@@ -77,3 +77,5 @@ const run = async (inputs: InputsClientI, github: GithubClientI, trello: TrelloC
 
   await run(inputs, github, trello);
 })();
+
+export { run };

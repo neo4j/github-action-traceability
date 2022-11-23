@@ -2,33 +2,13 @@ import fetch from 'node-fetch';
 import { RequestInit } from 'node-fetch';
 
 interface TrelloCard {
-  id: string;
-  checkItemStates: string | null;
-  closed: boolean;
-  dateLastActivity: string;
-  desc: string;
-  idBoard: string;
-  idShort: number;
-  name: string | null;
   shortLink: string;
-  dueComplete: boolean;
-  due: string | null;
-  shortUrl: string;
-  url: string;
+  closed: boolean;
 }
 
 interface TrelloAttachment {
-  id: string;
-  bytes: string;
-  date: string;
-  edgeColor: string;
-  idMember: string;
-  isUpload: boolean;
-  mimeType: string;
-  name: string;
-  previews: [];
+  shortLink: string;
   url: string;
-  pos: number;
 }
 
 interface TrelloClientI {

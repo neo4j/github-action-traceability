@@ -1,6 +1,4 @@
 import * as core from '@actions/core';
-import { TrelloCard } from './client-trello';
-import { GithubClientI } from './client-github';
 
 enum NoIdVerificationStrategy {
   CASE_INSENSITIVE = 'CASE_INSENSITIVE',

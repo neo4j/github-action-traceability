@@ -1,4 +1,4 @@
-import { InputsClient, NoIdVerificationStrategy } from './client-inputs';
+import { NoIdVerificationStrategy } from './client-inputs';
 import { TrelloCard } from './client-trello';
 import { GithubClientI } from './client-github';
 
