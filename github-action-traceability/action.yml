@@ -1,0 +1,28 @@
+name: "Traceability Github Action"
+author: "Daniel Leaver"
+description: "Ensures git commit messages contain a Trello ticket id"
+inputs:
+  noid_verification_strategy:
+    required: false
+    default: "UPPER_CASE"
+    description: "One of CASE_INSENSITIVE, UPPER_CASE, LOWER_CASE, NEVER."
+  commit_verification_strategy:
+    required: false
+    default: "ALL_COMMITS"
+    description: "One of ALL_COMMITS, HEAD_COMMIT_ONLY, NEVER."
+  title_verification_strategy:
+    required: false
+    default: "ALWAYS"
+    description: "One of ALWAYS, IF_EXISTS, NEVER."
+  trello_api_key:
+    required: true
+    description: "API key for Trello. Use Github secrets. Don't use plaintext."
+  trello_api_token:
+    required: true
+    description: "API token for Trello. Use Github secrets. Don't use plaintext."
+  github_access_token:
+    required: true
+    description: "API token for Github. Use Github secrets. Don't use plaintext."
+runs:
+  using: "node12"
+  main: "dist/index.js"

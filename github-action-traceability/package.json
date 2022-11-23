@@ -1,0 +1,42 @@
+{
+  "name": "github-action-traceability",
+  "description": "Ensures git commit messages contain a Trello ticket id",
+  "version": "1.0.0",
+  "author": "Daniel Leaver",
+  "license": "Apache-2.0",
+  "main": "dist/index.js",
+  "homepage": "https://github.com/neo-technology/github-action-traceability#readme",
+  "scripts": {
+    "clean": "rm -rf dist build-tsc",
+    "tsc": "tsc",
+    "build": "ncc build build-tsc/src/index.js -o dist --license licenses.txt",
+    "format": "prettier --write '**/*.ts'",
+    "lint": "eslint **/*.ts",
+    "test": "jest",
+    "all": "yarn clean && yarn build && yarn format && yarn lint && yarn package && yarn test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neo-technology/github-action-traceability"
+  },
+  "bugs": {
+    "url": "https://github.com/neo-technology/github-action-traceability/issues"
+  },
+  "dependencies": {
+    "@actions/core": "^1.5.0",
+    "@actions/github": "^5.0.0",
+    "node-fetch": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^16.9.1",
+    "@types/jest": "^29.2.0",
+    "@typescript-eslint/eslint-plugin": "^4.31.1",
+    "@typescript-eslint/parser": "^4.31.1",
+    "@vercel/ncc": "^0.34.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "prettier": "^2.4.0",
+    "typescript": "^4.4.3"
+  }
+}
