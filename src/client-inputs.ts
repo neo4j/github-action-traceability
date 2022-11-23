@@ -9,13 +9,11 @@ enum NoIdVerificationStrategy {
 
 enum CommitVerificationStrategy {
   ALL_COMMITS = 'ALL_COMMITS',
-  HEAD_COMMIT_ONLY = 'HEAD_COMMIT_ONLY',
   NEVER = 'NEVER',
 }
 
 enum TitleVerificationStrategy {
   ALWAYS = 'ALWAYS',
-  IF_EXISTS = 'IF_EXISTS',
   NEVER = 'NEVER',
 }
 
@@ -50,8 +48,6 @@ class InputsClient implements InputsClientI {
     switch (input) {
       case 'ALL_COMMITS':
         return CommitVerificationStrategy.ALL_COMMITS;
-      case 'HEAD_COMMIT_ONLY':
-        return CommitVerificationStrategy.HEAD_COMMIT_ONLY;
       case 'NEVER':
         return CommitVerificationStrategy.NEVER;
       default:
@@ -64,8 +60,6 @@ class InputsClient implements InputsClientI {
     switch (input) {
       case 'ALWAYS':
         return TitleVerificationStrategy.ALWAYS;
-      case 'IF_EXISTS':
-        return TitleVerificationStrategy.IF_EXISTS;
       case 'NEVER':
         return TitleVerificationStrategy.NEVER;
       default:
