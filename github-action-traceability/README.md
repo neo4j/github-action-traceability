@@ -22,7 +22,31 @@ In order to enable this github action, you need to add it to your existing repos
 
 ```
 
-
 ## For Maintainers
 
-// daniel
+You need to commit the lib/index.js artifact because that is what the Github Action will end up using. There is 
+currently no CI for this project, please manually ensure everything works before opening a PR.
+
+### yarn clean
+
+Deletes the build (./lib) artefacts/
+
+### yarn build
+
+Formats the code to make it consistent with the formatting rules. Does not run tests.
+
+### yarn lint
+
+Lints the code to make it consistent with the linting rules.
+
+### yarn test
+
+Tests the code.
+
+### yarn shadow
+
+Compiles the Typescript project into a single lib/index.js file. 
+
+### yarn package
+
+Does all of the above, building the project only once it's been formatted, linted, and tested.

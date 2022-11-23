@@ -1,503 +1,6 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 2942:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getPullRequestCommitMessages = exports.getPullRequestTitle = exports.isSupportedAction = exports.getSupportedActions = exports.getContextAction = exports.isSupportedEvent = exports.getSupportedEvent = exports.getContextEvent = exports.getPullRequestUrl = void 0;
-const core = __importStar(__nccwpck_require__(2186));
-const github = __importStar(__nccwpck_require__(5438));
-const utils_1 = __nccwpck_require__(1299);
-const graphql_1 = __nccwpck_require__(8467);
-const getContextEvent = () => github.context.eventName;
-exports.getContextEvent = getContextEvent;
-const getSupportedEvent = () => 'pull_request';
-exports.getSupportedEvent = getSupportedEvent;
-const isSupportedEvent = () => getContextEvent() === getSupportedEvent();
-exports.isSupportedEvent = isSupportedEvent;
-const getContextAction = () => github.context.payload.action;
-exports.getContextAction = getContextAction;
-const getSupportedActions = () => ['opened', 'reopened', 'edited'];
-exports.getSupportedActions = getSupportedActions;
-const isSupportedAction = () => getSupportedActions().some((el) => el === getContextAction());
-exports.isSupportedAction = isSupportedAction;
-const getPullRequestUrl = () => {
-    core.debug('Get pull request url');
-    if (!github.context.payload)
-        throw new Error('No payload found in the context.');
-    if (!github.context.payload.pull_request)
-        throw new Error('No pull request found in the payload.');
-    if (!github.context.payload.pull_request.html_url)
-        throw new Error('No pull request url found in the payload.');
-    return github.context.payload.pull_request.html_url;
-};
-exports.getPullRequestUrl = getPullRequestUrl;
-const getPullRequestTitle = () => {
-    core.debug('Get pull request title');
-    if (!github.context.payload)
-        throw new Error('No payload found in the context.');
-    if (!github.context.payload.pull_request)
-        throw new Error('No pull request found in the payload.');
-    if (!github.context.payload.pull_request.title)
-        throw new Error('No title found in the pull request.');
-    return github.context.payload.pull_request.title;
-};
-exports.getPullRequestTitle = getPullRequestTitle;
-const getPullRequestCommitMessages = () => __awaiter(void 0, void 0, void 0, function* () {
-    core.debug('Get pull request commits');
-    if (!github.context.payload)
-        throw new Error('No payload found in the context.');
-    if (!github.context.payload.pull_request)
-        throw new Error('No pull request found in the payload.');
-    if (!github.context.payload.pull_request.number)
-        throw new Error('No number found in the pull request.');
-    if (!github.context.payload.repository)
-        throw new Error('No repository found in the payload.');
-    if (!github.context.payload.repository.name)
-        throw new Error('No name found in the repository.');
-    if (!github.context.payload.repository.owner ||
-        (!github.context.payload.repository.owner.login &&
-            !github.context.payload.repository.owner.name))
-        throw new Error('No owner found in the repository.');
-    const variables = {
-        baseUrl: 'https://api.github.com',
-        repositoryOwner: github.context.payload.repository.owner.name || github.context.payload.repository.owner.login,
-        repositoryName: github.context.payload.repository.name,
-        pullRequestNumber: github.context.payload.pull_request.number,
-        headers: {
-            authorization: `token ${(0, utils_1.getGithubAPIToken)()}`,
-        },
-    };
-    const query = `
-      query commitMessages(
-        $repositoryOwner: String!
-        $repositoryName: String!
-        $pullRequestNumber: Int!
-        $numberOfCommits: Int = 100
-      ) {
-        repository(owner: $repositoryOwner, name: $repositoryName) {
-          pullRequest(number: $pullRequestNumber) {
-            commits(last: $numberOfCommits) {
-              edges {
-                node {
-                  commit {
-                    message
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    `;
-    const response = yield (0, graphql_1.graphql)(query, variables);
-    const repository = response.repository;
-    return repository.pullRequest.commits.edges.map((edge) => edge.node.commit.message);
-});
-exports.getPullRequestCommitMessages = getPullRequestCommitMessages;
-//# sourceMappingURL=api-github.js.map
-
-/***/ }),
-
-/***/ 7875:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.addUrlAttachmentToCard = exports.getCardAttachments = exports.getCard = void 0;
-const node_fetch_1 = __importDefault(__nccwpck_require__(4429));
-const utils_1 = __nccwpck_require__(1299);
-const buildApiUrl = (path, query) => {
-    const params = query ? query : new URLSearchParams();
-    const apiKey = (0, utils_1.getTrelloApiKey)();
-    const apiToken = (0, utils_1.getTrelloApiToken)();
-    if (!apiKey || !apiToken) {
-        throw Error('Trello API key and/or token ID is missing.');
-    }
-    params.append('key', apiKey);
-    params.append('token', apiToken);
-    return `https://api.trello.com/1${path}?${params.toString()}`;
-};
-// https://developer.atlassian.com/cloud/trello/guides/rest-api/authorization/#authorizing-a-client
-const apiBaseHeaders = () => {
-    return {
-        Accept: 'application/json',
-        method: 'GET',
-    };
-};
-// https://developer.atlassian.com/cloud/trello/rest/api-group-cards/#api-cards-id-get
-const getCard = (shortLink) => {
-    const path = `/cards/${shortLink}`;
-    const options = Object.assign({}, apiBaseHeaders());
-    return (0, node_fetch_1.default)(buildApiUrl(path), options)
-        .then((response) => __awaiter(void 0, void 0, void 0, function* () {
-        if (!response.ok) {
-            throw new Error(`API endpoint ${path} error: ${response.status} ${response.text}`);
-        }
-        return (yield response.json());
-    }))
-        .catch((error) => error);
-};
-exports.getCard = getCard;
-// https://developer.atlassian.com/cloud/trello/rest/api-group-cards/#api-cards-id-attachments-get
-const getCardAttachments = (shortLink) => {
-    const path = `/cards/${shortLink}/attachments`;
-    const options = Object.assign({}, apiBaseHeaders());
-    return (0, node_fetch_1.default)(buildApiUrl(path), options)
-        .then((response) => __awaiter(void 0, void 0, void 0, function* () {
-        if (!response.ok) {
-            throw new Error(`API endpoint ${path} error: ${response.status} ${response.text}`);
-        }
-        return (yield response.json());
-    }))
-        .catch((error) => error);
-};
-exports.getCardAttachments = getCardAttachments;
-// https://developer.atlassian.com/cloud/trello/rest/api-group-cards/#api-cards-id-attachments-post
-const addUrlAttachmentToCard = (shortLink, attachmentUrl) => {
-    const path = `/cards/${shortLink}/attachments`;
-    const options = Object.assign(Object.assign({}, apiBaseHeaders()), { method: 'POST' });
-    const queryParams = new URLSearchParams();
-    queryParams.append('url', attachmentUrl);
-    return (0, node_fetch_1.default)(buildApiUrl(path, queryParams), options)
-        .then((response) => __awaiter(void 0, void 0, void 0, function* () {
-        if (!response.ok) {
-            throw new Error(`API endpoint ${path} error: ${response.status} ${response.text}`);
-        }
-        return (yield response.json());
-    }))
-        .catch((error) => error);
-};
-exports.addUrlAttachmentToCard = addUrlAttachmentToCard;
-//# sourceMappingURL=api-trello.js.map
-
-/***/ }),
-
-/***/ 4939:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core = __importStar(__nccwpck_require__(2186));
-const api_github_1 = __nccwpck_require__(2942);
-const utils_1 = __nccwpck_require__(1299);
-const types_1 = __nccwpck_require__(7002);
-const api_trello_1 = __nccwpck_require__(7875);
-const getTrelloShortLink = (commitMessage) => {
-    const match = utils_1.REGEX_TRELLO_SHORT_LINK.exec(commitMessage);
-    if (match === null)
-        throw new Error(`Commit message ${commitMessage} does not contain a valid trello short link.`);
-    return match[1];
-};
-const assertNoIdShortLinkStrategy = (trelloShortLinks) => {
-    trelloShortLinks.forEach((trelloShortLink) => {
-        switch ((0, utils_1.getNoIdVerificationStrategy)()) {
-            case types_1.NoIdVerificationStrategy.CASE_INSENSITIVE:
-                return;
-            case types_1.NoIdVerificationStrategy.UPPER_CASE:
-                if (utils_1.REGEX_TRELLO_NOID_CASE_INSENSITIVE.test(trelloShortLink) &&
-                    !utils_1.REGEX_TRELLO_NOID_UPPERCASE.test(trelloShortLink)) {
-                    throw new Error(`NOID short link needed to be upper case but was ${trelloShortLink}`);
-                }
-                return;
-            case types_1.NoIdVerificationStrategy.LOWER_CASE:
-                if (utils_1.REGEX_TRELLO_NOID_CASE_INSENSITIVE.test(trelloShortLink) &&
-                    !utils_1.REGEX_TRELLO_NOID_LOWERCASE.test(trelloShortLink)) {
-                    throw new Error(`NOID short link needed to be lower case but was ${trelloShortLink}`);
-                }
-                return;
-            case types_1.NoIdVerificationStrategy.NEVER:
-                if (utils_1.REGEX_TRELLO_NOID_CASE_INSENSITIVE.test(trelloShortLink)) {
-                    throw new Error(`NOID short link is not allowed.`);
-                }
-                return;
-        }
-    });
-};
-const assertAllShortLinksAreIdentical = (shortLinks) => {
-    if (shortLinks.length === 0)
-        return;
-    const head = shortLinks[0];
-    shortLinks.forEach((shortLink) => {
-        if (shortLink !== head) {
-            throw new Error('');
-        }
-    });
-};
-const assertCardNotClosed = (card) => {
-    if (card.closed)
-        throw new Error(`Expected card ${card.shortUrl} to not be closed.`);
-};
-(() => __awaiter(void 0, void 0, void 0, function* () {
-    if (!(0, api_github_1.isSupportedEvent)()) {
-        throw new Error(`Event ${(0, api_github_1.getContextEvent)()} is unsupported. Only ${(0, api_github_1.getSupportedEvent)()} events are supported.`);
-    }
-    if (!(0, api_github_1.isSupportedAction)()) {
-        core.info(`Action ${(0, api_github_1.getContextAction)()} is unsupported. Only ${(0, api_github_1.getSupportedActions)()} actions are supported. Skipping.`);
-        return;
-    }
-    const pullRequestUrl = (0, api_github_1.getPullRequestUrl)();
-    switch ((0, utils_1.getCommitVerificationStrategy)()) {
-        case types_1.CommitVerificationStrategy.ALL_COMMITS:
-            const commitMessages = yield (0, api_github_1.getPullRequestCommitMessages)();
-            const commitMessageShortLinks = commitMessages.map(getTrelloShortLink);
-            assertAllShortLinksAreIdentical(commitMessageShortLinks);
-            assertNoIdShortLinkStrategy(commitMessageShortLinks);
-            const shortLink = commitMessageShortLinks[0];
-            const card = yield (0, api_trello_1.getCard)(shortLink);
-            assertCardNotClosed(card);
-            const attachments = yield (0, api_trello_1.getCardAttachments)(shortLink);
-            if (attachments.find((attachment) => attachment.url === pullRequestUrl)) {
-                core.info('Trello card already has an attachment for this pull request. Skipping');
-            }
-            else {
-                yield (0, api_trello_1.addUrlAttachmentToCard)(shortLink, pullRequestUrl);
-            }
-            return;
-        case types_1.CommitVerificationStrategy.HEAD_COMMIT_ONLY:
-            throw new Error('HEAD_COMMIT_ONLY implementation missing');
-        case types_1.CommitVerificationStrategy.NEVER:
-            core.info('Skipping commit verification strategy.');
-    }
-    switch ((0, utils_1.getTitleVerificationStrategy)()) {
-        case types_1.TitleVerificationStrategy.ALWAYS:
-            const pullRequestTitle = (0, api_github_1.getPullRequestTitle)();
-            const titleShortLink = getTrelloShortLink(pullRequestTitle);
-            assertNoIdShortLinkStrategy([titleShortLink]);
-            const card = yield (0, api_trello_1.getCard)(titleShortLink);
-            assertCardNotClosed(card);
-            const attachments = yield (0, api_trello_1.getCardAttachments)(titleShortLink);
-            if (attachments.find((attachment) => attachment.url === pullRequestUrl)) {
-                core.info('Trello card already has an attachment for this pull request. Skipping');
-            }
-            else {
-                yield (0, api_trello_1.addUrlAttachmentToCard)(titleShortLink, pullRequestUrl);
-            }
-            return;
-        case types_1.TitleVerificationStrategy.IF_EXISTS:
-            throw new Error('IF_EXISTS implementation missing.');
-        case types_1.TitleVerificationStrategy.NEVER:
-            return;
-    }
-}))();
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 7002:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.TitleVerificationStrategy = exports.CommitVerificationStrategy = exports.NoIdVerificationStrategy = void 0;
-var NoIdVerificationStrategy;
-(function (NoIdVerificationStrategy) {
-    NoIdVerificationStrategy["CASE_INSENSITIVE"] = "CASE_INSENSITIVE";
-    NoIdVerificationStrategy["UPPER_CASE"] = "UPPER_CASE";
-    NoIdVerificationStrategy["LOWER_CASE"] = "LOWER_CASE";
-    NoIdVerificationStrategy["NEVER"] = "NEVER";
-})(NoIdVerificationStrategy || (NoIdVerificationStrategy = {}));
-exports.NoIdVerificationStrategy = NoIdVerificationStrategy;
-var CommitVerificationStrategy;
-(function (CommitVerificationStrategy) {
-    CommitVerificationStrategy["ALL_COMMITS"] = "ALL_COMMITS";
-    CommitVerificationStrategy["HEAD_COMMIT_ONLY"] = "HEAD_COMMIT_ONLY";
-    CommitVerificationStrategy["NEVER"] = "NEVER";
-})(CommitVerificationStrategy || (CommitVerificationStrategy = {}));
-exports.CommitVerificationStrategy = CommitVerificationStrategy;
-var TitleVerificationStrategy;
-(function (TitleVerificationStrategy) {
-    TitleVerificationStrategy["ALWAYS"] = "ALWAYS";
-    TitleVerificationStrategy["IF_EXISTS"] = "IF_EXISTS";
-    TitleVerificationStrategy["NEVER"] = "NEVER";
-})(TitleVerificationStrategy || (TitleVerificationStrategy = {}));
-exports.TitleVerificationStrategy = TitleVerificationStrategy;
-//# sourceMappingURL=types.js.map
-
-/***/ }),
-
-/***/ 1299:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.REGEX_TRELLO_NOID_LOWERCASE = exports.REGEX_TRELLO_NOID_UPPERCASE = exports.REGEX_TRELLO_NOID_CASE_INSENSITIVE = exports.REGEX_TRELLO_SHORT_LINK = exports.getGithubAPIToken = exports.getTrelloApiToken = exports.getTrelloApiKey = exports.getTitleVerificationStrategy = exports.getCommitVerificationStrategy = exports.getNoIdVerificationStrategy = void 0;
-const types_1 = __nccwpck_require__(7002);
-const core = __importStar(__nccwpck_require__(2186));
-const REGEX_TRELLO_SHORT_LINK = new RegExp('^\\[([a-z0-9]+|NOID)\\].+');
-exports.REGEX_TRELLO_SHORT_LINK = REGEX_TRELLO_SHORT_LINK;
-const REGEX_TRELLO_NOID_CASE_INSENSITIVE = new RegExp('^\\[NOID\\]', 'i');
-exports.REGEX_TRELLO_NOID_CASE_INSENSITIVE = REGEX_TRELLO_NOID_CASE_INSENSITIVE;
-const REGEX_TRELLO_NOID_UPPERCASE = new RegExp('^\\[NOID\\]');
-exports.REGEX_TRELLO_NOID_UPPERCASE = REGEX_TRELLO_NOID_UPPERCASE;
-const REGEX_TRELLO_NOID_LOWERCASE = new RegExp('^\\[noid\\]');
-exports.REGEX_TRELLO_NOID_LOWERCASE = REGEX_TRELLO_NOID_LOWERCASE;
-const getNoIdVerificationStrategy = () => {
-    const input = core.getInput('noid_verification_strategy');
-    switch (input) {
-        case 'CASE_INSENSITIVE':
-            return types_1.NoIdVerificationStrategy.CASE_INSENSITIVE;
-        case 'UPPER_CASE':
-            return types_1.NoIdVerificationStrategy.UPPER_CASE;
-        case 'LOWER_CASE':
-            return types_1.NoIdVerificationStrategy.LOWER_CASE;
-        case 'NEVER':
-            return types_1.NoIdVerificationStrategy.NEVER;
-        default:
-            throw new Error(`Unrecognised value ${input} for "noid_verification_strategy"`);
-    }
-};
-exports.getNoIdVerificationStrategy = getNoIdVerificationStrategy;
-const getCommitVerificationStrategy = () => {
-    const input = core.getInput('commit_verification_strategy');
-    switch (input) {
-        case 'ALL_COMMITS':
-            return types_1.CommitVerificationStrategy.ALL_COMMITS;
-        case 'HEAD_COMMIT_ONLY':
-            return types_1.CommitVerificationStrategy.HEAD_COMMIT_ONLY;
-        case 'NEVER':
-            return types_1.CommitVerificationStrategy.NEVER;
-        default:
-            throw new Error(`Unrecognised value ${input} for "commit_verification_strategy"`);
-    }
-};
-exports.getCommitVerificationStrategy = getCommitVerificationStrategy;
-const getTitleVerificationStrategy = () => {
-    const input = core.getInput('title_verification_strategy');
-    switch (input) {
-        case 'ALWAYS':
-            return types_1.TitleVerificationStrategy.ALWAYS;
-        case 'IF_EXISTS':
-            return types_1.TitleVerificationStrategy.IF_EXISTS;
-        case 'NEVER':
-            return types_1.TitleVerificationStrategy.NEVER;
-        default:
-            throw new Error(`Unrecognised value ${input} for "title_verification_strategy"`);
-    }
-};
-exports.getTitleVerificationStrategy = getTitleVerificationStrategy;
-const getTrelloApiKey = () => {
-    return core.getInput('trello_api_key', { required: true });
-};
-exports.getTrelloApiKey = getTrelloApiKey;
-const getTrelloApiToken = () => {
-    return core.getInput('trello_api_token', { required: true });
-};
-exports.getTrelloApiToken = getTrelloApiToken;
-const getGithubAPIToken = () => {
-    return core.getInput('github_api_token', { required: true });
-};
-exports.getGithubAPIToken = getGithubAPIToken;
-//# sourceMappingURL=utils.js.map
-
-/***/ }),
-
 /***/ 7351:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -14246,6 +13749,503 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
+/***/ 3973:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getPullRequestCommitMessages = exports.getPullRequestTitle = exports.isSupportedAction = exports.getSupportedActions = exports.getContextAction = exports.isSupportedEvent = exports.getSupportedEvent = exports.getContextEvent = exports.getPullRequestUrl = void 0;
+const core = __importStar(__nccwpck_require__(2186));
+const github = __importStar(__nccwpck_require__(5438));
+const utils_1 = __nccwpck_require__(1314);
+const graphql_1 = __nccwpck_require__(8467);
+const getContextEvent = () => github.context.eventName;
+exports.getContextEvent = getContextEvent;
+const getSupportedEvent = () => 'pull_request';
+exports.getSupportedEvent = getSupportedEvent;
+const isSupportedEvent = () => getContextEvent() === getSupportedEvent();
+exports.isSupportedEvent = isSupportedEvent;
+const getContextAction = () => github.context.payload.action;
+exports.getContextAction = getContextAction;
+const getSupportedActions = () => ['opened', 'reopened', 'edited'];
+exports.getSupportedActions = getSupportedActions;
+const isSupportedAction = () => getSupportedActions().some((el) => el === getContextAction());
+exports.isSupportedAction = isSupportedAction;
+const getPullRequestUrl = () => {
+    core.debug('Get pull request url');
+    if (!github.context.payload)
+        throw new Error('No payload found in the context.');
+    if (!github.context.payload.pull_request)
+        throw new Error('No pull request found in the payload.');
+    if (!github.context.payload.pull_request.html_url)
+        throw new Error('No pull request url found in the payload.');
+    return github.context.payload.pull_request.html_url;
+};
+exports.getPullRequestUrl = getPullRequestUrl;
+const getPullRequestTitle = () => {
+    core.debug('Get pull request title');
+    if (!github.context.payload)
+        throw new Error('No payload found in the context.');
+    if (!github.context.payload.pull_request)
+        throw new Error('No pull request found in the payload.');
+    if (!github.context.payload.pull_request.title)
+        throw new Error('No title found in the pull request.');
+    return github.context.payload.pull_request.title;
+};
+exports.getPullRequestTitle = getPullRequestTitle;
+const getPullRequestCommitMessages = () => __awaiter(void 0, void 0, void 0, function* () {
+    core.debug('Get pull request commits');
+    if (!github.context.payload)
+        throw new Error('No payload found in the context.');
+    if (!github.context.payload.pull_request)
+        throw new Error('No pull request found in the payload.');
+    if (!github.context.payload.pull_request.number)
+        throw new Error('No number found in the pull request.');
+    if (!github.context.payload.repository)
+        throw new Error('No repository found in the payload.');
+    if (!github.context.payload.repository.name)
+        throw new Error('No name found in the repository.');
+    if (!github.context.payload.repository.owner ||
+        (!github.context.payload.repository.owner.login &&
+            !github.context.payload.repository.owner.name))
+        throw new Error('No owner found in the repository.');
+    const variables = {
+        baseUrl: 'https://api.github.com',
+        repositoryOwner: github.context.payload.repository.owner.name || github.context.payload.repository.owner.login,
+        repositoryName: github.context.payload.repository.name,
+        pullRequestNumber: github.context.payload.pull_request.number,
+        headers: {
+            authorization: `token ${(0, utils_1.getGithubAPIToken)()}`,
+        },
+    };
+    const query = `
+      query commitMessages(
+        $repositoryOwner: String!
+        $repositoryName: String!
+        $pullRequestNumber: Int!
+        $numberOfCommits: Int = 100
+      ) {
+        repository(owner: $repositoryOwner, name: $repositoryName) {
+          pullRequest(number: $pullRequestNumber) {
+            commits(last: $numberOfCommits) {
+              edges {
+                node {
+                  commit {
+                    message
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    `;
+    const response = yield (0, graphql_1.graphql)(query, variables);
+    const repository = response.repository;
+    return repository.pullRequest.commits.edges.map((edge) => edge.node.commit.message);
+});
+exports.getPullRequestCommitMessages = getPullRequestCommitMessages;
+
+
+/***/ }),
+
+/***/ 78:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.addUrlAttachmentToCard = exports.getCardAttachments = exports.getCard = void 0;
+const node_fetch_1 = __importDefault(__nccwpck_require__(4429));
+const utils_1 = __nccwpck_require__(1314);
+const buildApiUrl = (path, query) => {
+    const params = query ? query : new URLSearchParams();
+    const apiKey = (0, utils_1.getTrelloApiKey)();
+    const apiToken = (0, utils_1.getTrelloApiToken)();
+    if (!apiKey || !apiToken) {
+        throw Error('Trello API key and/or token ID is missing.');
+    }
+    params.append('key', apiKey);
+    params.append('token', apiToken);
+    return `https://api.trello.com/1${path}?${params.toString()}`;
+};
+// https://developer.atlassian.com/cloud/trello/guides/rest-api/authorization/#authorizing-a-client
+const apiBaseHeaders = () => {
+    return {
+        Accept: 'application/json',
+        method: 'GET',
+    };
+};
+// https://developer.atlassian.com/cloud/trello/rest/api-group-cards/#api-cards-id-get
+const getCard = (shortLink) => {
+    const path = `/cards/${shortLink}`;
+    const options = Object.assign({}, apiBaseHeaders());
+    return (0, node_fetch_1.default)(buildApiUrl(path), options)
+        .then((response) => __awaiter(void 0, void 0, void 0, function* () {
+        if (!response.ok) {
+            throw new Error(`API endpoint ${path} error: ${response.status} ${response.text}`);
+        }
+        return (yield response.json());
+    }))
+        .catch((error) => error);
+};
+exports.getCard = getCard;
+// https://developer.atlassian.com/cloud/trello/rest/api-group-cards/#api-cards-id-attachments-get
+const getCardAttachments = (shortLink) => {
+    const path = `/cards/${shortLink}/attachments`;
+    const options = Object.assign({}, apiBaseHeaders());
+    return (0, node_fetch_1.default)(buildApiUrl(path), options)
+        .then((response) => __awaiter(void 0, void 0, void 0, function* () {
+        if (!response.ok) {
+            throw new Error(`API endpoint ${path} error: ${response.status} ${response.text}`);
+        }
+        return (yield response.json());
+    }))
+        .catch((error) => error);
+};
+exports.getCardAttachments = getCardAttachments;
+// https://developer.atlassian.com/cloud/trello/rest/api-group-cards/#api-cards-id-attachments-post
+const addUrlAttachmentToCard = (shortLink, attachmentUrl) => {
+    const path = `/cards/${shortLink}/attachments`;
+    const options = Object.assign(Object.assign({}, apiBaseHeaders()), { method: 'POST' });
+    const queryParams = new URLSearchParams();
+    queryParams.append('url', attachmentUrl);
+    return (0, node_fetch_1.default)(buildApiUrl(path, queryParams), options)
+        .then((response) => __awaiter(void 0, void 0, void 0, function* () {
+        if (!response.ok) {
+            throw new Error(`API endpoint ${path} error: ${response.status} ${response.text}`);
+        }
+        return (yield response.json());
+    }))
+        .catch((error) => error);
+};
+exports.addUrlAttachmentToCard = addUrlAttachmentToCard;
+
+
+/***/ }),
+
+/***/ 6144:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const core = __importStar(__nccwpck_require__(2186));
+const api_github_1 = __nccwpck_require__(3973);
+const utils_1 = __nccwpck_require__(1314);
+const types_1 = __nccwpck_require__(5077);
+const api_trello_1 = __nccwpck_require__(78);
+const getTrelloShortLink = (commitMessage) => {
+    const match = utils_1.REGEX_TRELLO_SHORT_LINK.exec(commitMessage);
+    if (match === null)
+        throw new Error(`Commit message ${commitMessage} does not contain a valid trello short link.`);
+    return match[1];
+};
+const assertNoIdShortLinkStrategy = (trelloShortLinks) => {
+    trelloShortLinks.forEach((trelloShortLink) => {
+        switch ((0, utils_1.getNoIdVerificationStrategy)()) {
+            case types_1.NoIdVerificationStrategy.CASE_INSENSITIVE:
+                return;
+            case types_1.NoIdVerificationStrategy.UPPER_CASE:
+                if (utils_1.REGEX_TRELLO_NOID_CASE_INSENSITIVE.test(trelloShortLink) &&
+                    !utils_1.REGEX_TRELLO_NOID_UPPERCASE.test(trelloShortLink)) {
+                    throw new Error(`NOID short link needed to be upper case but was ${trelloShortLink}`);
+                }
+                return;
+            case types_1.NoIdVerificationStrategy.LOWER_CASE:
+                if (utils_1.REGEX_TRELLO_NOID_CASE_INSENSITIVE.test(trelloShortLink) &&
+                    !utils_1.REGEX_TRELLO_NOID_LOWERCASE.test(trelloShortLink)) {
+                    throw new Error(`NOID short link needed to be lower case but was ${trelloShortLink}`);
+                }
+                return;
+            case types_1.NoIdVerificationStrategy.NEVER:
+                if (utils_1.REGEX_TRELLO_NOID_CASE_INSENSITIVE.test(trelloShortLink)) {
+                    throw new Error(`NOID short link is not allowed.`);
+                }
+                return;
+        }
+    });
+};
+const assertAllShortLinksAreIdentical = (shortLinks) => {
+    if (shortLinks.length === 0)
+        return;
+    const head = shortLinks[0];
+    shortLinks.forEach((shortLink) => {
+        if (shortLink !== head) {
+            throw new Error('');
+        }
+    });
+};
+const assertCardNotClosed = (card) => {
+    if (card.closed)
+        throw new Error(`Expected card ${card.shortUrl} to not be closed.`);
+};
+(() => __awaiter(void 0, void 0, void 0, function* () {
+    if (!(0, api_github_1.isSupportedEvent)()) {
+        throw new Error(`Event ${(0, api_github_1.getContextEvent)()} is unsupported. Only ${(0, api_github_1.getSupportedEvent)()} events are supported.`);
+    }
+    if (!(0, api_github_1.isSupportedAction)()) {
+        core.info(`Action ${(0, api_github_1.getContextAction)()} is unsupported. Only ${(0, api_github_1.getSupportedActions)()} actions are supported. Skipping.`);
+        return;
+    }
+    const pullRequestUrl = (0, api_github_1.getPullRequestUrl)();
+    switch ((0, utils_1.getCommitVerificationStrategy)()) {
+        case types_1.CommitVerificationStrategy.ALL_COMMITS:
+            const commitMessages = yield (0, api_github_1.getPullRequestCommitMessages)();
+            const commitMessageShortLinks = commitMessages.map(getTrelloShortLink);
+            assertAllShortLinksAreIdentical(commitMessageShortLinks);
+            assertNoIdShortLinkStrategy(commitMessageShortLinks);
+            const shortLink = commitMessageShortLinks[0];
+            const card = yield (0, api_trello_1.getCard)(shortLink);
+            assertCardNotClosed(card);
+            const attachments = yield (0, api_trello_1.getCardAttachments)(shortLink);
+            if (attachments.find((attachment) => attachment.url === pullRequestUrl)) {
+                core.info('Trello card already has an attachment for this pull request. Skipping');
+            }
+            else {
+                yield (0, api_trello_1.addUrlAttachmentToCard)(shortLink, pullRequestUrl);
+            }
+            return;
+        case types_1.CommitVerificationStrategy.HEAD_COMMIT_ONLY:
+            throw new Error('HEAD_COMMIT_ONLY implementation missing');
+        case types_1.CommitVerificationStrategy.NEVER:
+            core.info('Skipping commit verification strategy.');
+    }
+    switch ((0, utils_1.getTitleVerificationStrategy)()) {
+        case types_1.TitleVerificationStrategy.ALWAYS:
+            const pullRequestTitle = (0, api_github_1.getPullRequestTitle)();
+            const titleShortLink = getTrelloShortLink(pullRequestTitle);
+            assertNoIdShortLinkStrategy([titleShortLink]);
+            const card = yield (0, api_trello_1.getCard)(titleShortLink);
+            assertCardNotClosed(card);
+            const attachments = yield (0, api_trello_1.getCardAttachments)(titleShortLink);
+            if (attachments.find((attachment) => attachment.url === pullRequestUrl)) {
+                core.info('Trello card already has an attachment for this pull request. Skipping');
+            }
+            else {
+                yield (0, api_trello_1.addUrlAttachmentToCard)(titleShortLink, pullRequestUrl);
+            }
+            return;
+        case types_1.TitleVerificationStrategy.IF_EXISTS:
+            throw new Error('IF_EXISTS implementation missing.');
+        case types_1.TitleVerificationStrategy.NEVER:
+            return;
+    }
+}))();
+
+
+/***/ }),
+
+/***/ 5077:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.TitleVerificationStrategy = exports.CommitVerificationStrategy = exports.NoIdVerificationStrategy = void 0;
+var NoIdVerificationStrategy;
+(function (NoIdVerificationStrategy) {
+    NoIdVerificationStrategy["CASE_INSENSITIVE"] = "CASE_INSENSITIVE";
+    NoIdVerificationStrategy["UPPER_CASE"] = "UPPER_CASE";
+    NoIdVerificationStrategy["LOWER_CASE"] = "LOWER_CASE";
+    NoIdVerificationStrategy["NEVER"] = "NEVER";
+})(NoIdVerificationStrategy || (NoIdVerificationStrategy = {}));
+exports.NoIdVerificationStrategy = NoIdVerificationStrategy;
+var CommitVerificationStrategy;
+(function (CommitVerificationStrategy) {
+    CommitVerificationStrategy["ALL_COMMITS"] = "ALL_COMMITS";
+    CommitVerificationStrategy["HEAD_COMMIT_ONLY"] = "HEAD_COMMIT_ONLY";
+    CommitVerificationStrategy["NEVER"] = "NEVER";
+})(CommitVerificationStrategy || (CommitVerificationStrategy = {}));
+exports.CommitVerificationStrategy = CommitVerificationStrategy;
+var TitleVerificationStrategy;
+(function (TitleVerificationStrategy) {
+    TitleVerificationStrategy["ALWAYS"] = "ALWAYS";
+    TitleVerificationStrategy["IF_EXISTS"] = "IF_EXISTS";
+    TitleVerificationStrategy["NEVER"] = "NEVER";
+})(TitleVerificationStrategy || (TitleVerificationStrategy = {}));
+exports.TitleVerificationStrategy = TitleVerificationStrategy;
+
+
+/***/ }),
+
+/***/ 1314:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.REGEX_TRELLO_NOID_LOWERCASE = exports.REGEX_TRELLO_NOID_UPPERCASE = exports.REGEX_TRELLO_NOID_CASE_INSENSITIVE = exports.REGEX_TRELLO_SHORT_LINK = exports.getGithubAPIToken = exports.getTrelloApiToken = exports.getTrelloApiKey = exports.getTitleVerificationStrategy = exports.getCommitVerificationStrategy = exports.getNoIdVerificationStrategy = void 0;
+const types_1 = __nccwpck_require__(5077);
+const core = __importStar(__nccwpck_require__(2186));
+const REGEX_TRELLO_SHORT_LINK = new RegExp('^\\[([a-z0-9]+|NOID)\\].+');
+exports.REGEX_TRELLO_SHORT_LINK = REGEX_TRELLO_SHORT_LINK;
+const REGEX_TRELLO_NOID_CASE_INSENSITIVE = new RegExp('^\\[NOID\\]', 'i');
+exports.REGEX_TRELLO_NOID_CASE_INSENSITIVE = REGEX_TRELLO_NOID_CASE_INSENSITIVE;
+const REGEX_TRELLO_NOID_UPPERCASE = new RegExp('^\\[NOID\\]');
+exports.REGEX_TRELLO_NOID_UPPERCASE = REGEX_TRELLO_NOID_UPPERCASE;
+const REGEX_TRELLO_NOID_LOWERCASE = new RegExp('^\\[noid\\]');
+exports.REGEX_TRELLO_NOID_LOWERCASE = REGEX_TRELLO_NOID_LOWERCASE;
+const getNoIdVerificationStrategy = () => {
+    const input = core.getInput('noid_verification_strategy');
+    switch (input) {
+        case 'CASE_INSENSITIVE':
+            return types_1.NoIdVerificationStrategy.CASE_INSENSITIVE;
+        case 'UPPER_CASE':
+            return types_1.NoIdVerificationStrategy.UPPER_CASE;
+        case 'LOWER_CASE':
+            return types_1.NoIdVerificationStrategy.LOWER_CASE;
+        case 'NEVER':
+            return types_1.NoIdVerificationStrategy.NEVER;
+        default:
+            throw new Error(`Unrecognised value ${input} for "noid_verification_strategy"`);
+    }
+};
+exports.getNoIdVerificationStrategy = getNoIdVerificationStrategy;
+const getCommitVerificationStrategy = () => {
+    const input = core.getInput('commit_verification_strategy');
+    switch (input) {
+        case 'ALL_COMMITS':
+            return types_1.CommitVerificationStrategy.ALL_COMMITS;
+        case 'HEAD_COMMIT_ONLY':
+            return types_1.CommitVerificationStrategy.HEAD_COMMIT_ONLY;
+        case 'NEVER':
+            return types_1.CommitVerificationStrategy.NEVER;
+        default:
+            throw new Error(`Unrecognised value ${input} for "commit_verification_strategy"`);
+    }
+};
+exports.getCommitVerificationStrategy = getCommitVerificationStrategy;
+const getTitleVerificationStrategy = () => {
+    const input = core.getInput('title_verification_strategy');
+    switch (input) {
+        case 'ALWAYS':
+            return types_1.TitleVerificationStrategy.ALWAYS;
+        case 'IF_EXISTS':
+            return types_1.TitleVerificationStrategy.IF_EXISTS;
+        case 'NEVER':
+            return types_1.TitleVerificationStrategy.NEVER;
+        default:
+            throw new Error(`Unrecognised value ${input} for "title_verification_strategy"`);
+    }
+};
+exports.getTitleVerificationStrategy = getTitleVerificationStrategy;
+const getTrelloApiKey = () => {
+    return core.getInput('trello_api_key', { required: true });
+};
+exports.getTrelloApiKey = getTrelloApiKey;
+const getTrelloApiToken = () => {
+    return core.getInput('trello_api_token', { required: true });
+};
+exports.getTrelloApiToken = getTrelloApiToken;
+const getGithubAPIToken = () => {
+    return core.getInput('github_api_token', { required: true });
+};
+exports.getGithubAPIToken = getGithubAPIToken;
+
+
+/***/ }),
+
 /***/ 2877:
 /***/ ((module) => {
 
@@ -17298,7 +17298,7 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(4939);
+/******/ 	var __webpack_exports__ = __nccwpck_require__(6144);
 /******/ 	module.exports = __webpack_exports__;
 /******/ 	
 /******/ })()
