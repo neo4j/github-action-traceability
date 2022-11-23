@@ -1,15 +1,13 @@
-// daniel write readm.md
-// daniel vulnerable packages
-
-# Traceability Github Action
+// daniel write readme.md
+# Traceability GitHub Action
 
 ## Introduction
-This Github Action exists for the sole purpose of linking Trello tickets to git commits. Depending on how the 
+This GitHub Action exists for the sole purpose of linking Trello tickets to git commits. Depending on how the 
 Action is configured in your project, you will be able to:
 - enforce that git commit messages contain a Trello card id
 - enforce that PR title contain a Trello card id
 - enforce that the Trello card id is real
-- automatically add an attachment to a Trello card containing the Github PR
+- automatically add an attachment to a Trello card containing the GitHub PR
 
 ## For Users 
 
@@ -24,7 +22,7 @@ In order to enable this github action, you need to add it to your existing repos
 
 ## For Maintainers
 
-You need to commit the lib/index.js artifact because that is what the Github Action will end up using. There is 
+You need to commit the lib/index.js artifact because that is what the GitHub Action will end up using. There is 
 currently no CI for this project, please manually ensure everything works before opening a PR.
 
 ### yarn clean

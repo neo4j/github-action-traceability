@@ -3048,13 +3048,13 @@ const Endpoints = {
     deleteSelfHostedRunnerFromRepo: ["DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}"],
     deleteWorkflowRun: ["DELETE /repos/{owner}/{repo}/actions/runs/{run_id}"],
     deleteWorkflowRunLogs: ["DELETE /repos/{owner}/{repo}/actions/runs/{run_id}/logs"],
-    disableSelectedRepositoryGithubActionsOrganization: ["DELETE /orgs/{org}/actions/permissions/repositories/{repository_id}"],
+    disableSelectedRepositoryGitHubActionsOrganization: ["DELETE /orgs/{org}/actions/permissions/repositories/{repository_id}"],
     disableWorkflow: ["PUT /repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable"],
     downloadArtifact: ["GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}"],
     downloadJobLogsForWorkflowRun: ["GET /repos/{owner}/{repo}/actions/jobs/{job_id}/logs"],
     downloadWorkflowRunAttemptLogs: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/logs"],
     downloadWorkflowRunLogs: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/logs"],
-    enableSelectedRepositoryGithubActionsOrganization: ["PUT /orgs/{org}/actions/permissions/repositories/{repository_id}"],
+    enableSelectedRepositoryGitHubActionsOrganization: ["PUT /orgs/{org}/actions/permissions/repositories/{repository_id}"],
     enableWorkflow: ["PUT /repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable"],
     getActionsCacheList: ["GET /repos/{owner}/{repo}/actions/caches"],
     getActionsCacheUsage: ["GET /repos/{owner}/{repo}/actions/cache/usage"],
@@ -3066,17 +3066,17 @@ const Endpoints = {
     getArtifact: ["GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}"],
     getEnvironmentPublicKey: ["GET /repositories/{repository_id}/environments/{environment_name}/secrets/public-key"],
     getEnvironmentSecret: ["GET /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}"],
-    getGithubActionsDefaultWorkflowPermissionsEnterprise: ["GET /enterprises/{enterprise}/actions/permissions/workflow"],
-    getGithubActionsDefaultWorkflowPermissionsOrganization: ["GET /orgs/{org}/actions/permissions/workflow"],
-    getGithubActionsDefaultWorkflowPermissionsRepository: ["GET /repos/{owner}/{repo}/actions/permissions/workflow"],
-    getGithubActionsPermissionsOrganization: ["GET /orgs/{org}/actions/permissions"],
-    getGithubActionsPermissionsRepository: ["GET /repos/{owner}/{repo}/actions/permissions"],
+    getGitHubActionsDefaultWorkflowPermissionsEnterprise: ["GET /enterprises/{enterprise}/actions/permissions/workflow"],
+    getGitHubActionsDefaultWorkflowPermissionsOrganization: ["GET /orgs/{org}/actions/permissions/workflow"],
+    getGitHubActionsDefaultWorkflowPermissionsRepository: ["GET /repos/{owner}/{repo}/actions/permissions/workflow"],
+    getGitHubActionsPermissionsOrganization: ["GET /orgs/{org}/actions/permissions"],
+    getGitHubActionsPermissionsRepository: ["GET /repos/{owner}/{repo}/actions/permissions"],
     getJobForWorkflowRun: ["GET /repos/{owner}/{repo}/actions/jobs/{job_id}"],
     getOrgPublicKey: ["GET /orgs/{org}/actions/secrets/public-key"],
     getOrgSecret: ["GET /orgs/{org}/actions/secrets/{secret_name}"],
     getPendingDeploymentsForRun: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments"],
     getRepoPermissions: ["GET /repos/{owner}/{repo}/actions/permissions", {}, {
-      renamed: ["actions", "getGithubActionsPermissionsRepository"]
+      renamed: ["actions", "getGitHubActionsPermissionsRepository"]
     }],
     getRepoPublicKey: ["GET /repos/{owner}/{repo}/actions/secrets/public-key"],
     getRepoSecret: ["GET /repos/{owner}/{repo}/actions/secrets/{secret_name}"],
@@ -3101,7 +3101,7 @@ const Endpoints = {
     listRunnerApplicationsForOrg: ["GET /orgs/{org}/actions/runners/downloads"],
     listRunnerApplicationsForRepo: ["GET /repos/{owner}/{repo}/actions/runners/downloads"],
     listSelectedReposForOrgSecret: ["GET /orgs/{org}/actions/secrets/{secret_name}/repositories"],
-    listSelectedRepositoriesEnabledGithubActionsOrganization: ["GET /orgs/{org}/actions/permissions/repositories"],
+    listSelectedRepositoriesEnabledGitHubActionsOrganization: ["GET /orgs/{org}/actions/permissions/repositories"],
     listSelfHostedRunnersForOrg: ["GET /orgs/{org}/actions/runners"],
     listSelfHostedRunnersForRepo: ["GET /repos/{owner}/{repo}/actions/runners"],
     listWorkflowRunArtifacts: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts"],
@@ -3120,13 +3120,13 @@ const Endpoints = {
     setAllowedActionsRepository: ["PUT /repos/{owner}/{repo}/actions/permissions/selected-actions"],
     setCustomLabelsForSelfHostedRunnerForOrg: ["PUT /orgs/{org}/actions/runners/{runner_id}/labels"],
     setCustomLabelsForSelfHostedRunnerForRepo: ["PUT /repos/{owner}/{repo}/actions/runners/{runner_id}/labels"],
-    setGithubActionsDefaultWorkflowPermissionsEnterprise: ["PUT /enterprises/{enterprise}/actions/permissions/workflow"],
-    setGithubActionsDefaultWorkflowPermissionsOrganization: ["PUT /orgs/{org}/actions/permissions/workflow"],
-    setGithubActionsDefaultWorkflowPermissionsRepository: ["PUT /repos/{owner}/{repo}/actions/permissions/workflow"],
-    setGithubActionsPermissionsOrganization: ["PUT /orgs/{org}/actions/permissions"],
-    setGithubActionsPermissionsRepository: ["PUT /repos/{owner}/{repo}/actions/permissions"],
+    setGitHubActionsDefaultWorkflowPermissionsEnterprise: ["PUT /enterprises/{enterprise}/actions/permissions/workflow"],
+    setGitHubActionsDefaultWorkflowPermissionsOrganization: ["PUT /orgs/{org}/actions/permissions/workflow"],
+    setGitHubActionsDefaultWorkflowPermissionsRepository: ["PUT /repos/{owner}/{repo}/actions/permissions/workflow"],
+    setGitHubActionsPermissionsOrganization: ["PUT /orgs/{org}/actions/permissions"],
+    setGitHubActionsPermissionsRepository: ["PUT /repos/{owner}/{repo}/actions/permissions"],
     setSelectedReposForOrgSecret: ["PUT /orgs/{org}/actions/secrets/{secret_name}/repositories"],
-    setSelectedRepositoriesEnabledGithubActionsOrganization: ["PUT /orgs/{org}/actions/permissions/repositories"],
+    setSelectedRepositoriesEnabledGitHubActionsOrganization: ["PUT /orgs/{org}/actions/permissions/repositories"],
     setWorkflowAccessToRepository: ["PUT /repos/{owner}/{repo}/actions/permissions/access"]
   },
   activity: {
@@ -3207,12 +3207,12 @@ const Endpoints = {
     updateWebhookConfigForApp: ["PATCH /app/hook/config"]
   },
   billing: {
-    getGithubActionsBillingOrg: ["GET /orgs/{org}/settings/billing/actions"],
-    getGithubActionsBillingUser: ["GET /users/{username}/settings/billing/actions"],
-    getGithubAdvancedSecurityBillingGhe: ["GET /enterprises/{enterprise}/settings/billing/advanced-security"],
-    getGithubAdvancedSecurityBillingOrg: ["GET /orgs/{org}/settings/billing/advanced-security"],
-    getGithubPackagesBillingOrg: ["GET /orgs/{org}/settings/billing/packages"],
-    getGithubPackagesBillingUser: ["GET /users/{username}/settings/billing/packages"],
+    getGitHubActionsBillingOrg: ["GET /orgs/{org}/settings/billing/actions"],
+    getGitHubActionsBillingUser: ["GET /users/{username}/settings/billing/actions"],
+    getGitHubAdvancedSecurityBillingGhe: ["GET /enterprises/{enterprise}/settings/billing/advanced-security"],
+    getGitHubAdvancedSecurityBillingOrg: ["GET /orgs/{org}/settings/billing/advanced-security"],
+    getGitHubPackagesBillingOrg: ["GET /orgs/{org}/settings/billing/packages"],
+    getGitHubPackagesBillingUser: ["GET /users/{username}/settings/billing/packages"],
     getSharedStorageBillingOrg: ["GET /orgs/{org}/settings/billing/shared-storage"],
     getSharedStorageBillingUser: ["GET /users/{username}/settings/billing/shared-storage"]
   },
@@ -3316,19 +3316,19 @@ const Endpoints = {
   },
   enterpriseAdmin: {
     addCustomLabelsToSelfHostedRunnerForEnterprise: ["POST /enterprises/{enterprise}/actions/runners/{runner_id}/labels"],
-    disableSelectedOrganizationGithubActionsEnterprise: ["DELETE /enterprises/{enterprise}/actions/permissions/organizations/{org_id}"],
-    enableSelectedOrganizationGithubActionsEnterprise: ["PUT /enterprises/{enterprise}/actions/permissions/organizations/{org_id}"],
+    disableSelectedOrganizationGitHubActionsEnterprise: ["DELETE /enterprises/{enterprise}/actions/permissions/organizations/{org_id}"],
+    enableSelectedOrganizationGitHubActionsEnterprise: ["PUT /enterprises/{enterprise}/actions/permissions/organizations/{org_id}"],
     getAllowedActionsEnterprise: ["GET /enterprises/{enterprise}/actions/permissions/selected-actions"],
-    getGithubActionsPermissionsEnterprise: ["GET /enterprises/{enterprise}/actions/permissions"],
+    getGitHubActionsPermissionsEnterprise: ["GET /enterprises/{enterprise}/actions/permissions"],
     getServerStatistics: ["GET /enterprise-installation/{enterprise_or_org}/server-statistics"],
     listLabelsForSelfHostedRunnerForEnterprise: ["GET /enterprises/{enterprise}/actions/runners/{runner_id}/labels"],
-    listSelectedOrganizationsEnabledGithubActionsEnterprise: ["GET /enterprises/{enterprise}/actions/permissions/organizations"],
+    listSelectedOrganizationsEnabledGitHubActionsEnterprise: ["GET /enterprises/{enterprise}/actions/permissions/organizations"],
     removeAllCustomLabelsFromSelfHostedRunnerForEnterprise: ["DELETE /enterprises/{enterprise}/actions/runners/{runner_id}/labels"],
     removeCustomLabelFromSelfHostedRunnerForEnterprise: ["DELETE /enterprises/{enterprise}/actions/runners/{runner_id}/labels/{name}"],
     setAllowedActionsEnterprise: ["PUT /enterprises/{enterprise}/actions/permissions/selected-actions"],
     setCustomLabelsForSelfHostedRunnerForEnterprise: ["PUT /enterprises/{enterprise}/actions/runners/{runner_id}/labels"],
-    setGithubActionsPermissionsEnterprise: ["PUT /enterprises/{enterprise}/actions/permissions"],
-    setSelectedOrganizationsEnabledGithubActionsEnterprise: ["PUT /enterprises/{enterprise}/actions/permissions/organizations"]
+    setGitHubActionsPermissionsEnterprise: ["PUT /enterprises/{enterprise}/actions/permissions"],
+    setSelectedOrganizationsEnabledGitHubActionsEnterprise: ["PUT /enterprises/{enterprise}/actions/permissions/organizations"]
   },
   gists: {
     checkIsStarred: ["GET /gists/{gist_id}/star"],
@@ -13848,7 +13848,7 @@ const getPullRequestCommitMessages = () => __awaiter(void 0, void 0, void 0, fun
         repositoryName: github.context.payload.repository.name,
         pullRequestNumber: github.context.payload.pull_request.number,
         headers: {
-            authorization: `token ${(0, utils_1.getGithubAPIToken)()}`,
+            authorization: `token ${(0, utils_1.getGitHubAPIToken)()}`,
         },
     };
     const query = `
@@ -14175,7 +14175,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.REGEX_TRELLO_NOID_LOWERCASE = exports.REGEX_TRELLO_NOID_UPPERCASE = exports.REGEX_TRELLO_NOID_CASE_INSENSITIVE = exports.REGEX_TRELLO_SHORT_LINK = exports.getGithubAPIToken = exports.getTrelloApiToken = exports.getTrelloApiKey = exports.getTitleVerificationStrategy = exports.getCommitVerificationStrategy = exports.getNoIdVerificationStrategy = void 0;
+exports.REGEX_TRELLO_NOID_LOWERCASE = exports.REGEX_TRELLO_NOID_UPPERCASE = exports.REGEX_TRELLO_NOID_CASE_INSENSITIVE = exports.REGEX_TRELLO_SHORT_LINK = exports.getGitHubAPIToken = exports.getTrelloApiToken = exports.getTrelloApiKey = exports.getTitleVerificationStrategy = exports.getCommitVerificationStrategy = exports.getNoIdVerificationStrategy = void 0;
 const types_1 = __nccwpck_require__(5077);
 const core = __importStar(__nccwpck_require__(2186));
 const REGEX_TRELLO_SHORT_LINK = new RegExp('^\\[([a-z0-9]+|NOID)\\].+');
@@ -14238,10 +14238,10 @@ const getTrelloApiToken = () => {
     return core.getInput('trello_api_token', { required: true });
 };
 exports.getTrelloApiToken = getTrelloApiToken;
-const getGithubAPIToken = () => {
+const getGitHubAPIToken = () => {
     return core.getInput('github_api_token', { required: true });
 };
-exports.getGithubAPIToken = getGithubAPIToken;
+exports.getGitHubAPIToken = getGitHubAPIToken;
 
 
 /***/ }),

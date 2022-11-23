@@ -62,7 +62,7 @@ const getTrelloApiToken = (): string => {
   return core.getInput('trello_api_token', { required: true });
 };
 
-const getGithubAPIToken = (): string => {
+const getGitHubAPIToken = (): string => {
   return core.getInput('github_api_token', { required: true });
 };
 
@@ -72,7 +72,7 @@ export {
   getTitleVerificationStrategy,
   getTrelloApiKey,
   getTrelloApiToken,
-  getGithubAPIToken,
+  getGitHubAPIToken,
   REGEX_TRELLO_SHORT_LINK,
   REGEX_TRELLO_NOID_CASE_INSENSITIVE,
   REGEX_TRELLO_NOID_UPPERCASE,

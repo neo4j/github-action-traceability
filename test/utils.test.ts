@@ -1,5 +1,5 @@
 // /*
-//  * This file is part of the "GS Commit Message Checker" Action for Github.
+//  * This file is part of the "GS Commit Message Checker" Action for GitHub.
 //  *
 //  * Copyright (C) 2019 by Gilbertsoft LLC (gilbertsoft.org)
 //  *

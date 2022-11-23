@@ -1,6 +1,6 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
-import { getGithubAPIToken } from './utils';
+import { getGitHubAPIToken } from './utils';
 import { graphql } from '@octokit/graphql';
 import { GhCommitEdgeItem, GhRepositoryResponseData } from './types';
 
@@ -61,7 +61,7 @@ const getPullRequestCommitMessages = async (): Promise<string[]> => {
     repositoryName: github.context.payload.repository.name,
     pullRequestNumber: github.context.payload.pull_request.number,
     headers: {
-      authorization: `token ${getGithubAPIToken()}`,
+      authorization: `token ${getGitHubAPIToken()}`,
     },
   };
 

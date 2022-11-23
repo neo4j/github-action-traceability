@@ -1,4 +1,4 @@
-name: "Traceability Github Action"
+name: "Traceability GitHub Action"
 author: "Daniel Leaver"
 description: "Ensures git commit messages contain a Trello ticket id"
 inputs:
@@ -16,13 +16,13 @@ inputs:
     description: "One of ALWAYS, IF_EXISTS, NEVER."
   trello_api_key:
     required: true
-    description: "API key for Trello. Use Github secrets. Don't use plaintext."
+    description: "API key for Trello. Use GitHub secrets. Don't use plaintext."
   trello_api_token:
     required: true
-    description: "API token for Trello. Use Github secrets. Don't use plaintext."
+    description: "API token for Trello. Use GitHub secrets. Don't use plaintext."
   github_access_token:
     required: true
-    description: "API token for Github. Use Github secrets. Don't use plaintext."
+    description: "API token for GitHub. Use GitHub secrets. Don't use plaintext."
 runs:
   using: "node12"
   main: "dist/index.js"
