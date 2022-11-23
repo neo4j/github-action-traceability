@@ -1,122 +1,44 @@
 import * as core from '@actions/core';
 
-import {
-  getContextAction,
-  getContextEvent,
-  getPullRequestCommitMessages,
-  getPullRequestTitle,
-  getPullRequestUrl,
-  getSupportedActions,
-  getSupportedEvent,
-  isSupportedAction,
-  isSupportedEvent,
-} from './api-github';
-
-import {
-  getCommitVerificationStrategy,
-  getNoIdVerificationStrategy,
-  getTitleVerificationStrategy,
-  REGEX_TRELLO_NOID_CASE_INSENSITIVE,
-  REGEX_TRELLO_NOID_LOWERCASE,
-  REGEX_TRELLO_NOID_UPPERCASE,
-  REGEX_TRELLO_SHORT_LINK,
-} from './utils';
-
+import { GithubClient, GithubClientI } from './client-github';
 import {
   CommitVerificationStrategy,
-  NoIdVerificationStrategy,
+  InputsClient,
+  InputsClientI,
   TitleVerificationStrategy,
-  TrelloCard,
-} from './types';
+} from './client-inputs';
+import { TrelloClient, TrelloClientI } from './client-trello';
+import {
+  assertAllShortLinksAreIdentical,
+  assertCardNotClosed,
+  assertNoIdShortLinkStrategy,
+  assertSupportedAction,
+  assertSupportedEvent,
+  extractTrelloShortLink,
+} from './utils';
 
-import { addUrlAttachmentToCard, getCard, getCardAttachments } from './api-trello';
+const run = async (inputs: InputsClientI, github: GithubClientI, trello: TrelloClientI) => {
+  assertSupportedEvent(github);
+  assertSupportedAction(github);
 
-const getTrelloShortLink = (commitMessage: string): string => {
-  const match = REGEX_TRELLO_SHORT_LINK.exec(commitMessage);
+  const pullRequestUrl = github.getPullRequestUrl();
 
-  if (match === null)
-    throw new Error(`Commit message ${commitMessage} does not contain a valid trello short link.`);
-
-  return match[1];
-};
-
-const assertNoIdShortLinkStrategy = (trelloShortLinks: string[]): void => {
-  trelloShortLinks.forEach((trelloShortLink) => {
-    switch (getNoIdVerificationStrategy()) {
-      case NoIdVerificationStrategy.CASE_INSENSITIVE:
-        return;
-      case NoIdVerificationStrategy.UPPER_CASE:
-        if (
-          REGEX_TRELLO_NOID_CASE_INSENSITIVE.test(trelloShortLink) &&
-          !REGEX_TRELLO_NOID_UPPERCASE.test(trelloShortLink)
-        ) {
-          throw new Error(`NOID short link needed to be upper case but was ${trelloShortLink}`);
-        }
-        return;
-      case NoIdVerificationStrategy.LOWER_CASE:
-        if (
-          REGEX_TRELLO_NOID_CASE_INSENSITIVE.test(trelloShortLink) &&
-          !REGEX_TRELLO_NOID_LOWERCASE.test(trelloShortLink)
-        ) {
-          throw new Error(`NOID short link needed to be lower case but was ${trelloShortLink}`);
-        }
-        return;
-      case NoIdVerificationStrategy.NEVER:
-        if (REGEX_TRELLO_NOID_CASE_INSENSITIVE.test(trelloShortLink)) {
-          throw new Error(`NOID short link is not allowed.`);
-        }
-        return;
-    }
-  });
-};
-
-const assertAllShortLinksAreIdentical = (shortLinks: string[]): void => {
-  if (shortLinks.length === 0) return;
-
-  const head = shortLinks[0];
-  shortLinks.forEach((shortLink) => {
-    if (shortLink !== head) {
-      throw new Error('');
-    }
-  });
-};
-
-const assertCardNotClosed = (card: TrelloCard): void => {
-  if (card.closed) throw new Error(`Expected card ${card.shortUrl} to not be closed.`);
-};
-
-(async () => {
-  if (!isSupportedEvent()) {
-    throw new Error(
-      `Event ${getContextEvent()} is unsupported. Only ${getSupportedEvent()} events are supported.`,
-    );
-  }
-
-  if (!isSupportedAction()) {
-    core.info(
-      `Action ${getContextAction()} is unsupported. Only ${getSupportedActions()} actions are supported. Skipping.`,
-    );
-    return;
-  }
-
-  const pullRequestUrl = getPullRequestUrl();
-
-  switch (getCommitVerificationStrategy()) {
+  switch (inputs.getCommitVerificationStrategy()) {
     case CommitVerificationStrategy.ALL_COMMITS:
-      const commitMessages = await getPullRequestCommitMessages();
-      const commitMessageShortLinks = commitMessages.map(getTrelloShortLink);
+      const commitMessages = await github.getPullRequestCommitMessages();
+      const commitMessageShortLinks = commitMessages.map(extractTrelloShortLink);
       assertAllShortLinksAreIdentical(commitMessageShortLinks);
-      assertNoIdShortLinkStrategy(commitMessageShortLinks);
+      assertNoIdShortLinkStrategy(inputs.getNoIdVerificationStrategy(), commitMessageShortLinks);
 
       const shortLink = commitMessageShortLinks[0];
-      const card = await getCard(shortLink);
+      const card = await trello.getCard(shortLink);
       assertCardNotClosed(card);
 
-      const attachments = await getCardAttachments(shortLink);
+      const attachments = await trello.getCardAttachments(shortLink);
       if (attachments.find((attachment) => attachment.url === pullRequestUrl)) {
         core.info('Trello card already has an attachment for this pull request. Skipping');
       } else {
-        await addUrlAttachmentToCard(shortLink, pullRequestUrl);
+        await trello.addUrlAttachmentToCard(shortLink, pullRequestUrl);
       }
       return;
     case CommitVerificationStrategy.HEAD_COMMIT_ONLY:
@@ -125,20 +47,20 @@ const assertCardNotClosed = (card: TrelloCard): void => {
       core.info('Skipping commit verification strategy.');
   }
 
-  switch (getTitleVerificationStrategy()) {
+  switch (inputs.getTitleVerificationStrategy()) {
     case TitleVerificationStrategy.ALWAYS:
-      const pullRequestTitle = getPullRequestTitle();
-      const titleShortLink = getTrelloShortLink(pullRequestTitle);
-      assertNoIdShortLinkStrategy([titleShortLink]);
+      const pullRequestTitle = github.getPullRequestTitle();
+      const titleShortLink = extractTrelloShortLink(pullRequestTitle);
+      assertNoIdShortLinkStrategy(inputs.getNoIdVerificationStrategy(), [titleShortLink]);
 
-      const card = await getCard(titleShortLink);
+      const card = await trello.getCard(titleShortLink);
       assertCardNotClosed(card);
 
-      const attachments = await getCardAttachments(titleShortLink);
+      const attachments = await trello.getCardAttachments(titleShortLink);
       if (attachments.find((attachment) => attachment.url === pullRequestUrl)) {
         core.info('Trello card already has an attachment for this pull request. Skipping');
       } else {
-        await addUrlAttachmentToCard(titleShortLink, pullRequestUrl);
+        await trello.addUrlAttachmentToCard(titleShortLink, pullRequestUrl);
       }
       return;
     case TitleVerificationStrategy.IF_EXISTS:
@@ -146,4 +68,12 @@ const assertCardNotClosed = (card: TrelloCard): void => {
     case TitleVerificationStrategy.NEVER:
       return;
   }
+};
+
+(async () => {
+  const inputs = new InputsClient();
+  const github = new GithubClient(inputs.getGitHubApiToken());
+  const trello = new TrelloClient(inputs.getTrelloApiKey(), inputs.getGitHubApiToken());
+
+  await run(inputs, github, trello);
 })();
