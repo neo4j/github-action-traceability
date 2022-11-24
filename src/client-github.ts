@@ -35,12 +35,12 @@ class GithubClient implements GithubClientI {
     this.githubApiToken = githubApiToken;
   }
 
-  public getContextEvent(): string {
+  getContextEvent(): string {
     if (!github.context.eventName) throw new Error('No event in the payload');
     return github.context.eventName;
   }
 
-  public getContextAction(): string {
+  getContextAction(): string {
     if (!github.context.payload.action) throw new Error('No action in the payload');
     return github.context.payload.action;
   }
@@ -69,7 +69,7 @@ class GithubClient implements GithubClientI {
     return github.context.payload.pull_request.title;
   }
 
-  public async getPullRequestCommitMessages(): Promise<string[]> {
+  async getPullRequestCommitMessages(): Promise<string[]> {
     core.debug('Get pull request commits');
 
     if (!github.context.payload) throw new Error('No payload found in the context.');

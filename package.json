@@ -6,13 +6,19 @@
   "license": "Apache-2.0",
   "main": "dist/index.js",
   "homepage": "https://github.com/neo-technology/github-action-traceability#readme",
+  "files": [
+    "action.yml",
+    "dist",
+    "lib"
+  ],
   "scripts": {
-    "clean": "rm -rf dist",
-    "build": "ncc build src/index.ts -o dist --license licenses.txt",
+    "clean": "rm -rf dist lib",
     "format": "prettier --write '**/*.ts'",
     "lint": "eslint **/*.ts",
+    "compile": "tsc",
     "test": "jest",
-    "package": "yarn clean && yarn format && yarn lint && yarn test && yarn build"
+    "build": "ncc build src/index.ts --license licenses.txt",
+    "package": "yarn clean && yarn format && yarn lint && yarn compile && yarn __tests__ && yarn build"
   },
   "repository": {
     "type": "git",
@@ -24,18 +30,24 @@
   "dependencies": {
     "@actions/core": "^1.5.0",
     "@actions/github": "^5.0.0",
-    "node-fetch": "^3.0.0"
+    "eslint-plugin-prettier": "^4.2.1",
+    "node-fetch": "^2.6.0"
   },
   "devDependencies": {
+    "@jest/globals": "^29.3.1",
+    "@types/jest": "^29.2.3",
     "@types/node": "^16.9.1",
-    "@types/jest": "^29.2.0",
-    "@typescript-eslint/eslint-plugin": "^4.31.1",
-    "@typescript-eslint/parser": "^4.31.1",
+    "@types/node-fetch": "^2.5.10",
+    "@typescript-eslint/eslint-plugin": "^5.44.0",
+    "@typescript-eslint/parser": "^5.44.0",
     "@vercel/ncc": "^0.34.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-jest": "^27.1.3",
     "eslint-plugin-promise": "^5.1.0",
+    "jest": "^29.2.1",
     "prettier": "^2.4.0",
-    "typescript": "^4.4.3"
+    "ts-jest": "^29.0.3",
+    "typescript": "^4.4.4"
   }
 }

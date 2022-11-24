@@ -29,13 +29,21 @@ currently no CI for this project, please manually ensure everything works before
 
 Deletes the build (./lib) artefacts/
 
-### yarn build
+### yarn format
 
-Formats the code to make it consistent with the formatting rules. Does not run tests.
+Format the code to make it consistent with the formatting rules.
 
 ### yarn lint
 
 Lints the code to make it consistent with the linting rules.
+
+### yarn compile
+
+Compiles the Typescript src files into their corresponding Javascript files in lib.
+
+### yarn build
+
+Compiles the Typescript src files into a single Javascript file in dist.
 
 ### yarn test
 

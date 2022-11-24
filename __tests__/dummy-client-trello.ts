@@ -1,6 +1,6 @@
 import { TrelloAttachment, TrelloCard, TrelloClientI } from '../src/client-trello';
 
-class DummyTrelloClientBuilder {
+class TrelloClientBuilder {
   cards: Record<string, TrelloCard>;
   cardAttachments: Record<string, TrelloAttachment[]>;
 
@@ -9,13 +9,13 @@ class DummyTrelloClientBuilder {
     this.cardAttachments = {};
   }
 
-  public withCard(shortLink: string, closed: boolean): DummyTrelloClientBuilder {
+  public withCard(shortLink: string, closed: boolean): TrelloClientBuilder {
     this.cards[shortLink] = { shortLink, closed };
     this.cardAttachments[shortLink] = [];
     return this;
   }
 
-  public withCardAttachment(shortLink: string, urlAttachment: string): DummyTrelloClientBuilder {
+  public withCardAttachment(shortLink: string, urlAttachment: string): TrelloClientBuilder {
     if (!this.cards[shortLink]) this.cards[shortLink] = { shortLink, closed: false };
     if (!this.cardAttachments[shortLink]) this.cardAttachments[shortLink] = [];
     this.cardAttachments[shortLink].push({ shortLink, url: urlAttachment });
@@ -60,4 +60,4 @@ class DummyTrelloClient implements TrelloClientI {
   }
 }
 
-export { DummyTrelloClientBuilder };
+export { TrelloClientBuilder };

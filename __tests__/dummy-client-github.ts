@@ -1,35 +1,33 @@
 import { GithubClientI } from '../src/client-github';
 
-class DummyGithubClientBuilder {
+class GithubClientBuilder {
   event: string = 'pull_request';
   action: string = 'opened';
   pullRequestUrl: string = 'https://www.github.com/neo4j/apoc';
   pullRequestTitle: string = 'Install Traceability Github Action';
   pullRequestCommitMessages: string[] = ['Install Traceability Github Action'];
 
-  public withEvent(event: string): DummyGithubClientBuilder {
+  public withEvent(event: string): GithubClientBuilder {
     this.event = event;
     return this;
   }
 
-  public withAction(action: string): DummyGithubClientBuilder {
+  public withAction(action: string): GithubClientBuilder {
     this.action = action;
     return this;
   }
 
-  public withPullRequestUrl(pullRequestUrl: string): DummyGithubClientBuilder {
+  public withPullRequestUrl(pullRequestUrl: string): GithubClientBuilder {
     this.pullRequestUrl = pullRequestUrl;
     return this;
   }
 
-  public withPullRequestTitle(pullRequestTitle: string): DummyGithubClientBuilder {
+  public withPullRequestTitle(pullRequestTitle: string): GithubClientBuilder {
     this.pullRequestTitle = 'Install Traceability Github Action';
     return this;
   }
 
-  public withPullRequestCommitMessages(
-    pullRequestCommitMessages: string[],
-  ): DummyGithubClientBuilder {
+  public withPullRequestCommitMessages(pullRequestCommitMessages: string[]): GithubClientBuilder {
     this.pullRequestCommitMessages = pullRequestCommitMessages;
     return this;
   }
@@ -87,4 +85,4 @@ class DummyGithubClient implements GithubClientI {
   }
 }
 
-export { DummyGithubClientBuilder };
+export { GithubClientBuilder };

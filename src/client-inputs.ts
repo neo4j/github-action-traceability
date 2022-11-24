@@ -27,7 +27,7 @@ interface InputsClientI {
 }
 
 class InputsClient implements InputsClientI {
-  public getNoIdVerificationStrategy(): NoIdVerificationStrategy {
+  getNoIdVerificationStrategy(): NoIdVerificationStrategy {
     const input = core.getInput('noid_verification_strategy');
     switch (input) {
       case 'CASE_INSENSITIVE':
@@ -43,7 +43,7 @@ class InputsClient implements InputsClientI {
     }
   }
 
-  public getCommitVerificationStrategy(): CommitVerificationStrategy {
+  getCommitVerificationStrategy(): CommitVerificationStrategy {
     const input = core.getInput('commit_verification_strategy');
     switch (input) {
       case 'ALL_COMMITS':
@@ -55,7 +55,7 @@ class InputsClient implements InputsClientI {
     }
   }
 
-  public getTitleVerificationStrategy(): TitleVerificationStrategy {
+  getTitleVerificationStrategy(): TitleVerificationStrategy {
     const input = core.getInput('title_verification_strategy');
     switch (input) {
       case 'ALWAYS':
@@ -67,15 +67,15 @@ class InputsClient implements InputsClientI {
     }
   }
 
-  public getTrelloApiKey(): string {
+  getTrelloApiKey(): string {
     return core.getInput('trello_api_key', { required: true });
   }
 
-  public getTrelloApiToken(): string {
+  getTrelloApiToken(): string {
     return core.getInput('trello_api_token', { required: true });
   }
 
-  public getGitHubApiToken(): string {
+  getGitHubApiToken(): string {
     return core.getInput('github_api_token', { required: true });
   }
 }

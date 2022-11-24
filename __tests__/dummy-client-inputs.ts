@@ -5,7 +5,7 @@ import {
   TitleVerificationStrategy,
 } from '../src/client-inputs';
 
-class DummyInputsClientBuilder {
+class InputsClientBuilder {
   commitVerificationStrategy: CommitVerificationStrategy;
   noIdVerificationStrategy: NoIdVerificationStrategy;
   titleVerificationStrategy: TitleVerificationStrategy;
@@ -16,17 +16,17 @@ class DummyInputsClientBuilder {
     this.titleVerificationStrategy = TitleVerificationStrategy.NEVER;
   }
 
-  withCommitVerificationStrategy(strategy: CommitVerificationStrategy): DummyInputsClientBuilder {
+  withCommitVerificationStrategy(strategy: CommitVerificationStrategy): InputsClientBuilder {
     this.commitVerificationStrategy = strategy;
     return this;
   }
 
-  withNoIdVerificationStrategy(strategy: NoIdVerificationStrategy): DummyInputsClientBuilder {
+  withNoIdVerificationStrategy(strategy: NoIdVerificationStrategy): InputsClientBuilder {
     this.noIdVerificationStrategy = strategy;
     return this;
   }
 
-  withTitleVerificationStrategy(strategy: TitleVerificationStrategy): DummyInputsClientBuilder {
+  withTitleVerificationStrategy(strategy: TitleVerificationStrategy): InputsClientBuilder {
     this.titleVerificationStrategy = strategy;
     return this;
   }
@@ -80,4 +80,4 @@ class DummyInputsClient implements InputsClientI {
   }
 }
 
-export { DummyInputsClientBuilder };
+export { InputsClientBuilder };

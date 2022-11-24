@@ -1,5 +1,4 @@
-import fetch from 'node-fetch';
-import { RequestInit } from 'node-fetch';
+import fetch, { RequestInit } from 'node-fetch';
 
 interface TrelloCard {
   shortLink: string;
@@ -42,7 +41,7 @@ class TrelloClient implements TrelloClientI {
   }
 
   // https://developer.atlassian.com/cloud/trello/rest/api-group-cards/#api-cards-id-get
-  public getCard(shortLink: string): Promise<TrelloCard> {
+  async getCard(shortLink: string): Promise<TrelloCard> {
     const path = `/cards/${shortLink}`;
     const options = { ...this.apiBaseHeaders };
 
@@ -58,7 +57,7 @@ class TrelloClient implements TrelloClientI {
   }
 
   // https://developer.atlassian.com/cloud/trello/rest/api-group-cards/#api-cards-id-attachments-get
-  public getCardAttachments(shortLink: string): Promise<TrelloAttachment[]> {
+  async getCardAttachments(shortLink: string): Promise<TrelloAttachment[]> {
     const path = `/cards/${shortLink}/attachments`;
     const options = { ...this.apiBaseHeaders };
 
@@ -74,7 +73,7 @@ class TrelloClient implements TrelloClientI {
   }
 
   // https://developer.atlassian.com/cloud/trello/rest/api-group-cards/#api-cards-id-attachments-post
-  public addUrlAttachmentToCard(
+  async addUrlAttachmentToCard(
     shortLink: string,
     attachmentUrl: string,
   ): Promise<TrelloAttachment> {

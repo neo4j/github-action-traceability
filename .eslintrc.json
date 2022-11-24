@@ -5,7 +5,7 @@
     "ecmaVersion": 9,
     "project": ["./tsconfig.eslint.json"]
   },
-  "plugins": ["@typescript-eslint", "promise"],
+  "plugins": ["@typescript-eslint", "promise", "jest"],
   "extends": ["prettier"],
   "rules": {
     "import/extensions": "off",
