@@ -1,6 +1,27 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 918:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.assertSupportedAction = exports.assertSupportedEvent = void 0;
+const assertSupportedEvent = (githubClient) => {
+    if (githubClient.getContextEvent() !== 'pull_request')
+        throw new Error(`Event ${githubClient.getContextEvent()} is unsupported. Only 'pull_request' events are supported.`);
+};
+exports.assertSupportedEvent = assertSupportedEvent;
+const assertSupportedAction = (githubClient) => {
+    if (!['opened', 'reopened', 'edited'].some((el) => el === githubClient.getContextAction()))
+        throw new Error(`Action ${githubClient.getContextAction()} is unsupported. Only 'opened', 'reopened', 'edited' actions are supported.`);
+};
+exports.assertSupportedAction = assertSupportedAction;
+
+
+/***/ }),
+
 /***/ 7351:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -7918,7 +7939,7 @@ exports.implementation = class URLImpl {
 
 
 const conversions = __nccwpck_require__(4886);
-const utils = __nccwpck_require__(3185);
+const utils = __nccwpck_require__(918);
 const Impl = __nccwpck_require__(7537);
 
 const impl = utils.implSymbol;
@@ -9435,34 +9456,6 @@ module.exports.parseURL = function (input, options) {
   // We don't handle blobs, so this just delegates:
   return module.exports.basicURLParse(input, { baseURL: options.baseURL, encodingOverride: options.encodingOverride });
 };
-
-
-/***/ }),
-
-/***/ 3185:
-/***/ ((module) => {
-
-"use strict";
-
-
-module.exports.mixin = function mixin(target, source) {
-  const keys = Object.getOwnPropertyNames(source);
-  for (let i = 0; i < keys.length; ++i) {
-    Object.defineProperty(target, keys[i], Object.getOwnPropertyDescriptor(source, keys[i]));
-  }
-};
-
-module.exports.wrapperSymbol = Symbol("wrapper");
-module.exports.implSymbol = Symbol("impl");
-
-module.exports.wrapperForImpl = function (impl) {
-  return impl[module.exports.wrapperSymbol];
-};
-
-module.exports.implForWrapper = function (wrapper) {
-  return wrapper[module.exports.implSymbol];
-};
-
 
 
 /***/ }),

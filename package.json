@@ -18,7 +18,7 @@
     "compile": "tsc",
     "test": "jest",
     "build": "ncc build src/index.ts --license licenses.txt",
-    "package": "yarn clean && yarn format && yarn lint && yarn compile && yarn __tests__ && yarn build"
+    "package": "yarn clean && yarn format && yarn lint && yarn compile && yarn test && yarn build"
   },
   "repository": {
     "type": "git",

@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@jest/globals';
-import { run } from '../src/index';
+import { run } from '../src';
 
 import { GithubClientBuilder } from './dummy-client-github';
 import { InputsClientBuilder } from './dummy-client-inputs';
