@@ -39,7 +39,7 @@ class InputsClient implements InputsClientI {
       case 'NEVER':
         return NoIdVerificationStrategy.NEVER;
       default:
-        throw new Error(`Unrecognised value ${input} for "noid_verification_strategy"`);
+        throw `Unrecognised value ${input} for "noid_verification_strategy"`;
     }
   }
 
@@ -51,7 +51,7 @@ class InputsClient implements InputsClientI {
       case 'NEVER':
         return CommitVerificationStrategy.NEVER;
       default:
-        throw new Error(`Unrecognised value ${input} for "commit_verification_strategy"`);
+        throw `Unrecognised value ${input} for "commit_verification_strategy"`;
     }
   }
 
@@ -63,7 +63,7 @@ class InputsClient implements InputsClientI {
       case 'NEVER':
         return TitleVerificationStrategy.NEVER;
       default:
-        throw new Error(`Unrecognised value ${input} for "title_verification_strategy"`);
+        throw `Unrecognised value ${input} for "title_verification_strategy"`;
     }
   }
 

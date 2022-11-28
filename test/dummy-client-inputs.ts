@@ -6,15 +6,9 @@ import {
 } from '../src/client-inputs';
 
 class InputsClientBuilder {
-  commitVerificationStrategy: CommitVerificationStrategy;
-  noIdVerificationStrategy: NoIdVerificationStrategy;
-  titleVerificationStrategy: TitleVerificationStrategy;
-
-  constructor() {
-    this.commitVerificationStrategy = CommitVerificationStrategy.NEVER;
-    this.noIdVerificationStrategy = NoIdVerificationStrategy.NEVER;
-    this.titleVerificationStrategy = TitleVerificationStrategy.NEVER;
-  }
+  commitVerificationStrategy: CommitVerificationStrategy = CommitVerificationStrategy.NEVER;
+  noIdVerificationStrategy: NoIdVerificationStrategy = NoIdVerificationStrategy.NEVER;
+  titleVerificationStrategy: TitleVerificationStrategy = TitleVerificationStrategy.NEVER;
 
   withCommitVerificationStrategy(strategy: CommitVerificationStrategy): InputsClientBuilder {
     this.commitVerificationStrategy = strategy;

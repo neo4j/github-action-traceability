@@ -19,9 +19,7 @@ class VerificationsService {
     const match = REGEX_TRELLO_SHORT_LINK.exec(commitMessage);
 
     if (match === null)
-      throw new Error(
-        `Commit message ${commitMessage} does not contain a valid trello short link.`,
-      );
+      throw `Commit message ${commitMessage} does not contain a valid trello short link.`;
 
     return match[1];
   }
@@ -32,13 +30,13 @@ class VerificationsService {
     const head = shortLinks[0];
     shortLinks.forEach((shortLink) => {
       if (shortLink !== head) {
-        throw new Error('');
+        throw '';
       }
     });
   }
 
   private assertCardNotClosed(card: TrelloCard): void {
-    if (card.closed) throw new Error(`Expected card ${card.shortLink} to not be closed.`);
+    if (card.closed) throw `Expected card ${card.shortLink} to not be closed.`;
   }
 
   assertNoIdShortLinkStrategy(
@@ -58,7 +56,7 @@ class VerificationsService {
             REGEX_TRELLO_NOID_CASE_INSENSITIVE.test(trelloShortLink) &&
             !REGEX_TRELLO_NOID_UPPERCASE.test(trelloShortLink)
           ) {
-            throw new Error(`NOID short link needed to be upper case but was ${trelloShortLink}`);
+            throw `NOID short link needed to be upper case but was ${trelloShortLink}`;
           }
           return;
         case NoIdVerificationStrategy.LOWER_CASE:
@@ -66,12 +64,12 @@ class VerificationsService {
             REGEX_TRELLO_NOID_CASE_INSENSITIVE.test(trelloShortLink) &&
             !REGEX_TRELLO_NOID_LOWERCASE.test(trelloShortLink)
           ) {
-            throw new Error(`NOID short link needed to be lower case but was ${trelloShortLink}`);
+            throw `NOID short link needed to be lower case but was ${trelloShortLink}`;
           }
           return;
         case NoIdVerificationStrategy.NEVER:
           if (REGEX_TRELLO_NOID_CASE_INSENSITIVE.test(trelloShortLink)) {
-            throw new Error(`NOID short link is not allowed.`);
+            throw `NOID short link is not allowed.`;
           }
           return;
       }

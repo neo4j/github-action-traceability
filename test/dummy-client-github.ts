@@ -5,7 +5,7 @@ class GithubClientBuilder {
   action: string = 'opened';
   pullRequestUrl: string = 'https://www.github.com/neo4j/apoc';
   pullRequestTitle: string = 'Install Traceability Github Action';
-  pullRequestCommitMessages: string[] = ['Install Traceability Github Action'];
+  pullRequestCommitMessages: string[] = [];
 
   public withEvent(event: string): GithubClientBuilder {
     this.event = event;
@@ -27,8 +27,8 @@ class GithubClientBuilder {
     return this;
   }
 
-  public withPullRequestCommitMessages(pullRequestCommitMessages: string[]): GithubClientBuilder {
-    this.pullRequestCommitMessages = pullRequestCommitMessages;
+  public withPullRequestCommitMessage(pullRequestCommitMessage: string): GithubClientBuilder {
+    this.pullRequestCommitMessages.push(pullRequestCommitMessage);
     return this;
   }
 
@@ -55,7 +55,7 @@ class DummyGithubClient implements GithubClientI {
     action: string = 'opened',
     pullRequestUrl: string = 'https://www.github.com/neo4j/apoc',
     pullRequestTitle: string = 'Install Traceability Github Action',
-    pullRequestCommitMessages: string[] = ['Install Traceability Github Action'],
+    pullRequestCommitMessages: string[] = [],
   ) {
     this.event = event;
     this.action = action;
