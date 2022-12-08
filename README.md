@@ -14,12 +14,13 @@ Depending on how you want to configure this GitHub Action for your project, you 
 - enforce that the Trello card short link id is real
 - automatically add an attachment to a Trello card containing the GitHub PR
 
-## What is a Trello Short Link
+## Instructions for Every-Day Users
 
 Open your Trello card in your browser, and take a look at the URL. In the example below, the Trello short link is 
-highlighted and is `i19tvtq1`. Copy this to your commit message and put it between brackets like so:
+highlighted and its value is `i19tvtq1`. 
 
-`git commit -m "[i19tvtq1] Description of my change"`
+Include this your commit message and put it between brackets like so: 
+- `git commit -m "[i19tvtq1] Description of my change"`
 
 ![](assets/trello-short-link.png)
 
