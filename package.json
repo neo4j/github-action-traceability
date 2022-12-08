@@ -1,6 +1,6 @@
 {
   "name": "github-action-traceability",
-  "description": "Ensures git commit messages contain a Trello ticket id",
+  "description": "Ensures git commit messages contain a Trello short link",
   "version": "1.0.0",
   "author": "Daniel Leaver",
   "license": "Apache-2.0",

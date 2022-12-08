@@ -1,6 +1,6 @@
 name: "Traceability GitHub Action"
 author: "Daniel Leaver"
-description: "Ensures git commit messages contain a Trello ticket id"
+description: "Ensures git commit messages contain a Trello short link"
 inputs:
   noid_verification_strategy:
     required: false
