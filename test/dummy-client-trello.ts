@@ -42,20 +42,20 @@ class DummyTrelloClient implements TrelloClientI {
   addUrlAttachmentToCard(shortLink: string, urlAttachment: string): Promise<TrelloAttachment> {
     const attachments = this.cardAttachments[shortLink];
     const attachment = { shortLink, url: urlAttachment };
-    if (attachments === undefined) throw 'Card does not exist';
+    if (attachments === undefined) throw new Error('Card does not exist');
     attachments.push(attachment);
     return Promise.resolve(attachment);
   }
 
   getCard(shortLink: string): Promise<TrelloCard> {
     const card = this.cards[shortLink];
-    if (card === undefined) throw 'Card does not exist';
+    if (card === undefined) throw new Error('Card does not exist');
     return Promise.resolve(card);
   }
 
   getCardAttachments(shortLink: string): Promise<TrelloAttachment[]> {
     const attachments = this.cardAttachments[shortLink];
-    if (attachments === undefined) throw 'Card does not exist';
+    if (attachments === undefined) throw new Error('Card does not exist');
     return Promise.resolve(attachments);
   }
 }

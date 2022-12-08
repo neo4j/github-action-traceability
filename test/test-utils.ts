@@ -1,7 +1,7 @@
 import { expect } from '@jest/globals';
 
 const expectThrows = async (p: Promise<void>, errorMessage: string) => {
-  await expect(p).rejects.toEqual(errorMessage);
+  await expect(p).rejects.toThrowError(errorMessage);
 };
 
 const expectSuccess = async (p: Promise<void>) => {

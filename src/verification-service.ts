@@ -24,14 +24,14 @@ class VerificationService {
     if (match === null) {
       switch (descriptionType) {
         case ChangeDescriptionType.Title:
-          throw (
+          throw new Error(
             `PR title "${description}" did not contain a valid trello short link. Please include one ` +
-            'like in the following examples: "[abc123] My work description" or "[NOID] My work description"'
+              'like in the following examples: "[abc123] My work description" or "[NOID] My work description"',
           );
         case ChangeDescriptionType.CommitMessage:
-          throw (
+          throw new Error(
             `Commit message "${description}" did not contain a valid trello short link. Please include one ` +
-            'like in the following examples: "[abc123] My work description" or "[NOID] My work description"'
+              'like in the following examples: "[abc123] My work description" or "[NOID] My work description"',
           );
       }
     }
@@ -45,14 +45,14 @@ class VerificationService {
     if (shortLinks.length === 0) {
       switch (descriptionType) {
         case ChangeDescriptionType.Title:
-          throw (
+          throw new Error(
             'A Trello short link is missing from the title in your PR. Please include one ' +
-            'like in the following examples: "[abc123] My work description" or "[NOID] My work description"'
+              'like in the following examples: "[abc123] My work description" or "[NOID] My work description"',
           );
         case ChangeDescriptionType.CommitMessage:
-          throw (
+          throw new Error(
             'A Trello short link is missing from all commits in your PR. Please include at least one ' +
-            'like the following examples: "[abc123] My work description" or "[NOID] My work description"'
+              'like the following examples: "[abc123] My work description" or "[NOID] My work description"',
           );
       }
     }
@@ -64,10 +64,10 @@ class VerificationService {
     const head = shortLinks[0];
     shortLinks.forEach((shortLink: string) => {
       if (shortLink !== head) {
-        throw (
+        throw new Error(
           `Your PR contained Trello short links that did not match: "${head}" and "${shortLink}" differ. ` +
-          'You cannot currently include more than one Trello card per PR. But please reach out to me if this is ' +
-          'something your team needs, you savages.'
+            'You cannot currently include more than one Trello card per PR. But please reach out to me if this is ' +
+            'something your team needs, you savages.',
         );
       }
     });
@@ -75,7 +75,10 @@ class VerificationService {
 
   private assertCardNotClosed(card: TrelloCard): void {
     if (card.closed) {
-      throw `Trello card "${card.shortLink}" needs to be in an open state, but it is currently marked as closed.`;
+      throw new Error(
+        `Trello card "${card.shortLink}" needs to be in an open state, ` +
+          'but it is currently marked as closed.',
+      );
     }
   }
 
@@ -93,7 +96,7 @@ class VerificationService {
             REGEX_TRELLO_NOID_CASE_INSENSITIVE.test(shortLink) &&
             REGEX_TRELLO_NOID_LOWERCASE.test(shortLink)
           ) {
-            throw `NOID short link needed to be upper case but was "${shortLink}"`;
+            throw new Error(`NOID short link needed to be upper case but was "${shortLink}"`);
           }
           return;
         case NoIdVerificationStrategy.LowerCase:
@@ -101,14 +104,14 @@ class VerificationService {
             REGEX_TRELLO_NOID_CASE_INSENSITIVE.test(shortLink) &&
             REGEX_TRELLO_NOID_UPPERCASE.test(shortLink)
           ) {
-            throw `NOID short link needed to be lower case but was "${shortLink}"`;
+            throw new Error(`NOID short link needed to be lower case but was "${shortLink}"`);
           }
           return;
         case NoIdVerificationStrategy.Never:
           if (REGEX_TRELLO_NOID_CASE_INSENSITIVE.test(shortLink)) {
-            throw (
+            throw new Error(
               'This PR should not include any NOID short links. If you need this functionality please enable it ' +
-              'via the "noid_verification_strategy" setting for this Github Action'
+                'via the "noid_verification_strategy" setting for this Github Action',
             );
           }
           return;

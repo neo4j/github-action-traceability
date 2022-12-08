@@ -10,12 +10,14 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.assertSupportedAction = exports.assertSupportedEvent = void 0;
 const assertSupportedEvent = (githubClient) => {
     if (githubClient.getContextEvent() !== 'pull_request')
-        throw new Error(`Event ${githubClient.getContextEvent()} is unsupported. Only 'pull_request' events are supported.`);
+        throw new Error(`Github event "${githubClient.getContextEvent()}" is unsupported. ` +
+            'Only "pull_request" is supported.');
 };
 exports.assertSupportedEvent = assertSupportedEvent;
 const assertSupportedAction = (githubClient) => {
     if (!['opened', 'reopened', 'edited'].some((el) => el === githubClient.getContextAction()))
-        throw new Error(`Action ${githubClient.getContextAction()} is unsupported. Only 'opened', 'reopened', 'edited' actions are supported.`);
+        throw new Error(`Github action "${githubClient.getContextAction()}" is unsupported. Only "opened", "reopened", ` +
+            '"edited" are supported.');
 };
 exports.assertSupportedAction = assertSupportedAction;
 
@@ -9538,10 +9540,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.GithubClient = void 0;
+exports.ChangeDescriptionType = exports.GithubClient = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 const graphql_1 = __nccwpck_require__(8467);
+var ChangeDescriptionType;
+(function (ChangeDescriptionType) {
+    ChangeDescriptionType[ChangeDescriptionType["CommitMessage"] = 0] = "CommitMessage";
+    ChangeDescriptionType[ChangeDescriptionType["Title"] = 1] = "Title";
+})(ChangeDescriptionType || (ChangeDescriptionType = {}));
+exports.ChangeDescriptionType = ChangeDescriptionType;
 class GithubClient {
     constructor(githubApiToken) {
         this.githubApiToken = githubApiToken;
@@ -9669,22 +9677,22 @@ exports.CommitVerificationStrategy = exports.TitleVerificationStrategy = exports
 const core = __importStar(__nccwpck_require__(2186));
 var NoIdVerificationStrategy;
 (function (NoIdVerificationStrategy) {
-    NoIdVerificationStrategy["CASE_INSENSITIVE"] = "CASE_INSENSITIVE";
-    NoIdVerificationStrategy["UPPER_CASE"] = "UPPER_CASE";
-    NoIdVerificationStrategy["LOWER_CASE"] = "LOWER_CASE";
-    NoIdVerificationStrategy["NEVER"] = "NEVER";
+    NoIdVerificationStrategy[NoIdVerificationStrategy["CaseInsensitive"] = 0] = "CaseInsensitive";
+    NoIdVerificationStrategy[NoIdVerificationStrategy["UpperCase"] = 1] = "UpperCase";
+    NoIdVerificationStrategy[NoIdVerificationStrategy["LowerCase"] = 2] = "LowerCase";
+    NoIdVerificationStrategy[NoIdVerificationStrategy["Never"] = 3] = "Never";
 })(NoIdVerificationStrategy || (NoIdVerificationStrategy = {}));
 exports.NoIdVerificationStrategy = NoIdVerificationStrategy;
 var CommitVerificationStrategy;
 (function (CommitVerificationStrategy) {
-    CommitVerificationStrategy["ALL_COMMITS"] = "ALL_COMMITS";
-    CommitVerificationStrategy["NEVER"] = "NEVER";
+    CommitVerificationStrategy[CommitVerificationStrategy["AllCommits"] = 0] = "AllCommits";
+    CommitVerificationStrategy[CommitVerificationStrategy["Never"] = 1] = "Never";
 })(CommitVerificationStrategy || (CommitVerificationStrategy = {}));
 exports.CommitVerificationStrategy = CommitVerificationStrategy;
 var TitleVerificationStrategy;
 (function (TitleVerificationStrategy) {
-    TitleVerificationStrategy["ALWAYS"] = "ALWAYS";
-    TitleVerificationStrategy["NEVER"] = "NEVER";
+    TitleVerificationStrategy[TitleVerificationStrategy["Always"] = 0] = "Always";
+    TitleVerificationStrategy[TitleVerificationStrategy["Never"] = 1] = "Never";
 })(TitleVerificationStrategy || (TitleVerificationStrategy = {}));
 exports.TitleVerificationStrategy = TitleVerificationStrategy;
 class InputsClient {
@@ -9692,13 +9700,13 @@ class InputsClient {
         const input = core.getInput('noid_verification_strategy');
         switch (input) {
             case 'CASE_INSENSITIVE':
-                return NoIdVerificationStrategy.CASE_INSENSITIVE;
+                return NoIdVerificationStrategy.CaseInsensitive;
             case 'UPPER_CASE':
-                return NoIdVerificationStrategy.UPPER_CASE;
+                return NoIdVerificationStrategy.UpperCase;
             case 'LOWER_CASE':
-                return NoIdVerificationStrategy.LOWER_CASE;
+                return NoIdVerificationStrategy.LowerCase;
             case 'NEVER':
-                return NoIdVerificationStrategy.NEVER;
+                return NoIdVerificationStrategy.Never;
             default:
                 throw new Error(`Unrecognised value ${input} for "noid_verification_strategy"`);
         }
@@ -9707,9 +9715,9 @@ class InputsClient {
         const input = core.getInput('commit_verification_strategy');
         switch (input) {
             case 'ALL_COMMITS':
-                return CommitVerificationStrategy.ALL_COMMITS;
+                return CommitVerificationStrategy.AllCommits;
             case 'NEVER':
-                return CommitVerificationStrategy.NEVER;
+                return CommitVerificationStrategy.Never;
             default:
                 throw new Error(`Unrecognised value ${input} for "commit_verification_strategy"`);
         }
@@ -9718,9 +9726,9 @@ class InputsClient {
         const input = core.getInput('title_verification_strategy');
         switch (input) {
             case 'ALWAYS':
-                return TitleVerificationStrategy.ALWAYS;
+                return TitleVerificationStrategy.Always;
             case 'NEVER':
-                return TitleVerificationStrategy.NEVER;
+                return TitleVerificationStrategy.Never;
             default:
                 throw new Error(`Unrecognised value ${input} for "title_verification_strategy"`);
         }
@@ -9871,45 +9879,79 @@ exports.run = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const client_github_1 = __nccwpck_require__(9236);
 const client_inputs_1 = __nccwpck_require__(5867);
-const service_verifications_1 = __nccwpck_require__(8473);
+const verification_service_1 = __nccwpck_require__(1508);
 const client_trello_1 = __nccwpck_require__(6901);
 const utils_1 = __nccwpck_require__(1314);
 const run = (inputs, github, trello) => __awaiter(void 0, void 0, void 0, function* () {
-    const service = new service_verifications_1.VerificationsService(github, inputs, trello);
-    core.info('Start event verification.');
+    const service = new verification_service_1.VerificationService(github, inputs, trello);
+    core.info('Start GitHub event verification.');
     (0, utils_1.assertSupportedEvent)(github);
     (0, utils_1.assertSupportedAction)(github);
-    core.info('Start commit verification.');
+    core.info('Start commit messages verification.');
     switch (inputs.getCommitVerificationStrategy()) {
-        case client_inputs_1.CommitVerificationStrategy.ALL_COMMITS:
+        case client_inputs_1.CommitVerificationStrategy.AllCommits:
             yield service.assertAllCommitsContainShortLink();
             break;
-        case client_inputs_1.CommitVerificationStrategy.NEVER:
+        case client_inputs_1.CommitVerificationStrategy.Never:
             core.info('Skipping commit verification.');
             break;
     }
-    core.info('Start title verification.');
+    core.info('Start PR title verification.');
     switch (inputs.getTitleVerificationStrategy()) {
-        case client_inputs_1.TitleVerificationStrategy.ALWAYS:
+        case client_inputs_1.TitleVerificationStrategy.Always:
             yield service.assertTitleContainsShortLink();
             break;
-        case client_inputs_1.TitleVerificationStrategy.NEVER:
+        case client_inputs_1.TitleVerificationStrategy.Never:
             core.info('Skipping title verification.');
             break;
     }
+    core.info('PR validated successfully.');
 });
 exports.run = run;
 (() => __awaiter(void 0, void 0, void 0, function* () {
     const inputs = new client_inputs_1.InputsClient();
     const github = new client_github_1.GithubClient(inputs.getGitHubApiToken());
     const trello = new client_trello_1.TrelloClient(inputs.getTrelloApiKey(), inputs.getGitHubApiToken());
-    yield run(inputs, github, trello);
+    try {
+        yield run(inputs, github, trello);
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            core.setFailed(error);
+        }
+        else {
+            throw error;
+        }
+    }
 }))();
 
 
 /***/ }),
 
-/***/ 8473:
+/***/ 1314:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.assertSupportedAction = exports.assertSupportedEvent = void 0;
+const assertSupportedEvent = (githubClient) => {
+    if (githubClient.getContextEvent() !== 'pull_request')
+        throw new Error(`Github event "${githubClient.getContextEvent()}" is unsupported. ` +
+            'Only "pull_request" is supported.');
+};
+exports.assertSupportedEvent = assertSupportedEvent;
+const assertSupportedAction = (githubClient) => {
+    if (!['opened', 'reopened', 'edited'].some((el) => el === githubClient.getContextAction()))
+        throw new Error(`Github action "${githubClient.getContextAction()}" is unsupported. Only "opened", "reopened", ` +
+            '"edited" are supported.');
+};
+exports.assertSupportedAction = assertSupportedAction;
+
+
+/***/ }),
+
+/***/ 1508:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -9947,21 +9989,42 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.VerificationsService = void 0;
+exports.VerificationService = void 0;
 const client_inputs_1 = __nccwpck_require__(5867);
+const client_github_1 = __nccwpck_require__(9236);
 const core = __importStar(__nccwpck_require__(2186));
-class VerificationsService {
+class VerificationService {
     constructor(github, inputs, trello) {
         this.github = github;
         this.inputs = inputs;
         this.trello = trello;
     }
-    extractTrelloShortLink(commitMessage) {
-        const REGEX_TRELLO_SHORT_LINK = new RegExp('^\\[([a-z0-9]+|NOID)\\].+');
-        const match = REGEX_TRELLO_SHORT_LINK.exec(commitMessage);
-        if (match === null)
-            throw new Error(`Commit message ${commitMessage} does not contain a valid trello short link.`);
+    extractTrelloShortLink(description, descriptionType) {
+        const REGEX_TRELLO_SHORT_LINK = new RegExp('^\\[([a-z0-9]+|NOID)\\].+', 'i');
+        const match = REGEX_TRELLO_SHORT_LINK.exec(description);
+        if (match === null) {
+            switch (descriptionType) {
+                case client_github_1.ChangeDescriptionType.Title:
+                    throw new Error(`PR title "${description}" did not contain a valid trello short link. Please include one ` +
+                        'like in the following examples: "[abc123] My work description" or "[NOID] My work description"');
+                case client_github_1.ChangeDescriptionType.CommitMessage:
+                    throw new Error(`Commit message "${description}" did not contain a valid trello short link. Please include one ` +
+                        'like in the following examples: "[abc123] My work description" or "[NOID] My work description"');
+            }
+        }
         return match[1];
+    }
+    assertAtLeastOneShortLink(shortLinks, descriptionType) {
+        if (shortLinks.length === 0) {
+            switch (descriptionType) {
+                case client_github_1.ChangeDescriptionType.Title:
+                    throw new Error('A Trello short link is missing from the title in your PR. Please include one ' +
+                        'like in the following examples: "[abc123] My work description" or "[NOID] My work description"');
+                case client_github_1.ChangeDescriptionType.CommitMessage:
+                    throw new Error('A Trello short link is missing from all commits in your PR. Please include at least one ' +
+                        'like the following examples: "[abc123] My work description" or "[NOID] My work description"');
+            }
+        }
     }
     assertAllShortLinksAreIdentical(shortLinks) {
         if (shortLinks.length === 0)
@@ -9969,37 +10032,42 @@ class VerificationsService {
         const head = shortLinks[0];
         shortLinks.forEach((shortLink) => {
             if (shortLink !== head) {
-                throw new Error('');
+                throw new Error(`Your PR contained Trello short links that did not match: "${head}" and "${shortLink}" differ. ` +
+                    'You cannot currently include more than one Trello card per PR. But please reach out to me if this is ' +
+                    'something your team needs, you savages.');
             }
         });
     }
     assertCardNotClosed(card) {
-        if (card.closed)
-            throw new Error(`Expected card ${card.shortLink} to not be closed.`);
+        if (card.closed) {
+            throw new Error(`Trello card "${card.shortLink}" needs to be in an open state, ` +
+                'but it is currently marked as closed.');
+        }
     }
-    assertNoIdShortLinkStrategy(strategy, trelloShortLinks) {
-        const REGEX_TRELLO_NOID_CASE_INSENSITIVE = new RegExp('^\\[NOID\\]', 'i');
-        const REGEX_TRELLO_NOID_UPPERCASE = new RegExp('^\\[NOID\\]');
-        const REGEX_TRELLO_NOID_LOWERCASE = new RegExp('^\\[noid\\]');
-        trelloShortLinks.forEach((trelloShortLink) => {
+    assertNoIdShortLinkStrategy(strategy, shortLinks) {
+        const REGEX_TRELLO_NOID_CASE_INSENSITIVE = new RegExp('^NOID$', 'i');
+        const REGEX_TRELLO_NOID_UPPERCASE = new RegExp('^NOID$');
+        const REGEX_TRELLO_NOID_LOWERCASE = new RegExp('^noid$');
+        shortLinks.forEach((shortLink) => {
             switch (strategy) {
-                case client_inputs_1.NoIdVerificationStrategy.CASE_INSENSITIVE:
+                case client_inputs_1.NoIdVerificationStrategy.CaseInsensitive:
                     return;
-                case client_inputs_1.NoIdVerificationStrategy.UPPER_CASE:
-                    if (REGEX_TRELLO_NOID_CASE_INSENSITIVE.test(trelloShortLink) &&
-                        !REGEX_TRELLO_NOID_UPPERCASE.test(trelloShortLink)) {
-                        throw new Error(`NOID short link needed to be upper case but was ${trelloShortLink}`);
+                case client_inputs_1.NoIdVerificationStrategy.UpperCase:
+                    if (REGEX_TRELLO_NOID_CASE_INSENSITIVE.test(shortLink) &&
+                        REGEX_TRELLO_NOID_LOWERCASE.test(shortLink)) {
+                        throw new Error(`NOID short link needed to be upper case but was "${shortLink}"`);
                     }
                     return;
-                case client_inputs_1.NoIdVerificationStrategy.LOWER_CASE:
-                    if (REGEX_TRELLO_NOID_CASE_INSENSITIVE.test(trelloShortLink) &&
-                        !REGEX_TRELLO_NOID_LOWERCASE.test(trelloShortLink)) {
-                        throw new Error(`NOID short link needed to be lower case but was ${trelloShortLink}`);
+                case client_inputs_1.NoIdVerificationStrategy.LowerCase:
+                    if (REGEX_TRELLO_NOID_CASE_INSENSITIVE.test(shortLink) &&
+                        REGEX_TRELLO_NOID_UPPERCASE.test(shortLink)) {
+                        throw new Error(`NOID short link needed to be lower case but was "${shortLink}"`);
                     }
                     return;
-                case client_inputs_1.NoIdVerificationStrategy.NEVER:
-                    if (REGEX_TRELLO_NOID_CASE_INSENSITIVE.test(trelloShortLink)) {
-                        throw new Error(`NOID short link is not allowed.`);
+                case client_inputs_1.NoIdVerificationStrategy.Never:
+                    if (REGEX_TRELLO_NOID_CASE_INSENSITIVE.test(shortLink)) {
+                        throw new Error('This PR should not include any NOID short links. If you need this functionality please enable it ' +
+                            'via the "noid_verification_strategy" setting for this Github Action');
                     }
                     return;
             }
@@ -10009,10 +10077,14 @@ class VerificationsService {
         return __awaiter(this, void 0, void 0, function* () {
             const pullRequestUrl = this.github.getPullRequestUrl();
             const commitMessages = yield this.github.getPullRequestCommitMessages();
-            const commitMessageShortLinks = commitMessages.map(this.extractTrelloShortLink);
+            const commitMessageShortLinks = commitMessages.map((msg) => this.extractTrelloShortLink(msg, client_github_1.ChangeDescriptionType.CommitMessage));
+            this.assertAtLeastOneShortLink(commitMessageShortLinks, client_github_1.ChangeDescriptionType.CommitMessage);
             this.assertAllShortLinksAreIdentical(commitMessageShortLinks);
             this.assertNoIdShortLinkStrategy(this.inputs.getNoIdVerificationStrategy(), commitMessageShortLinks);
             const shortLink = commitMessageShortLinks[0];
+            if (shortLink.toUpperCase() === 'NOID') {
+                return;
+            }
             const card = yield this.trello.getCard(shortLink);
             this.assertCardNotClosed(card);
             const attachments = yield this.trello.getCardAttachments(shortLink);
@@ -10028,8 +10100,12 @@ class VerificationsService {
         return __awaiter(this, void 0, void 0, function* () {
             const pullRequestUrl = this.github.getPullRequestUrl();
             const pullRequestTitle = this.github.getPullRequestTitle();
-            const titleShortLink = this.extractTrelloShortLink(pullRequestTitle);
+            const titleShortLink = this.extractTrelloShortLink(pullRequestTitle, client_github_1.ChangeDescriptionType.Title);
+            this.assertAtLeastOneShortLink([titleShortLink], client_github_1.ChangeDescriptionType.Title);
             this.assertNoIdShortLinkStrategy(this.inputs.getNoIdVerificationStrategy(), [titleShortLink]);
+            if (titleShortLink.toUpperCase() === 'NOID') {
+                return;
+            }
             const card = yield this.trello.getCard(titleShortLink);
             this.assertCardNotClosed(card);
             const attachments = yield this.trello.getCardAttachments(titleShortLink);
@@ -10043,28 +10119,7 @@ class VerificationsService {
         });
     }
 }
-exports.VerificationsService = VerificationsService;
-
-
-/***/ }),
-
-/***/ 1314:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.assertSupportedAction = exports.assertSupportedEvent = void 0;
-const assertSupportedEvent = (githubClient) => {
-    if (githubClient.getContextEvent() !== 'pull_request')
-        throw new Error(`Event ${githubClient.getContextEvent()} is unsupported. Only 'pull_request' events are supported.`);
-};
-exports.assertSupportedEvent = assertSupportedEvent;
-const assertSupportedAction = (githubClient) => {
-    if (!['opened', 'reopened', 'edited'].some((el) => el === githubClient.getContextAction()))
-        throw new Error(`Action ${githubClient.getContextAction()} is unsupported. Only 'opened', 'reopened', 'edited' actions are supported.`);
-};
-exports.assertSupportedAction = assertSupportedAction;
+exports.VerificationService = VerificationService;
 
 
 /***/ }),

@@ -14,11 +14,11 @@ import { assertSupportedAction, assertSupportedEvent } from './utils';
 const run = async (inputs: InputsClientI, github: GithubClientI, trello: TrelloClientI) => {
   const service = new VerificationService(github, inputs, trello);
 
-  core.info('Start event verification.');
+  core.info('Start GitHub event verification.');
   assertSupportedEvent(github);
   assertSupportedAction(github);
 
-  core.info('Start commit verification.');
+  core.info('Start commit messages verification.');
   switch (inputs.getCommitVerificationStrategy()) {
     case CommitVerificationStrategy.AllCommits:
       await service.assertAllCommitsContainShortLink();
@@ -28,7 +28,7 @@ const run = async (inputs: InputsClientI, github: GithubClientI, trello: TrelloC
       break;
   }
 
-  core.info('Start title verification.');
+  core.info('Start PR title verification.');
   switch (inputs.getTitleVerificationStrategy()) {
     case TitleVerificationStrategy.Always:
       await service.assertTitleContainsShortLink();
@@ -37,6 +37,8 @@ const run = async (inputs: InputsClientI, github: GithubClientI, trello: TrelloC
       core.info('Skipping title verification.');
       break;
   }
+
+  core.info('PR validated successfully.');
 };
 
 (async () => {
@@ -44,7 +46,15 @@ const run = async (inputs: InputsClientI, github: GithubClientI, trello: TrelloC
   const github = new GithubClient(inputs.getGitHubApiToken());
   const trello = new TrelloClient(inputs.getTrelloApiKey(), inputs.getGitHubApiToken());
 
-  await run(inputs, github, trello);
+  try {
+    await run(inputs, github, trello);
+  } catch (error) {
+    if (error instanceof Error) {
+      core.setFailed(error);
+    } else {
+      throw error;
+    }
+  }
 })();
 
 export { run };

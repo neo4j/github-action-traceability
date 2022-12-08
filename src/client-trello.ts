@@ -48,7 +48,7 @@ class TrelloClient implements TrelloClientI {
     return fetch(this.buildApiUrl(path), options as RequestInit)
       .then(async (response) => {
         if (!response.ok) {
-          throw `API endpoint ${path} error: ${response.status} ${response.text}`;
+          throw new Error(`API endpoint ${path} error: ${response.status} ${response.text}`);
         }
 
         return (await response.json()) as unknown as TrelloCard;
@@ -64,7 +64,7 @@ class TrelloClient implements TrelloClientI {
     return fetch(this.buildApiUrl(path), options as RequestInit)
       .then(async (response) => {
         if (!response.ok) {
-          throw `API endpoint ${path} error: ${response.status} ${response.text}`;
+          throw new Error(`API endpoint ${path} error: ${response.status} ${response.text}`);
         }
 
         return (await response.json()) as unknown as TrelloAttachment[];
@@ -88,7 +88,7 @@ class TrelloClient implements TrelloClientI {
     return fetch(this.buildApiUrl(path, queryParams), options as RequestInit)
       .then(async (response) => {
         if (!response.ok) {
-          throw `API endpoint ${path} error: ${response.status} ${response.text}`;
+          throw new Error(`API endpoint ${path} error: ${response.status} ${response.text}`);
         }
 
         return (await response.json()) as unknown as TrelloAttachment[];
