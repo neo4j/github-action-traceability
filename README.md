@@ -17,10 +17,13 @@ Depending on how you want to configure this GitHub Action for your project, you 
 ## Instructions for Every-Day Users
 
 Open your Trello card in your browser, and take a look at the URL. In the example below, the Trello short link is 
-highlighted and its value is `i19tvtq1`. 
+highlighted and its value is i19tvtq1. 
 
-Include this your commit message and put it between brackets like so: 
-- `git commit -m "[i19tvtq1] Description of my change"`
+Include this your commit message and put it between brackets like so:
+
+```bash
+git commit -m "[i19tvtq1] Description of my change"
+```
 
 ![](assets/trello-short-link.png)
 
