@@ -38,4 +38,4 @@ In order to enable this GitHub action, you need to add it to your existing repos
 
 # Contributing
 
-Please check out [./CONTRIBUTING.md](CONTRIBUTING.md).
+Please check out [CONTRIBUTING.md](CONTRIBUTING.md).
