@@ -13,16 +13,17 @@ Depending on how you want to configure this GitHub Action for your project, you 
 
 ## Instructions for Every Day Users
 
-Open your Trello card in your browser, and take a look at the URL. In the screenshot below, the Trello short link is 
-highlighted and its value is "i19tvtq1". 
-
-![](assets/trello-short-link.png)
-
-Include the Trello short link in the beginning of each of your commit message between brackets. Like so...
+Include the short link of the Trello ticket you are working on to each of your commit message. The short link needs to
+appear at the beginning of the commit message and needs to be between brackets, like in the example below.
 
 ```bash
 git commit -m "[i19tvtq1] Description of my change"
 ```
+
+Trello short links are in the URL of your ticket (see highlighted section in the example below).
+
+![](assets/trello-short-link.png)
+
 
 ## Instructions for Initial Setup and Configuration
 
