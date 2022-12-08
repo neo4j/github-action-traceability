@@ -1,6 +1,3 @@
-// daniel finish README.md
-// daniel action.yml options...
-
 # Traceability GitHub Action
 
 ## Introduction
@@ -14,7 +11,7 @@ Depending on how you want to configure this GitHub Action for your project, you 
 - enforce that the Trello card exists and is open
 - automatically add an attachment to a Trello card containing the GitHub PR
 
-## Instructions for Every-Day Users
+## Instructions for Every Day Users
 
 Open your Trello card in your browser, and take a look at the URL. In the screenshot below, the Trello short link is 
 highlighted and its value is "i19tvtq1". 
@@ -27,19 +24,25 @@ Include the Trello short link in the beginning of each of your commit message be
 git commit -m "[i19tvtq1] Description of my change"
 ```
 
-## For Users
+## Instructions for Initial Setup and Configuration
+
+// daniel finish README.md
+// daniel action.yml options...
 
 In order to enable this GitHub action, you need to add it to your existing repository and let it run on PR builds.
 
 ```
 
-
 ```
 
-## For Maintainers
+## Instructions for Maintainers
 
 You need to commit the lib/index.js artifact because that is what the GitHub Action will end up using. There is 
 currently no CI for this project, please manually ensure everything works before opening a PR.
+
+### yarn install
+
+Installs all the dependencies you need to make the other commands run, and to build your project.
 
 ### yarn clean
 
