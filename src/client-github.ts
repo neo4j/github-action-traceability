@@ -2,7 +2,12 @@ import * as core from '@actions/core';
 import * as github from '@actions/github';
 import { graphql } from '@octokit/graphql';
 
-interface GhCommitEdgeItem {
+enum ChangeDescriptionType {
+  CommitMessage = 0,
+  Title = 1,
+}
+
+interface CommitEdgeItem {
   node: {
     commit: {
       message: string;
@@ -10,11 +15,11 @@ interface GhCommitEdgeItem {
   };
 }
 
-interface GhRepositoryResponseData {
+interface RepositoryResponseData {
   repository: {
     pullRequest: {
       commits: {
-        edges: [GhCommitEdgeItem];
+        edges: [CommitEdgeItem];
       };
     };
   };
@@ -116,12 +121,12 @@ class GithubClient implements GithubClientI {
       }
     `;
 
-    const response = await graphql<GhRepositoryResponseData>(query, variables);
+    const response = await graphql<RepositoryResponseData>(query, variables);
     const repository = response.repository;
     return repository.pullRequest.commits.edges.map(
-      (edge: GhCommitEdgeItem) => edge.node.commit.message,
+      (edge: CommitEdgeItem) => edge.node.commit.message,
     );
   }
 }
 
-export { GithubClient, GithubClientI };
+export { GithubClient, GithubClientI, ChangeDescriptionType };

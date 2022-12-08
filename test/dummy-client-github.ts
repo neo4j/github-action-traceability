@@ -23,7 +23,7 @@ class GithubClientBuilder {
   }
 
   public withPullRequestTitle(pullRequestTitle: string): GithubClientBuilder {
-    this.pullRequestTitle = 'Install Traceability Github Action';
+    this.pullRequestTitle = pullRequestTitle;
     return this;
   }
 

@@ -7,12 +7,12 @@ import {
   InputsClientI,
   TitleVerificationStrategy,
 } from './client-inputs';
-import { VerificationsService } from './service-verifications';
+import { VerificationService } from './verification-service';
 import { TrelloClient, TrelloClientI } from './client-trello';
 import { assertSupportedAction, assertSupportedEvent } from './utils';
 
 const run = async (inputs: InputsClientI, github: GithubClientI, trello: TrelloClientI) => {
-  const service = new VerificationsService(github, inputs, trello);
+  const service = new VerificationService(github, inputs, trello);
 
   core.info('Start event verification.');
   assertSupportedEvent(github);

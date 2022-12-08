@@ -1,19 +1,31 @@
-// daniel write readme.md
+// daniel finish README.md
+// daniel action.yml options...
+
 # Traceability GitHub Action
 
 ## Introduction
-This GitHub Action exists for the sole purpose of linking Trello tickets to git commits. Depending on how the 
-Action is configured in your project, you will be able to:
-- enforce that git commit messages contain a Trello card id
-- enforce that PR title contain a Trello card id
-- enforce that the Trello card id is real
+
+This GitHub Action exists for the sole purpose of linking Trello tickets to git commits. So that when you look at your
+project's work history in git, you can easily trace back each code change to a nicely documented Trello card. 
+
+Depending on how you want to configure this GitHub Action for your project, you will be able to:
+- enforce that git commit messages contain a Trello card short link
+- enforce that PR title contain a Trello card short link
+- enforce that the Trello card short link id is real
 - automatically add an attachment to a Trello card containing the GitHub PR
 
-## For Users 
+## What is a Trello Short Link
 
-// daniel
+Open your Trello card in your browser, and take a look at the URL. In the example below, the Trello short link is 
+highlighted and is `i19tvtq1`. Copy this to your commit message and put it between brackets like so:
 
-In order to enable this github action, you need to add it to your existing repository and let it run on PR builds.
+`git commit -m "[i19tvtq1] Description of my change"`
+
+![](assets/trello-short-link.png)
+
+## For Users
+
+In order to enable this GitHub action, you need to add it to your existing repository and let it run on PR builds.
 
 ```
 
