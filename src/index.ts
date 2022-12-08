@@ -20,20 +20,20 @@ const run = async (inputs: InputsClientI, github: GithubClientI, trello: TrelloC
 
   core.info('Start commit verification.');
   switch (inputs.getCommitVerificationStrategy()) {
-    case CommitVerificationStrategy.ALL_COMMITS:
+    case CommitVerificationStrategy.AllCommits:
       await service.assertAllCommitsContainShortLink();
       break;
-    case CommitVerificationStrategy.NEVER:
+    case CommitVerificationStrategy.Never:
       core.info('Skipping commit verification.');
       break;
   }
 
   core.info('Start title verification.');
   switch (inputs.getTitleVerificationStrategy()) {
-    case TitleVerificationStrategy.ALWAYS:
+    case TitleVerificationStrategy.Always:
       await service.assertTitleContainsShortLink();
       break;
-    case TitleVerificationStrategy.NEVER:
+    case TitleVerificationStrategy.Never:
       core.info('Skipping title verification.');
       break;
   }

@@ -72,7 +72,7 @@ describe('action_type', () => {
 describe('commit_verification_strategy.ALL_COMMITS', () => {
   it('succeeds if all commits correspond to a trello card', async () => {
     const inputs = new InputsClientBuilder()
-      .withCommitVerificationStrategy(CommitVerificationStrategy.ALL_COMMITS)
+      .withCommitVerificationStrategy(CommitVerificationStrategy.AllCommits)
       .build();
     const github = new GithubClientBuilder()
       .withPullRequestCommitMessage('[abc123] Foo')
@@ -85,8 +85,8 @@ describe('commit_verification_strategy.ALL_COMMITS', () => {
 
   it('succeeds if pull request has noid commits', async () => {
     const inputs = new InputsClientBuilder()
-      .withCommitVerificationStrategy(CommitVerificationStrategy.ALL_COMMITS)
-      .withNoIdVerificationStrategy(NoIdVerificationStrategy.CASE_INSENSITIVE)
+      .withCommitVerificationStrategy(CommitVerificationStrategy.AllCommits)
+      .withNoIdVerificationStrategy(NoIdVerificationStrategy.CaseInsensitive)
       .build();
     const github = new GithubClientBuilder()
       .withPullRequestCommitMessage('[NOID] Foo')
@@ -99,7 +99,7 @@ describe('commit_verification_strategy.ALL_COMMITS', () => {
 
   it('throws if the card is closed', async () => {
     const inputs = new InputsClientBuilder()
-      .withCommitVerificationStrategy(CommitVerificationStrategy.ALL_COMMITS)
+      .withCommitVerificationStrategy(CommitVerificationStrategy.AllCommits)
       .build();
     const github = new GithubClientBuilder()
       .withPullRequestUrl('github.com/namespace/project/pulls/96')
@@ -115,7 +115,7 @@ describe('commit_verification_strategy.ALL_COMMITS', () => {
 
   it('attaches the pull request url to the trello card', async () => {
     const inputs = new InputsClientBuilder()
-      .withCommitVerificationStrategy(CommitVerificationStrategy.ALL_COMMITS)
+      .withCommitVerificationStrategy(CommitVerificationStrategy.AllCommits)
       .build();
     const github = new GithubClientBuilder()
       .withPullRequestUrl('github.com/namespace/project/pulls/96')
@@ -135,7 +135,7 @@ describe('commit_verification_strategy.ALL_COMMITS', () => {
 
   it('does not attach the pull request url to the trello card if one already exists', async () => {
     const inputs = new InputsClientBuilder()
-      .withCommitVerificationStrategy(CommitVerificationStrategy.ALL_COMMITS)
+      .withCommitVerificationStrategy(CommitVerificationStrategy.AllCommits)
       .build();
     const github = new GithubClientBuilder()
       .withPullRequestUrl('github.com/namespace/project/pulls/96')
@@ -158,7 +158,7 @@ describe('commit_verification_strategy.ALL_COMMITS', () => {
 
   it('fails if there are different short links', async () => {
     const inputs = new InputsClientBuilder()
-      .withCommitVerificationStrategy(CommitVerificationStrategy.ALL_COMMITS)
+      .withCommitVerificationStrategy(CommitVerificationStrategy.AllCommits)
       .build();
     const github = new GithubClientBuilder()
       .withPullRequestCommitMessage('[abc123] Foo')
@@ -176,7 +176,7 @@ describe('commit_verification_strategy.ALL_COMMITS', () => {
 
   it('fails if there is a mixture of short link and no-id', async () => {
     const inputs = new InputsClientBuilder()
-      .withCommitVerificationStrategy(CommitVerificationStrategy.ALL_COMMITS)
+      .withCommitVerificationStrategy(CommitVerificationStrategy.AllCommits)
       .build();
     const github = new GithubClientBuilder()
       .withPullRequestCommitMessage('[abc123] Foo')
@@ -194,7 +194,7 @@ describe('commit_verification_strategy.ALL_COMMITS', () => {
 
   it('fails if there are no commits', async () => {
     const inputs = new InputsClientBuilder()
-      .withCommitVerificationStrategy(CommitVerificationStrategy.ALL_COMMITS)
+      .withCommitVerificationStrategy(CommitVerificationStrategy.AllCommits)
       .build();
     const github = new GithubClientBuilder().build();
     const trello = new TrelloClientBuilder().build();
@@ -210,7 +210,7 @@ describe('commit_verification_strategy.ALL_COMMITS', () => {
 describe('CommitVerificationStrategy.NEVER', () => {
   it('succeeds when there are no commits', async () => {
     const inputs = new InputsClientBuilder()
-      .withCommitVerificationStrategy(CommitVerificationStrategy.NEVER)
+      .withCommitVerificationStrategy(CommitVerificationStrategy.Never)
       .build();
     const github = new GithubClientBuilder().build();
     const trello = new TrelloClientBuilder().build();
@@ -220,7 +220,7 @@ describe('CommitVerificationStrategy.NEVER', () => {
 
   it('succeeds when commits are missing the short link', async () => {
     const inputs = new InputsClientBuilder()
-      .withCommitVerificationStrategy(CommitVerificationStrategy.NEVER)
+      .withCommitVerificationStrategy(CommitVerificationStrategy.Never)
       .build();
     const github = new GithubClientBuilder()
       .withPullRequestCommitMessage('Foo')
@@ -235,7 +235,7 @@ describe('CommitVerificationStrategy.NEVER', () => {
 describe('title_verification_strategy.ALWAYS', () => {
   it('succeeds if pull request title title has a short link', async () => {
     const inputs = new InputsClientBuilder()
-      .withTitleVerificationStrategy(TitleVerificationStrategy.ALWAYS)
+      .withTitleVerificationStrategy(TitleVerificationStrategy.Always)
       .build();
     const github = new GithubClientBuilder().withPullRequestTitle('[abc123] Foobar').build();
     const trello = new TrelloClientBuilder().withCard('abc123', false).build();
@@ -245,8 +245,8 @@ describe('title_verification_strategy.ALWAYS', () => {
 
   it('succeeds if pull request title has a no-id', async () => {
     const inputs = new InputsClientBuilder()
-      .withTitleVerificationStrategy(TitleVerificationStrategy.ALWAYS)
-      .withNoIdVerificationStrategy(NoIdVerificationStrategy.CASE_INSENSITIVE)
+      .withTitleVerificationStrategy(TitleVerificationStrategy.Always)
+      .withNoIdVerificationStrategy(NoIdVerificationStrategy.CaseInsensitive)
       .build();
     const github = new GithubClientBuilder().withPullRequestTitle('[NOID] Foobar').build();
     const trello = new TrelloClientBuilder().build();
@@ -256,7 +256,7 @@ describe('title_verification_strategy.ALWAYS', () => {
 
   it('fail is pull request does not have a short link', async () => {
     const inputs = new InputsClientBuilder()
-      .withTitleVerificationStrategy(TitleVerificationStrategy.ALWAYS)
+      .withTitleVerificationStrategy(TitleVerificationStrategy.Always)
       .build();
     const github = new GithubClientBuilder().withPullRequestTitle('Foobar').build();
     const trello = new TrelloClientBuilder().build();
@@ -272,7 +272,7 @@ describe('title_verification_strategy.ALWAYS', () => {
 describe('title_verification_strategy.NEVER', () => {
   it('succeeds even if pull request title is missing shirt link', async () => {
     const inputs = new InputsClientBuilder()
-      .withTitleVerificationStrategy(TitleVerificationStrategy.NEVER)
+      .withTitleVerificationStrategy(TitleVerificationStrategy.Never)
       .build();
     const github = new GithubClientBuilder().withPullRequestTitle('Foobar').build();
     const trello = new TrelloClientBuilder().build();
@@ -284,8 +284,8 @@ describe('title_verification_strategy.NEVER', () => {
 describe('noid_verification_strategy', () => {
   it('CASE_INSENSITIVE succeeds with any case noids', async () => {
     const inputs = new InputsClientBuilder()
-      .withTitleVerificationStrategy(TitleVerificationStrategy.ALWAYS)
-      .withNoIdVerificationStrategy(NoIdVerificationStrategy.CASE_INSENSITIVE)
+      .withTitleVerificationStrategy(TitleVerificationStrategy.Always)
+      .withNoIdVerificationStrategy(NoIdVerificationStrategy.CaseInsensitive)
       .build();
     const github = new GithubClientBuilder().withPullRequestTitle('[NoId] Foobar').build();
     const trello = new TrelloClientBuilder().build();
@@ -295,8 +295,8 @@ describe('noid_verification_strategy', () => {
 
   it('UPPER_CASE succeeds with upper case noids', async () => {
     const inputs = new InputsClientBuilder()
-      .withTitleVerificationStrategy(TitleVerificationStrategy.ALWAYS)
-      .withNoIdVerificationStrategy(NoIdVerificationStrategy.UPPER_CASE)
+      .withTitleVerificationStrategy(TitleVerificationStrategy.Always)
+      .withNoIdVerificationStrategy(NoIdVerificationStrategy.UpperCase)
       .build();
     const github = new GithubClientBuilder().withPullRequestTitle('[NOID] Foobar').build();
     const trello = new TrelloClientBuilder().build();
@@ -306,8 +306,8 @@ describe('noid_verification_strategy', () => {
 
   it('UPPER_CASE fails with lower case noids', async () => {
     const inputs = new InputsClientBuilder()
-      .withTitleVerificationStrategy(TitleVerificationStrategy.ALWAYS)
-      .withNoIdVerificationStrategy(NoIdVerificationStrategy.UPPER_CASE)
+      .withTitleVerificationStrategy(TitleVerificationStrategy.Always)
+      .withNoIdVerificationStrategy(NoIdVerificationStrategy.UpperCase)
       .build();
     const github = new GithubClientBuilder().withPullRequestTitle('[noid] Foobar').build();
     const trello = new TrelloClientBuilder().build();
@@ -320,8 +320,8 @@ describe('noid_verification_strategy', () => {
 
   it('LOWER_CASE succeeds with lower case noids', async () => {
     const inputs = new InputsClientBuilder()
-      .withTitleVerificationStrategy(TitleVerificationStrategy.ALWAYS)
-      .withNoIdVerificationStrategy(NoIdVerificationStrategy.LOWER_CASE)
+      .withTitleVerificationStrategy(TitleVerificationStrategy.Always)
+      .withNoIdVerificationStrategy(NoIdVerificationStrategy.LowerCase)
       .build();
     const github = new GithubClientBuilder().withPullRequestTitle('[noid] Foobar').build();
     const trello = new TrelloClientBuilder().build();
@@ -331,8 +331,8 @@ describe('noid_verification_strategy', () => {
 
   it('LOWER_CASE fails with upper case noids', async () => {
     const inputs = new InputsClientBuilder()
-      .withTitleVerificationStrategy(TitleVerificationStrategy.ALWAYS)
-      .withNoIdVerificationStrategy(NoIdVerificationStrategy.LOWER_CASE)
+      .withTitleVerificationStrategy(TitleVerificationStrategy.Always)
+      .withNoIdVerificationStrategy(NoIdVerificationStrategy.LowerCase)
       .build();
     const github = new GithubClientBuilder().withPullRequestTitle('[NOID] Foobar').build();
     const trello = new TrelloClientBuilder().build();
@@ -345,8 +345,8 @@ describe('noid_verification_strategy', () => {
 
   it('NEVER succeeds with no noid', async () => {
     const inputs = new InputsClientBuilder()
-      .withTitleVerificationStrategy(TitleVerificationStrategy.ALWAYS)
-      .withNoIdVerificationStrategy(NoIdVerificationStrategy.NEVER)
+      .withTitleVerificationStrategy(TitleVerificationStrategy.Always)
+      .withNoIdVerificationStrategy(NoIdVerificationStrategy.Never)
       .build();
     const github = new GithubClientBuilder().withPullRequestTitle('[abc123] Foobar').build();
     const trello = new TrelloClientBuilder().withCard('abc123', false).build();
@@ -356,8 +356,8 @@ describe('noid_verification_strategy', () => {
 
   it('NEVER fails with noid', async () => {
     const inputs = new InputsClientBuilder()
-      .withTitleVerificationStrategy(TitleVerificationStrategy.ALWAYS)
-      .withNoIdVerificationStrategy(NoIdVerificationStrategy.NEVER)
+      .withTitleVerificationStrategy(TitleVerificationStrategy.Always)
+      .withNoIdVerificationStrategy(NoIdVerificationStrategy.Never)
       .build();
     const github = new GithubClientBuilder().withPullRequestTitle('[NOID] Foobar').build();
     const trello = new TrelloClientBuilder().build();

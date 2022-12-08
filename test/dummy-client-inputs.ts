@@ -6,9 +6,9 @@ import {
 } from '../src/client-inputs';
 
 class InputsClientBuilder {
-  commitVerificationStrategy: CommitVerificationStrategy = CommitVerificationStrategy.NEVER;
-  noIdVerificationStrategy: NoIdVerificationStrategy = NoIdVerificationStrategy.NEVER;
-  titleVerificationStrategy: TitleVerificationStrategy = TitleVerificationStrategy.NEVER;
+  commitVerificationStrategy: CommitVerificationStrategy = CommitVerificationStrategy.Never;
+  noIdVerificationStrategy: NoIdVerificationStrategy = NoIdVerificationStrategy.Never;
+  titleVerificationStrategy: TitleVerificationStrategy = TitleVerificationStrategy.Never;
 
   withCommitVerificationStrategy(strategy: CommitVerificationStrategy): InputsClientBuilder {
     this.commitVerificationStrategy = strategy;

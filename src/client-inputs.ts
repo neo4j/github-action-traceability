@@ -1,20 +1,20 @@
 import * as core from '@actions/core';
 
 enum NoIdVerificationStrategy {
-  CASE_INSENSITIVE = 'CASE_INSENSITIVE',
-  UPPER_CASE = 'UPPER_CASE',
-  LOWER_CASE = 'LOWER_CASE',
-  NEVER = 'NEVER',
+  CaseInsensitive,
+  UpperCase,
+  LowerCase,
+  Never,
 }
 
 enum CommitVerificationStrategy {
-  ALL_COMMITS = 'ALL_COMMITS',
-  NEVER = 'NEVER',
+  AllCommits,
+  Never,
 }
 
 enum TitleVerificationStrategy {
-  ALWAYS = 'ALWAYS',
-  NEVER = 'NEVER',
+  Always,
+  Never,
 }
 
 interface InputsClientI {
@@ -31,13 +31,13 @@ class InputsClient implements InputsClientI {
     const input = core.getInput('noid_verification_strategy');
     switch (input) {
       case 'CASE_INSENSITIVE':
-        return NoIdVerificationStrategy.CASE_INSENSITIVE;
+        return NoIdVerificationStrategy.CaseInsensitive;
       case 'UPPER_CASE':
-        return NoIdVerificationStrategy.UPPER_CASE;
+        return NoIdVerificationStrategy.UpperCase;
       case 'LOWER_CASE':
-        return NoIdVerificationStrategy.LOWER_CASE;
+        return NoIdVerificationStrategy.LowerCase;
       case 'NEVER':
-        return NoIdVerificationStrategy.NEVER;
+        return NoIdVerificationStrategy.Never;
       default:
         throw `Unrecognised value ${input} for "noid_verification_strategy"`;
     }
@@ -47,9 +47,9 @@ class InputsClient implements InputsClientI {
     const input = core.getInput('commit_verification_strategy');
     switch (input) {
       case 'ALL_COMMITS':
-        return CommitVerificationStrategy.ALL_COMMITS;
+        return CommitVerificationStrategy.AllCommits;
       case 'NEVER':
-        return CommitVerificationStrategy.NEVER;
+        return CommitVerificationStrategy.Never;
       default:
         throw `Unrecognised value ${input} for "commit_verification_strategy"`;
     }
@@ -59,9 +59,9 @@ class InputsClient implements InputsClientI {
     const input = core.getInput('title_verification_strategy');
     switch (input) {
       case 'ALWAYS':
-        return TitleVerificationStrategy.ALWAYS;
+        return TitleVerificationStrategy.Always;
       case 'NEVER':
-        return TitleVerificationStrategy.NEVER;
+        return TitleVerificationStrategy.Never;
       default:
         throw `Unrecognised value ${input} for "title_verification_strategy"`;
     }
