@@ -13,7 +13,7 @@ Depending on how you want to configure this GitHub Action for your project, you 
 
 ## Commit Message Structure
 
-Add the short link of your Trello ticket to each of your commit messages: 
+Include your short link in each of your commit messages: 
 - The short link needs to appear at the beginning of the commit message 
 - The short link needs to be between square brackets
 
@@ -21,7 +21,7 @@ Add the short link of your Trello ticket to each of your commit messages:
 git commit -m "[i19tvtq1] Description of my change"
 ```
 
-Trello short links can be found in the URL of your ticket:
+Trello short links can be found in the URL of your ticket. Below, the short link is highlighted.
 
 ![](assets/trello-short-link.png)
 
