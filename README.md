@@ -17,7 +17,6 @@ Add the short link of your Trello ticket to each of your commit messages:
 - The short link needs to appear at the beginning of the commit message 
 - The short link needs to be between brackets
 
-Example:
 ```bash
 git commit -m "[i19tvtq1] Description of my change"
 ```
