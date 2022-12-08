@@ -11,21 +11,21 @@ project's work history in git, you can easily trace back each code change to a n
 Depending on how you want to configure this GitHub Action for your project, you will be able to:
 - enforce that git commit messages contain a Trello card short link
 - enforce that PR title contain a Trello card short link
-- enforce that the Trello card short link id is real
+- enforce that the Trello card exists and is open
 - automatically add an attachment to a Trello card containing the GitHub PR
 
 ## Instructions for Every-Day Users
 
-Open your Trello card in your browser, and take a look at the URL. In the example below, the Trello short link is 
-highlighted and its value is i19tvtq1. 
+Open your Trello card in your browser, and take a look at the URL. In the screenshot below, the Trello short link is 
+highlighted and its value is "i19tvtq1". 
 
-Include this your commit message and put it between brackets like so:
+![](assets/trello-short-link.png)
+
+Include the Trello short link in the beginning of each of your commit message between brackets. Like so...
 
 ```bash
 git commit -m "[i19tvtq1] Description of my change"
 ```
-
-![](assets/trello-short-link.png)
 
 ## For Users
 
