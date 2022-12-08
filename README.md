@@ -11,16 +11,18 @@ Depending on how you want to configure this GitHub Action for your project, you 
 - enforce that the Trello card exists and is open
 - automatically add an attachment to a Trello card containing the GitHub PR
 
-## How To Structure Your Commit Messages
+## How To Structure Commit Messages
 
-Include the short link of the Trello ticket you are working on to each of your commit message. The short link needs to
-appear at the beginning of the commit message and needs to be between brackets, like in the example below.
+Add the short link of your Trello ticket to each of your commit messages: 
+- The short link needs to appear at the beginning of the commit message 
+- The short link needs to be between brackets
 
+Example:
 ```bash
 git commit -m "[i19tvtq1] Description of my change"
 ```
 
-Trello short links are in the URL of your ticket (see highlighted section in the example below).
+Trello short links can be found in the URL of your ticket:
 
 ![](assets/trello-short-link.png)
 
