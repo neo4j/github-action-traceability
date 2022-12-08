@@ -11,7 +11,7 @@ Depending on how you want to configure this GitHub Action for your project, you 
 - enforce that the Trello card exists and is open
 - automatically add an attachment to a Trello card containing the GitHub PR
 
-## Instructions for Every Day Users
+## How To Structure Your Commit Messages
 
 Include the short link of the Trello ticket you are working on to each of your commit message. The short link needs to
 appear at the beginning of the commit message and needs to be between brackets, like in the example below.
@@ -24,19 +24,16 @@ Trello short links are in the URL of your ticket (see highlighted section in the
 
 ![](assets/trello-short-link.png)
 
-
-## Instructions for Initial Setup and Configuration
-
-// daniel finish README.md
-// daniel action.yml options...
+## How To Configure Your GitHub Action
 
 In order to enable this GitHub action, you need to add it to your existing repository and let it run on PR builds.
+// daniel
 
 ```
 
 ```
 
-## Instructions for Maintainers
+## How To Become a Contributor
 
 You need to commit the lib/index.js artifact because that is what the GitHub Action will end up using. There is 
 currently no CI for this project, please manually ensure everything works before opening a PR.
@@ -76,3 +73,7 @@ Compiles the Typescript project into a single lib/index.js file.
 ### yarn package
 
 Does all of the above, building the project only once it's been formatted, linted, and tested.
+
+# How To Make a Release
+
+// daniel
