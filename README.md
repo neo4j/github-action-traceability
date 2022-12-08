@@ -2,7 +2,7 @@
 
 ![](assets/trello-github.png)
 
-## Introduction
+# Introduction
 
 This GitHub Action exists for the sole purpose of linking Trello cards to git commits. So that when you look at your
 project's work history in git, you can easily trace back each code change to a nicely documented Trello card. 
@@ -13,7 +13,7 @@ Depending on how you want to configure this GitHub Action for your project, you 
 - enforce that the Trello card exists and is open
 - automatically add an attachment to a Trello card containing the GitHub PR
 
-## Commit Message Structure
+# Commit Message Structure
 
 Include your short link in each of your commit messages: 
 - The short link needs to appear at the beginning of the commit message 
@@ -27,7 +27,7 @@ Trello short links can be found in the card URL. Below, the short link is highli
 
 ![](assets/trello-short-link.png)
 
-## Setting Up Your GitHub Action
+# Setting Up Your GitHub Action
 
 In order to enable this GitHub action, you need to add it to your existing repository and let it run on PR builds.
 
@@ -36,40 +36,40 @@ In order to enable this GitHub action, you need to add it to your existing repos
 
 ```
 
-## Becoming a Contributor
+# Becoming a Contributor
 
 You need to commit the `lib/index.js` artifact because that is what the GitHub Action will end up using. There is 
 currently no CI for this project, please manually ensure everything works before opening a PR.
 
-### yarn install
+## yarn install
 
 Installs all the dependencies you need to make the other commands run, and to build your project.
 
-### yarn clean
+## yarn clean
 
 Deletes the build artefacts under `./lib` and `./dist`
 
-### yarn format
+## yarn format
 
 Format the code to make it consistent with the formatting rules.
 
-### yarn lint
+## yarn lint
 
 Lints the code to make it consistent with the linting rules.
 
-### yarn compile
+## yarn compile
 
 Compiles the Typescript `./src` files into their corresponding Javascript files in `./lib`.
 
-### yarn build
+## yarn build
 
 Compiles the Typescript `./src` files into a single Javascript releasable file in `./dist`.
 
-### yarn test
+## yarn test
 
 Tests the code.
 
-### yarn package
+## yarn package
 
 Does all of the above, building the project only once it's been formatted, linted, and tested.
 
