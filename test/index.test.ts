@@ -57,6 +57,14 @@ describe('action_type', () => {
     await expectSuccess(run(inputs, github, trello));
   });
 
+  it('succeeds with "synchronize" action type', async () => {
+    const inputs = new InputsClientBuilder().build();
+    const github = new GithubClientBuilder().withAction('synchronize').build();
+    const trello = new TrelloClientBuilder().build();
+
+    await expectSuccess(run(inputs, github, trello));
+  });
+
   it('fails with other action types', async () => {
     const inputs = new InputsClientBuilder().build();
     const github = new GithubClientBuilder().withAction('foobar').build();
@@ -64,7 +72,8 @@ describe('action_type', () => {
 
     await expectThrows(
       run(inputs, github, trello),
-      'Github action "foobar" is unsupported. Only "opened", "reopened", "edited" are supported.',
+      'Github action "foobar" is unsupported. ' +
+        'Only "opened", "reopened", "edited", "synchronize" are supported.',
     );
   });
 });
