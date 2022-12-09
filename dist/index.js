@@ -9865,6 +9865,58 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const core = __importStar(__nccwpck_require__(2186));
+const client_inputs_1 = __nccwpck_require__(5867);
+const client_github_1 = __nccwpck_require__(9236);
+const client_trello_1 = __nccwpck_require__(6901);
+const run_1 = __nccwpck_require__(7764);
+const inputs = new client_inputs_1.InputsClient();
+const github = new client_github_1.GithubClient(inputs.getGitHubApiToken());
+const trello = new client_trello_1.TrelloClient(inputs.getTrelloApiKey(), inputs.getTrelloApiToken());
+try {
+    (0, run_1.run)(inputs, github, trello);
+}
+catch (error) {
+    if (error instanceof Error) {
+        core.setFailed(error);
+    }
+    else {
+        throw error;
+    }
+}
+
+
+/***/ }),
+
+/***/ 7764:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -9877,10 +9929,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core = __importStar(__nccwpck_require__(2186));
-const client_github_1 = __nccwpck_require__(9236);
 const client_inputs_1 = __nccwpck_require__(5867);
 const verification_service_1 = __nccwpck_require__(1508);
-const client_trello_1 = __nccwpck_require__(6901);
 const utils_1 = __nccwpck_require__(1314);
 const run = (inputs, github, trello) => __awaiter(void 0, void 0, void 0, function* () {
     const service = new verification_service_1.VerificationService(github, inputs, trello);
@@ -9908,22 +9958,6 @@ const run = (inputs, github, trello) => __awaiter(void 0, void 0, void 0, functi
     core.info('PR validated successfully.');
 });
 exports.run = run;
-(() => __awaiter(void 0, void 0, void 0, function* () {
-    const inputs = new client_inputs_1.InputsClient();
-    const github = new client_github_1.GithubClient(inputs.getGitHubApiToken());
-    const trello = new client_trello_1.TrelloClient(inputs.getTrelloApiKey(), inputs.getGitHubApiToken());
-    try {
-        yield run(inputs, github, trello);
-    }
-    catch (error) {
-        if (error instanceof Error) {
-            core.setFailed(error);
-        }
-        else {
-            throw error;
-        }
-    }
-}))();
 
 
 /***/ }),
