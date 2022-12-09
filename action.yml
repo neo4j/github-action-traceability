@@ -20,7 +20,7 @@ inputs:
   trello_api_token:
     required: true
     description: "API token for Trello. Use GitHub secrets. Don't use plaintext."
-  github_access_token:
+  github_api_token:
     required: true
     description: "API token for GitHub. Use GitHub secrets. Don't use plaintext."
 runs:
