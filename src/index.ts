@@ -4,15 +4,16 @@ import { GithubClient } from './client-github';
 import { TrelloClient } from './client-trello';
 import { run } from './run';
 
-try {
-  const inputs = new InputsClient();
-  const github = new GithubClient(inputs.getGitHubApiToken());
-  const trello = new TrelloClient(inputs.getTrelloApiKey(), inputs.getTrelloApiToken());
-  run(inputs, github, trello);
-} catch (error) {
-  if (error instanceof Error) {
-    core.setFailed(error);
-  } else {
-    throw error;
-  }
-}
+const inputs = new InputsClient();
+const github = new GithubClient(inputs.getGitHubApiToken());
+const trello = new TrelloClient(inputs.getTrelloApiKey(), inputs.getTrelloApiToken());
+run(inputs, github, trello)
+  .then(() => {
+    core.setOutput('Traceability check completed successfully', 0);
+  })
+  .catch((error) => {
+    if (error instanceof Error) {
+      core.setFailed(error);
+    }
+    core.setFailed(`Failed with unexpected error ${error}`);
+  });

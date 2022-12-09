@@ -1,3 +1,5 @@
+import * as core from '@actions/core';
+
 import fetch, { RequestInit } from 'node-fetch';
 
 interface TrelloCard {
@@ -42,6 +44,7 @@ class TrelloClient implements TrelloClientI {
 
   // https://developer.atlassian.com/cloud/trello/rest/api-group-cards/#api-cards-id-get
   async getCard(shortLink: string): Promise<TrelloCard> {
+    core.info('Get Trello card');
     const path = `/cards/${shortLink}`;
     const options = { ...this.apiBaseHeaders };
 
@@ -58,6 +61,7 @@ class TrelloClient implements TrelloClientI {
 
   // https://developer.atlassian.com/cloud/trello/rest/api-group-cards/#api-cards-id-attachments-get
   async getCardAttachments(shortLink: string): Promise<TrelloAttachment[]> {
+    core.info('Get Trello card attachments');
     const path = `/cards/${shortLink}/attachments`;
     const options = { ...this.apiBaseHeaders };
 
@@ -77,6 +81,7 @@ class TrelloClient implements TrelloClientI {
     shortLink: string,
     attachmentUrl: string,
   ): Promise<TrelloAttachment> {
+    core.info('Get attachment to Trello card');
     const path = `/cards/${shortLink}/attachments`;
     const options = {
       ...this.apiBaseHeaders,

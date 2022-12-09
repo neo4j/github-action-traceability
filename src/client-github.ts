@@ -51,7 +51,7 @@ class GithubClient implements GithubClientI {
   }
 
   getPullRequestUrl(): string {
-    core.debug('Get pull request url');
+    core.info('Get pull request url');
 
     if (!github.context.payload) throw new Error('No payload found in the context.');
     if (!github.context.payload.pull_request)
@@ -63,7 +63,7 @@ class GithubClient implements GithubClientI {
   }
 
   getPullRequestTitle(): string {
-    core.debug('Get pull request title');
+    core.info('Get pull request title');
 
     if (!github.context.payload) throw new Error('No payload found in the context.');
     if (!github.context.payload.pull_request)
@@ -75,7 +75,7 @@ class GithubClient implements GithubClientI {
   }
 
   async getPullRequestCommitMessages(): Promise<string[]> {
-    core.debug('Get pull request commits');
+    core.info('Get pull request commits');
 
     if (!github.context.payload) throw new Error('No payload found in the context.');
     if (!github.context.payload.pull_request)
