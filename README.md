@@ -1,6 +1,6 @@
 // daniel check all action types (push, pull_request_target, etc)
 // daniel check event type "synchronize"
-// daniel lock down the AzuObs repositor permissions
+// daniel lock down the AzuObs repository permissions
 
 # Traceability GitHub Action
 

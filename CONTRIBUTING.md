@@ -1,5 +1,7 @@
 # Becoming a Contributor
 
+// daniel add simple CI checks
+
 You need to commit the `lib/index.js` artifact because that is what the GitHub Action will end up using. There is
 currently no CI for this project, please manually ensure everything works before opening a PR.
 

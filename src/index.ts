@@ -41,7 +41,7 @@ const run = async (inputs: InputsClientI, github: GithubClientI, trello: TrelloC
   core.info('PR validated successfully.');
 };
 
-(async () => {
+await (async () => {
   const inputs = new InputsClient();
   const github = new GithubClient(inputs.getGitHubApiToken());
   const trello = new TrelloClient(inputs.getTrelloApiKey(), inputs.getGitHubApiToken());
@@ -55,6 +55,6 @@ const run = async (inputs: InputsClientI, github: GithubClientI, trello: TrelloC
       throw error;
     }
   }
-})();
+})()
 
 export { run };
