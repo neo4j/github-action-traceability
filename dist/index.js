@@ -9823,11 +9823,13 @@ class TrelloClient {
             return (0, node_fetch_1.default)(this.buildApiUrl(path), options)
                 .then((response) => __awaiter(this, void 0, void 0, function* () {
                 if (!response.ok) {
-                    throw new Error(`API endpoint ${path} error: ${response.status} ${response.text}`);
+                    throw new Error(`Get Trello card endpoint returned: ${response.status} ${response.text}`);
                 }
                 return (yield response.json());
             }))
-                .catch((error) => error);
+                .catch(() => {
+                throw new Error(`Error: unable to get Trello card.`);
+            });
         });
     }
     // https://developer.atlassian.com/cloud/trello/rest/api-group-cards/#api-cards-id-attachments-get
@@ -9839,11 +9841,13 @@ class TrelloClient {
             return (0, node_fetch_1.default)(this.buildApiUrl(path), options)
                 .then((response) => __awaiter(this, void 0, void 0, function* () {
                 if (!response.ok) {
-                    throw new Error(`API endpoint ${path} error: ${response.status} ${response.text}`);
+                    throw new Error(`Get Trello card attachments endpoint returned: ${response.status} ${response.text}`);
                 }
                 return (yield response.json());
             }))
-                .catch((error) => error);
+                .catch(() => {
+                throw new Error(`Error: unable to get Trello card attachement.`);
+            });
         });
     }
     // https://developer.atlassian.com/cloud/trello/rest/api-group-cards/#api-cards-id-attachments-post

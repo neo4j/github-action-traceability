@@ -51,12 +51,13 @@ class TrelloClient implements TrelloClientI {
     return fetch(this.buildApiUrl(path), options as RequestInit)
       .then(async (response) => {
         if (!response.ok) {
-          throw new Error(`API endpoint ${path} error: ${response.status} ${response.text}`);
+          throw new Error(`Get Trello card endpoint returned: ${response.status} ${response.text}`);
         }
-
         return (await response.json()) as unknown as TrelloCard;
       })
-      .catch((error) => error);
+      .catch(() => {
+        throw new Error(`Error: unable to get Trello card.`);
+      });
   }
 
   // https://developer.atlassian.com/cloud/trello/rest/api-group-cards/#api-cards-id-attachments-get
@@ -68,12 +69,15 @@ class TrelloClient implements TrelloClientI {
     return fetch(this.buildApiUrl(path), options as RequestInit)
       .then(async (response) => {
         if (!response.ok) {
-          throw new Error(`API endpoint ${path} error: ${response.status} ${response.text}`);
+          throw new Error(
+            `Get Trello card attachments endpoint returned: ${response.status} ${response.text}`,
+          );
         }
-
         return (await response.json()) as unknown as TrelloAttachment[];
       })
-      .catch((error) => error);
+      .catch(() => {
+        throw new Error(`Error: unable to get Trello card attachement.`);
+      });
   }
 
   // https://developer.atlassian.com/cloud/trello/rest/api-group-cards/#api-cards-id-attachments-post
