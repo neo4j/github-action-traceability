@@ -9,10 +9,14 @@ const assertSupportedEvent = (githubClient: GithubClientI): void => {
 };
 
 const assertSupportedAction = (githubClient: GithubClientI): void => {
-  if (!['opened', 'reopened', 'edited', 'synchronize'].some((el) => el === githubClient.getContextAction()))
+  if (
+    !['opened', 'reopened', 'edited', 'synchronize'].some(
+      (el) => el === githubClient.getContextAction(),
+    )
+  )
     throw new Error(
       `Github action "${githubClient.getContextAction()}" is unsupported. Only "opened", "reopened", ` +
-        '"edited" are supported.',
+        '"edited", "synchronize" are supported.',
     );
 };
 
