@@ -9677,7 +9677,7 @@ exports.CommitVerificationStrategy = exports.TitleVerificationStrategy = exports
 const core = __importStar(__nccwpck_require__(2186));
 var NoIdVerificationStrategy;
 (function (NoIdVerificationStrategy) {
-    NoIdVerificationStrategy[NoIdVerificationStrategy["CaseInsensitive"] = 0] = "CaseInsensitive";
+    NoIdVerificationStrategy[NoIdVerificationStrategy["AnyCase"] = 0] = "AnyCase";
     NoIdVerificationStrategy[NoIdVerificationStrategy["UpperCase"] = 1] = "UpperCase";
     NoIdVerificationStrategy[NoIdVerificationStrategy["LowerCase"] = 2] = "LowerCase";
     NoIdVerificationStrategy[NoIdVerificationStrategy["Never"] = 3] = "Never";
@@ -9699,13 +9699,13 @@ class InputsClient {
     getNoIdVerificationStrategy() {
         const input = core.getInput('noid_verification_strategy');
         switch (input) {
-            case 'CASE_INSENSITIVE':
-                return NoIdVerificationStrategy.CaseInsensitive;
-            case 'UPPER_CASE':
+            case 'any_case':
+                return NoIdVerificationStrategy.AnyCase;
+            case 'upper_case':
                 return NoIdVerificationStrategy.UpperCase;
-            case 'LOWER_CASE':
+            case 'lower_case':
                 return NoIdVerificationStrategy.LowerCase;
-            case 'NEVER':
+            case 'never':
                 return NoIdVerificationStrategy.Never;
             default:
                 throw new Error(`Unrecognised value ${input} for "noid_verification_strategy"`);
@@ -9714,9 +9714,9 @@ class InputsClient {
     getCommitVerificationStrategy() {
         const input = core.getInput('commit_verification_strategy');
         switch (input) {
-            case 'ALL_COMMITS':
+            case 'all_commits':
                 return CommitVerificationStrategy.AllCommits;
-            case 'NEVER':
+            case 'never':
                 return CommitVerificationStrategy.Never;
             default:
                 throw new Error(`Unrecognised value ${input} for "commit_verification_strategy"`);
@@ -9725,9 +9725,9 @@ class InputsClient {
     getTitleVerificationStrategy() {
         const input = core.getInput('title_verification_strategy');
         switch (input) {
-            case 'ALWAYS':
+            case 'always':
                 return TitleVerificationStrategy.Always;
-            case 'NEVER':
+            case 'never':
                 return TitleVerificationStrategy.Never;
             default:
                 throw new Error(`Unrecognised value ${input} for "title_verification_strategy"`);
@@ -10050,7 +10050,7 @@ class VerificationService {
         const REGEX_TRELLO_NOID_LOWERCASE = new RegExp('^noid$');
         shortLinks.forEach((shortLink) => {
             switch (strategy) {
-                case client_inputs_1.NoIdVerificationStrategy.CaseInsensitive:
+                case client_inputs_1.NoIdVerificationStrategy.AnyCase:
                     return;
                 case client_inputs_1.NoIdVerificationStrategy.UpperCase:
                     if (REGEX_TRELLO_NOID_ANYCASE.test(shortLink) &&
