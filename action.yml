@@ -4,16 +4,16 @@ description: "Ensures git commit messages contain a Trello short link"
 inputs:
   noid_verification_strategy:
     required: false
-    default: "UPPER_CASE"
-    description: "One of CASE_INSENSITIVE, UPPER_CASE, LOWER_CASE, NEVER."
+    default: "upper_case"
+    description: "One of any_case, upper_case, lower_case, never."
   commit_verification_strategy:
     required: false
-    default: "ALL_COMMITS"
-    description: "One of ALL_COMMITS, HEAD_COMMIT_ONLY, NEVER."
+    default: "all_commits"
+    description: "One of all_commits, never."
   title_verification_strategy:
     required: false
-    default: "ALWAYS"
-    description: "One of ALWAYS, IF_EXISTS, NEVER."
+    default: "always"
+    description: "One of always, never."
   trello_api_key:
     required: true
     description: "API key for Trello. Use GitHub secrets. Don't use plaintext."

@@ -37,4 +37,7 @@ Does all of the above, building the project only once it's been formatted, linte
 
 # Releasing New Versions
 
-// daniel
+// daniel tag with v1.x.y unless breaking change
+// daniel bump tag v1 to point to your new release
+// create release in GitHub for v1.x.y
+// congrats you are done

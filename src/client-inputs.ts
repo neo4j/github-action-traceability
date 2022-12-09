@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
 
 enum NoIdVerificationStrategy {
-  CaseInsensitive,
+  AnyCase,
   UpperCase,
   LowerCase,
   Never,
@@ -30,13 +30,13 @@ class InputsClient implements InputsClientI {
   getNoIdVerificationStrategy(): NoIdVerificationStrategy {
     const input = core.getInput('noid_verification_strategy');
     switch (input) {
-      case 'CASE_INSENSITIVE':
-        return NoIdVerificationStrategy.CaseInsensitive;
-      case 'UPPER_CASE':
+      case 'any_case':
+        return NoIdVerificationStrategy.AnyCase;
+      case 'upper_case':
         return NoIdVerificationStrategy.UpperCase;
-      case 'LOWER_CASE':
+      case 'lower_case':
         return NoIdVerificationStrategy.LowerCase;
-      case 'NEVER':
+      case 'never':
         return NoIdVerificationStrategy.Never;
       default:
         throw new Error(`Unrecognised value ${input} for "noid_verification_strategy"`);
@@ -46,9 +46,9 @@ class InputsClient implements InputsClientI {
   getCommitVerificationStrategy(): CommitVerificationStrategy {
     const input = core.getInput('commit_verification_strategy');
     switch (input) {
-      case 'ALL_COMMITS':
+      case 'all_commits':
         return CommitVerificationStrategy.AllCommits;
-      case 'NEVER':
+      case 'never':
         return CommitVerificationStrategy.Never;
       default:
         throw new Error(`Unrecognised value ${input} for "commit_verification_strategy"`);
@@ -58,9 +58,9 @@ class InputsClient implements InputsClientI {
   getTitleVerificationStrategy(): TitleVerificationStrategy {
     const input = core.getInput('title_verification_strategy');
     switch (input) {
-      case 'ALWAYS':
+      case 'always':
         return TitleVerificationStrategy.Always;
-      case 'NEVER':
+      case 'never':
         return TitleVerificationStrategy.Never;
       default:
         throw new Error(`Unrecognised value ${input} for "title_verification_strategy"`);

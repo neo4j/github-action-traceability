@@ -10045,7 +10045,7 @@ class VerificationService {
         }
     }
     assertNoIdShortLinkStrategy(strategy, shortLinks) {
-        const REGEX_TRELLO_NOID_CASE_INSENSITIVE = new RegExp('^NOID$', 'i');
+        const REGEX_TRELLO_NOID_ANYCASE = new RegExp('^NOID$', 'i');
         const REGEX_TRELLO_NOID_UPPERCASE = new RegExp('^NOID$');
         const REGEX_TRELLO_NOID_LOWERCASE = new RegExp('^noid$');
         shortLinks.forEach((shortLink) => {
@@ -10053,19 +10053,19 @@ class VerificationService {
                 case client_inputs_1.NoIdVerificationStrategy.CaseInsensitive:
                     return;
                 case client_inputs_1.NoIdVerificationStrategy.UpperCase:
-                    if (REGEX_TRELLO_NOID_CASE_INSENSITIVE.test(shortLink) &&
+                    if (REGEX_TRELLO_NOID_ANYCASE.test(shortLink) &&
                         REGEX_TRELLO_NOID_LOWERCASE.test(shortLink)) {
                         throw new Error(`NOID short link needed to be upper case but was "${shortLink}"`);
                     }
                     return;
                 case client_inputs_1.NoIdVerificationStrategy.LowerCase:
-                    if (REGEX_TRELLO_NOID_CASE_INSENSITIVE.test(shortLink) &&
+                    if (REGEX_TRELLO_NOID_ANYCASE.test(shortLink) &&
                         REGEX_TRELLO_NOID_UPPERCASE.test(shortLink)) {
                         throw new Error(`NOID short link needed to be lower case but was "${shortLink}"`);
                     }
                     return;
                 case client_inputs_1.NoIdVerificationStrategy.Never:
-                    if (REGEX_TRELLO_NOID_CASE_INSENSITIVE.test(shortLink)) {
+                    if (REGEX_TRELLO_NOID_ANYCASE.test(shortLink)) {
                         throw new Error('This PR should not include any NOID short links. If you need this functionality please enable it ' +
                             'via the "noid_verification_strategy" setting for this Github Action');
                     }
