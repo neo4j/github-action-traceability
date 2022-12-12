@@ -98,7 +98,7 @@ and make your own power up. It takes 5 minutes, and you don't need particularly 
 
 ### github_api_token
 
-Comes by default in your CI under ${{ secrets.GITHUB_TOKEN }}
+Included by default in your GitHub CI.
 
 # Contributing
 
