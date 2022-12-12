@@ -12,7 +12,7 @@ inputs:
     description: "One of trello, trello_or_noid."
   noid_short_link_pattern:
     required: false
-    default: "\[(NOID)\]"
+    default: "\\[(NOID)\\]"
     description: "Regex pattern for the NOID short link."
   trello_api_key:
     required: true
