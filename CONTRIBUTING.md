@@ -1,45 +1,62 @@
 # Becoming a Contributor
 
-// daniel add simple CI checks
-
-You need to commit the `lib/index.js` artifact because that is what the GitHub Action will end up using. There is
-currently no CI for this project, please manually ensure everything works before opening a PR.
-
-## yarn install
+#### yarn install
 
 Installs all the dependencies you need to make the other commands run, and to build your project.
 
-## yarn clean
+#### yarn clean
 
 Deletes the build artefacts under `./lib` and `./dist`
 
-## yarn format
+#### yarn format
 
 Format the code to make it consistent with the formatting rules.
 
-## yarn lint
+#### yarn lint
 
 Lints the code to make it consistent with the linting rules.
 
-## yarn compile
+#### yarn compile
 
 Compiles the Typescript `./src` files into their corresponding Javascript files in `./lib`.
 
-## yarn build
+#### yarn build
 
 Compiles the Typescript `./src` files into a single Javascript releasable file in `./dist`.
 
-## yarn test
+#### yarn test
 
 Tests the code.
 
-## yarn package
+#### yarn package
 
 Does all of the above, building the project only once it's been formatted, linted, and tested.
 
 # Releasing New Versions
 
-// daniel tag with v1.x.y unless breaking change
-// daniel bump tag v1 to point to your new release
-// create release in GitHub for v1.x.y
-// congrats you are done
+1. Build the release artefacts locally
+```bash
+yarn install
+yarn package
+```
+
+2. Commit your changes
+```bash
+git add .
+git commit -m "[NOID] What change is about..."
+```
+
+3. Create a PR against dev and get a maintainer as Assigned
+[https://github.com/AzuObs/github-action-traceability/compare](https://github.com/AzuObs/github-action-traceability/compare)
+
+4. Once the PR is merged, tag it with a new semver 
+```bash
+git tag -a v1.0.34
+```
+
+5. Also, update the existing major semver tag
+```
+git tag -fa v1
+```
+
+6. That's it

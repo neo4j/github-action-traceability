@@ -1,7 +1,3 @@
-// daniel check all action types (push, pull_request_target, etc)
-// daniel check event type "synchronize"
-// daniel lock down the AzuObs repository permissions
-
 # Traceability GitHub Action
 
 ![](assets/trello-github.png)
@@ -31,14 +27,88 @@ Trello short links can be found in the card URL. Below, the short link is highli
 
 ![](assets/trello-short-link.png)
 
-# Setting Up Your GitHub Action
+# Setup Overview
 
-In order to enable this GitHub action, you need to add it to your existing repository and let it run on PR builds.
+In order to enable this GitHub action, you need to add it to your existing repository and let it run on PR builds. An 
+example setup is provided below, and a live one exists in 
+[APOC](https://github.com/neo4j/apoc/tree/dev/.github/workflows).
 
-// daniel
 ```yml
+name: traceability
 
+on:
+  pull_request:
+    branches:
+      - dev
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+
+jobs:
+  validate-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: AzuObs/github-action-traceability@v1.0.10
+        with:
+          global_verification_strategy: commits_and_pr_title
+          short_link_verification_strategy: trello_or_noid
+          trello_api_key: ${{ secrets.TRELLO_API_KEY }}
+          trello_api_token: ${{ secrets.TRELLO_API_TOKEN }}
+          github_api_token: ${{ secrets.GITHUB_TOKEN }}
 ```
+
+# Setup Inputs in Detail
+
+#### global_verification_strategy
+
+> commits
+
+The GHA will only check the commits contained within your PR.
+
+> commits_and_pr_title
+
+The GHA will check the commits in your PR as well as your PR title.
+
+> disabled
+
+Disables the GHA. If you intend to permanently disable the GHA, then you should just remove it from your project. The
+main purpose of this option is to temporarily disable the GHA (because of some technical problem for example).
+
+#### short_link_verification_strategy
+
+> trello
+
+The GHA will only allow Trello short links. 
+
+> trello_or_noid
+
+The GHA will allow Trello short links and also NOID short links
+
+#### noid_short_link_pattern
+
+The GHA will use this regex pattern to extract NOID short links from your work descriptions. The pattern should contain 
+a capture group wrapping your desire NOID tag.
+
+#### trello_api_key
+
+Use the public key found in [TrelloManagePowerUps>GithubIntegration](https://trello.com/power-ups/639711253572cf0030b9bb20/edit/api-key).
+
+Alternative, follow instructions [here](https://developer.atlassian.com/cloud/trello/guides/rest-api/api-introduction/#managing-your-api-key) 
+and make your own. It takes 5 minutes, and you don't need particularly advanced privileges to generate your own.
+
+#### trello_api_token
+
+Use the public key found in [TrelloManagePowerUps>GithubIntegration](https://trello.com/power-ups/639711253572cf0030b9bb20/edit/api-key) 
+and click on "Token".
+
+Alternative, follow instructions [here](https://developer.atlassian.com/cloud/trello/guides/rest-api/api-introduction/#managing-your-api-key)
+and make your own. It takes 5 minutes, and you don't need particularly advanced privileges to generate your own.
+
+#### github_api_token
+
+Comes by default in your CI under ${{ secrets.GITHUB_TOKEN }}
 
 # Contributing
 

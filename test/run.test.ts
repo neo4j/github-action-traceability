@@ -294,7 +294,6 @@ describe('ShortLinkVerificationStrategy', () => {
 
 describe('Adding attachments to Trello cards', () => {
   it('fails if the Trello card does not exist', async () => {
-    // daniel
     const inputs = new InputsClientBuilder()
       .withGlobalVerificationStrategy(GlobalVerificationStrategy.Commits)
       .withShortLinkVerificationStrategy(ShortLinkVerificationStrategy.Trello)
