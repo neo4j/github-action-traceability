@@ -32,7 +32,7 @@ Tests the code.
 
 Does all of the above, building the project only once it's been formatted, linted, and tested.
 
-# Releasing New Versions
+# Releasing
 
 1. Build the release artefacts locally
 ```bash
@@ -49,14 +49,11 @@ git commit -m "[NOID] What change is about..."
 3. Create a PR against dev and get a maintainer as Assigned
 [https://github.com/AzuObs/github-action-traceability/compare](https://github.com/AzuObs/github-action-traceability/compare)
 
-4. Once the PR is merged, tag it with a new semver 
+4. Once the PR is merged, tag it with a new semver. Also, update the existing major semver tag 
 ```bash
-git tag -a v1.0.34
+git tag -a v1.0.12
+git push origin --tags --force
 ```
 
-5. Also, update the existing major semver tag
-```
-git tag -fa v1
-```
-
-6. That's it
+6. Create a release on GitHub With a Changelog
+[https://github.com/AzuObs/github-action-traceability/releases](https://github.com/AzuObs/github-action-traceability/releases)
