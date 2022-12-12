@@ -1,59 +1,65 @@
-# Becoming a Contributor
+# Building
 
-#### yarn install
+### yarn install
 
 Installs all the dependencies you need to make the other commands run, and to build your project.
 
-#### yarn clean
+### yarn clean
 
 Deletes the build artefacts under `./lib` and `./dist`
 
-#### yarn format
+### yarn format
 
 Format the code to make it consistent with the formatting rules.
 
-#### yarn lint
+### yarn lint
 
 Lints the code to make it consistent with the linting rules.
 
-#### yarn compile
+### yarn compile
 
 Compiles the Typescript `./src` files into their corresponding Javascript files in `./lib`.
 
-#### yarn build
+### yarn build
 
 Compiles the Typescript `./src` files into a single Javascript releasable file in `./dist`.
 
-#### yarn test
+### yarn test
 
 Tests the code.
 
-#### yarn package
+### yarn package
 
 Does all of the above, building the project only once it's been formatted, linted, and tested.
 
 # Releasing
 
-1. Build the release artefacts locally
+1. Build the release artefacts locally.
+
 ```bash
 yarn install
 yarn package
 ```
 
-2. Commit your changes
+2. Commit your changes.
+
 ```bash
 git add .
-git commit -m "[NOID] What change is about..."
+git commit -m "[NOID] Change description"
 ```
 
-3. Create a PR against dev and get a maintainer as Assigned
+3. Create a PR against dev and add a regular contributor as Assigned.
+
 [https://github.com/AzuObs/github-action-traceability/compare](https://github.com/AzuObs/github-action-traceability/compare)
 
-4. Once the PR is merged, tag it with a new semver. Also, update the existing major semver tag 
+4. Once the PR is merged, tag it with a new semver. Also, update the existing major semver tag.
+
 ```bash
 git tag -a v1.0.12
+git tag -fa v1
 git push origin --tags --force
 ```
 
-6. Create a release on GitHub With a Changelog
+5. Create a release on GitHub with a Changelog.
+
 [https://github.com/AzuObs/github-action-traceability/releases](https://github.com/AzuObs/github-action-traceability/releases)

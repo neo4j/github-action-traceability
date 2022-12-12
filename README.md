@@ -31,7 +31,7 @@ Trello short links can be found in the card URL. Below, the short link is highli
 
 In order to enable this GitHub action, you need to add it to your existing repository and let it run on PR builds. An 
 example setup is provided below, and a live one exists in 
-[APOC](https://github.com/neo4j/apoc/tree/dev/.github/workflows).
+[neo4j/apoc](https://github.com/neo4j/apoc/tree/dev/.github/workflows).
 
 ```yml
 name: traceability
@@ -61,52 +61,42 @@ jobs:
 
 # Setup Inputs in Detail
 
-#### global_verification_strategy
+### global_verification_strategy
 
-> commits
+| Option                   | Descriptions                                                                                                      |
+|--------------------------|-------------------------------------------------------------------------------------------------------------------|
+| **commits**              | The GHA will only check the commits contained within your PR.                                                     |
+| **commits_and_pr_title** | The GHA will check the commits in your PR as well as your PR title.                                               |
+| **disabled**             | Disables the GHA. If you intend to permanently disable the GHA, then you should just remove it from your project. |
 
-The GHA will only check the commits contained within your PR.
+### short_link_verification_strategy
 
-> commits_and_pr_title
+| Option                    | Descriptions                                                     |
+|---------------------------|------------------------------------------------------------------|
+| **trello**                | The GHA will only allow Trello short links.                      |
+| **commits_and_pr_title**  | The GHA will allow Trello short links and also NOID short links. |
 
-The GHA will check the commits in your PR as well as your PR title.
-
-> disabled
-
-Disables the GHA. If you intend to permanently disable the GHA, then you should just remove it from your project. The
-main purpose of this option is to temporarily disable the GHA (because of some technical problem for example).
-
-#### short_link_verification_strategy
-
-> trello
-
-The GHA will only allow Trello short links. 
-
-> trello_or_noid
-
-The GHA will allow Trello short links and also NOID short links
-
-#### noid_short_link_pattern
+### noid_short_link_pattern
 
 The GHA will use this regex pattern to extract NOID short links from your work descriptions. The pattern should contain 
 a capture group wrapping your desire NOID tag.
 
-#### trello_api_key
+### trello_api_key
 
-Use the public key found in [TrelloManagePowerUps>GithubIntegration](https://trello.com/power-ups/639711253572cf0030b9bb20/edit/api-key).
+Use the public key of the existing PowerUp [ManageTrelloPowerUps>GithubIntegration](https://trello.com/power-ups/639711253572cf0030b9bb20/edit/api-key).
 
 Alternative, follow instructions [here](https://developer.atlassian.com/cloud/trello/guides/rest-api/api-introduction/#managing-your-api-key) 
-and make your own. It takes 5 minutes, and you don't need particularly advanced privileges to generate your own.
+and make your own power up. It takes 5 minutes, and you don't need particularly advanced privileges to create it.
 
-#### trello_api_token
+### trello_api_token
 
-Use the public key found in [TrelloManagePowerUps>GithubIntegration](https://trello.com/power-ups/639711253572cf0030b9bb20/edit/api-key) 
+Go to existing PowerUp in [ManageTrelloPowerUps>GithubIntegration](https://trello.com/power-ups/639711253572cf0030b9bb20/edit/api-key) 
 and click on "Token".
 
 Alternative, follow instructions [here](https://developer.atlassian.com/cloud/trello/guides/rest-api/api-introduction/#managing-your-api-key)
-and make your own. It takes 5 minutes, and you don't need particularly advanced privileges to generate your own.
+and make your own power up. It takes 5 minutes, and you don't need particularly advanced privileges to create it.
 
-#### github_api_token
+### github_api_token
 
 Comes by default in your CI under ${{ secrets.GITHUB_TOKEN }}
 
