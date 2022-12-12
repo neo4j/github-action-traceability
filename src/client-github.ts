@@ -2,11 +2,6 @@ import * as core from '@actions/core';
 import * as github from '@actions/github';
 import { graphql } from '@octokit/graphql';
 
-enum ChangeDescriptionType {
-  CommitMessage = 0,
-  Title = 1,
-}
-
 interface CommitEdgeItem {
   node: {
     commit: {
@@ -25,7 +20,7 @@ interface RepositoryResponseData {
   };
 }
 
-interface GithubClientI {
+interface GitHubClientI {
   getContextEvent(): string;
   getContextAction(): string;
   getPullRequestUrl(): string;
@@ -33,7 +28,7 @@ interface GithubClientI {
   getPullRequestCommitMessages(): Promise<string[]>;
 }
 
-class GithubClient implements GithubClientI {
+class GitHubClient implements GitHubClientI {
   githubApiToken: string;
 
   constructor(githubApiToken: string) {
@@ -51,37 +46,32 @@ class GithubClient implements GithubClientI {
   }
 
   getPullRequestUrl(): string {
-    core.info('Get pull request url');
+    core.info('Get pull request URL.');
 
     if (!github.context.payload) throw new Error('No payload found in the context.');
-    if (!github.context.payload.pull_request)
-      throw new Error('No pull request found in the payload.');
+    if (!github.context.payload.pull_request) throw new Error('No PR found in the payload.');
     if (!github.context.payload.pull_request.html_url)
-      throw new Error('No pull request url found in the payload.');
+      throw new Error('No PR url found in the payload.');
 
     return github.context.payload.pull_request.html_url;
   }
 
   getPullRequestTitle(): string {
-    core.info('Get pull request title');
+    core.info('Get pull request title.');
 
     if (!github.context.payload) throw new Error('No payload found in the context.');
-    if (!github.context.payload.pull_request)
-      throw new Error('No pull request found in the payload.');
-    if (!github.context.payload.pull_request.title)
-      throw new Error('No title found in the pull request.');
+    if (!github.context.payload.pull_request) throw new Error('No PR found in the payload.');
+    if (!github.context.payload.pull_request.title) throw new Error('No title found in the PR.');
 
     return github.context.payload.pull_request.title;
   }
 
   async getPullRequestCommitMessages(): Promise<string[]> {
-    core.info('Get pull request commits');
+    core.info('Get pull request commits.');
 
     if (!github.context.payload) throw new Error('No payload found in the context.');
-    if (!github.context.payload.pull_request)
-      throw new Error('No pull request found in the payload.');
-    if (!github.context.payload.pull_request.number)
-      throw new Error('No number found in the pull request.');
+    if (!github.context.payload.pull_request) throw new Error('No PR found in the payload.');
+    if (!github.context.payload.pull_request.number) throw new Error('No number found in the PR.');
     if (!github.context.payload.repository) throw new Error('No repository found in the payload.');
     if (!github.context.payload.repository.name)
       throw new Error('No name found in the repository.');
@@ -135,4 +125,4 @@ class GithubClient implements GithubClientI {
   }
 }
 
-export { GithubClient, GithubClientI, ChangeDescriptionType };
+export { GitHubClient, GitHubClientI };

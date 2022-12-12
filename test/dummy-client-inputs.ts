@@ -1,64 +1,64 @@
 import {
-  CommitVerificationStrategy,
+  GlobalVerificationStrategy,
+  ShortLinkVerificationStrategy,
   InputsClientI,
-  NoIdVerificationStrategy,
-  TitleVerificationStrategy,
 } from '../src/client-inputs';
 
 class InputsClientBuilder {
-  commitVerificationStrategy: CommitVerificationStrategy = CommitVerificationStrategy.Never;
-  noIdVerificationStrategy: NoIdVerificationStrategy = NoIdVerificationStrategy.Never;
-  titleVerificationStrategy: TitleVerificationStrategy = TitleVerificationStrategy.Never;
+  globalVerificationStrategy: GlobalVerificationStrategy = GlobalVerificationStrategy.Commits;
+  shortLinkVerificationStrategy: ShortLinkVerificationStrategy =
+    ShortLinkVerificationStrategy.TrelloOrNoId;
+  noIdShortLinkPattern: RegExp = new RegExp('\\[(NOID)\\]');
 
-  withCommitVerificationStrategy(strategy: CommitVerificationStrategy): InputsClientBuilder {
-    this.commitVerificationStrategy = strategy;
+  withGlobalVerificationStrategy(strategy: GlobalVerificationStrategy): InputsClientBuilder {
+    this.globalVerificationStrategy = strategy;
     return this;
   }
 
-  withNoIdVerificationStrategy(strategy: NoIdVerificationStrategy): InputsClientBuilder {
-    this.noIdVerificationStrategy = strategy;
+  withShortLinkVerificationStrategy(strategy: ShortLinkVerificationStrategy): InputsClientBuilder {
+    this.shortLinkVerificationStrategy = strategy;
     return this;
   }
 
-  withTitleVerificationStrategy(strategy: TitleVerificationStrategy): InputsClientBuilder {
-    this.titleVerificationStrategy = strategy;
+  withNoIdShortLinkPattern(pattern: string): InputsClientBuilder {
+    this.noIdShortLinkPattern = new RegExp(pattern);
     return this;
   }
 
   build(): InputsClientI {
     return new DummyInputsClient(
-      this.commitVerificationStrategy,
-      this.noIdVerificationStrategy,
-      this.titleVerificationStrategy,
+      this.globalVerificationStrategy,
+      this.shortLinkVerificationStrategy,
+      this.noIdShortLinkPattern,
     );
   }
 }
 
 class DummyInputsClient implements InputsClientI {
-  commitVerificationStrategy: CommitVerificationStrategy;
-  noIdVerificationStrategy: NoIdVerificationStrategy;
-  titleVerificationStrategy: TitleVerificationStrategy;
+  globalVerificationStrategy: GlobalVerificationStrategy;
+  shortLinkVerificationStrategy: ShortLinkVerificationStrategy;
+  noIdPattern: RegExp;
 
   constructor(
-    commitVerificationStrategy: CommitVerificationStrategy,
-    noIdVerificationStrategy: NoIdVerificationStrategy,
-    titleVerificationStrategy: TitleVerificationStrategy,
+    globalVerificationStrategy: GlobalVerificationStrategy,
+    shortLinkVerificationStrategy: ShortLinkVerificationStrategy,
+    noIdPattern: RegExp,
   ) {
-    this.commitVerificationStrategy = commitVerificationStrategy;
-    this.noIdVerificationStrategy = noIdVerificationStrategy;
-    this.titleVerificationStrategy = titleVerificationStrategy;
+    this.globalVerificationStrategy = globalVerificationStrategy;
+    this.shortLinkVerificationStrategy = shortLinkVerificationStrategy;
+    this.noIdPattern = noIdPattern;
   }
 
-  getCommitVerificationStrategy(): CommitVerificationStrategy {
-    return this.commitVerificationStrategy;
+  getGlobalVerificationStrategy(): GlobalVerificationStrategy {
+    return this.globalVerificationStrategy;
   }
 
-  getNoIdVerificationStrategy(): NoIdVerificationStrategy {
-    return this.noIdVerificationStrategy;
+  getShortLinkVerificationStrategy(): ShortLinkVerificationStrategy {
+    return this.shortLinkVerificationStrategy;
   }
 
-  getTitleVerificationStrategy(): TitleVerificationStrategy {
-    return this.titleVerificationStrategy;
+  getNoIdShortLinkPattern(): RegExp {
+    return this.noIdPattern;
   }
 
   getGitHubApiToken(): string {

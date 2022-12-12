@@ -1,29 +1,6 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 918:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.assertSupportedAction = exports.assertSupportedEvent = void 0;
-const assertSupportedEvent = (githubClient) => {
-    if (githubClient.getContextEvent() !== 'pull_request')
-        throw new Error(`Github event "${githubClient.getContextEvent()}" is unsupported. ` +
-            'Only "pull_request" is supported.');
-};
-exports.assertSupportedEvent = assertSupportedEvent;
-const assertSupportedAction = (githubClient) => {
-    if (!['opened', 'reopened', 'edited', 'synchronize'].some((el) => el === githubClient.getContextAction()))
-        throw new Error(`Github action "${githubClient.getContextAction()}" is unsupported. Only "opened", "reopened", ` +
-            '"edited", "synchronize" are supported.');
-};
-exports.assertSupportedAction = assertSupportedAction;
-
-
-/***/ }),
-
 /***/ 7351:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -7941,7 +7918,7 @@ exports.implementation = class URLImpl {
 
 
 const conversions = __nccwpck_require__(4886);
-const utils = __nccwpck_require__(918);
+const utils = __nccwpck_require__(3185);
 const Impl = __nccwpck_require__(7537);
 
 const impl = utils.implSymbol;
@@ -9462,6 +9439,34 @@ module.exports.parseURL = function (input, options) {
 
 /***/ }),
 
+/***/ 3185:
+/***/ ((module) => {
+
+"use strict";
+
+
+module.exports.mixin = function mixin(target, source) {
+  const keys = Object.getOwnPropertyNames(source);
+  for (let i = 0; i < keys.length; ++i) {
+    Object.defineProperty(target, keys[i], Object.getOwnPropertyDescriptor(source, keys[i]));
+  }
+};
+
+module.exports.wrapperSymbol = Symbol("wrapper");
+module.exports.implSymbol = Symbol("impl");
+
+module.exports.wrapperForImpl = function (impl) {
+  return impl[module.exports.wrapperSymbol];
+};
+
+module.exports.implForWrapper = function (wrapper) {
+  return wrapper[module.exports.implSymbol];
+};
+
+
+
+/***/ }),
+
 /***/ 2940:
 /***/ ((module) => {
 
@@ -9540,17 +9545,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.ChangeDescriptionType = exports.GithubClient = void 0;
+exports.GitHubClient = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 const graphql_1 = __nccwpck_require__(8467);
-var ChangeDescriptionType;
-(function (ChangeDescriptionType) {
-    ChangeDescriptionType[ChangeDescriptionType["CommitMessage"] = 0] = "CommitMessage";
-    ChangeDescriptionType[ChangeDescriptionType["Title"] = 1] = "Title";
-})(ChangeDescriptionType || (ChangeDescriptionType = {}));
-exports.ChangeDescriptionType = ChangeDescriptionType;
-class GithubClient {
+class GitHubClient {
     constructor(githubApiToken) {
         this.githubApiToken = githubApiToken;
     }
@@ -9565,34 +9564,34 @@ class GithubClient {
         return github.context.payload.action;
     }
     getPullRequestUrl() {
-        core.info('Get pull request url');
+        core.info('Get pull request URL.');
         if (!github.context.payload)
             throw new Error('No payload found in the context.');
         if (!github.context.payload.pull_request)
-            throw new Error('No pull request found in the payload.');
+            throw new Error('No PR found in the payload.');
         if (!github.context.payload.pull_request.html_url)
-            throw new Error('No pull request url found in the payload.');
+            throw new Error('No PR url found in the payload.');
         return github.context.payload.pull_request.html_url;
     }
     getPullRequestTitle() {
-        core.info('Get pull request title');
+        core.info('Get pull request title.');
         if (!github.context.payload)
             throw new Error('No payload found in the context.');
         if (!github.context.payload.pull_request)
-            throw new Error('No pull request found in the payload.');
+            throw new Error('No PR found in the payload.');
         if (!github.context.payload.pull_request.title)
-            throw new Error('No title found in the pull request.');
+            throw new Error('No title found in the PR.');
         return github.context.payload.pull_request.title;
     }
     getPullRequestCommitMessages() {
         return __awaiter(this, void 0, void 0, function* () {
-            core.info('Get pull request commits');
+            core.info('Get pull request commits.');
             if (!github.context.payload)
                 throw new Error('No payload found in the context.');
             if (!github.context.payload.pull_request)
-                throw new Error('No pull request found in the payload.');
+                throw new Error('No PR found in the payload.');
             if (!github.context.payload.pull_request.number)
-                throw new Error('No number found in the pull request.');
+                throw new Error('No number found in the PR.');
             if (!github.context.payload.repository)
                 throw new Error('No repository found in the payload.');
             if (!github.context.payload.repository.name)
@@ -9639,7 +9638,7 @@ class GithubClient {
         });
     }
 }
-exports.GithubClient = GithubClient;
+exports.GitHubClient = GitHubClient;
 
 
 /***/ }),
@@ -9673,79 +9672,62 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.CommitVerificationStrategy = exports.TitleVerificationStrategy = exports.NoIdVerificationStrategy = exports.InputsClient = void 0;
+exports.ShortLinkVerificationStrategy = exports.GlobalVerificationStrategy = exports.InputsClient = void 0;
 const core = __importStar(__nccwpck_require__(2186));
-var NoIdVerificationStrategy;
-(function (NoIdVerificationStrategy) {
-    NoIdVerificationStrategy[NoIdVerificationStrategy["AnyCase"] = 0] = "AnyCase";
-    NoIdVerificationStrategy[NoIdVerificationStrategy["UpperCase"] = 1] = "UpperCase";
-    NoIdVerificationStrategy[NoIdVerificationStrategy["LowerCase"] = 2] = "LowerCase";
-    NoIdVerificationStrategy[NoIdVerificationStrategy["Never"] = 3] = "Never";
-})(NoIdVerificationStrategy || (NoIdVerificationStrategy = {}));
-exports.NoIdVerificationStrategy = NoIdVerificationStrategy;
-var CommitVerificationStrategy;
-(function (CommitVerificationStrategy) {
-    CommitVerificationStrategy[CommitVerificationStrategy["AllCommits"] = 0] = "AllCommits";
-    CommitVerificationStrategy[CommitVerificationStrategy["Never"] = 1] = "Never";
-})(CommitVerificationStrategy || (CommitVerificationStrategy = {}));
-exports.CommitVerificationStrategy = CommitVerificationStrategy;
-var TitleVerificationStrategy;
-(function (TitleVerificationStrategy) {
-    TitleVerificationStrategy[TitleVerificationStrategy["Always"] = 0] = "Always";
-    TitleVerificationStrategy[TitleVerificationStrategy["Never"] = 1] = "Never";
-})(TitleVerificationStrategy || (TitleVerificationStrategy = {}));
-exports.TitleVerificationStrategy = TitleVerificationStrategy;
+var GlobalVerificationStrategy;
+(function (GlobalVerificationStrategy) {
+    GlobalVerificationStrategy["Commits"] = "commits";
+    GlobalVerificationStrategy["CommitsAndPRTitle"] = "commits_and_pr_title";
+    GlobalVerificationStrategy["Disabled"] = "disabled";
+})(GlobalVerificationStrategy || (GlobalVerificationStrategy = {}));
+exports.GlobalVerificationStrategy = GlobalVerificationStrategy;
+var ShortLinkVerificationStrategy;
+(function (ShortLinkVerificationStrategy) {
+    ShortLinkVerificationStrategy["Trello"] = "trello";
+    ShortLinkVerificationStrategy["TrelloOrNoId"] = "trello_or_noid";
+})(ShortLinkVerificationStrategy || (ShortLinkVerificationStrategy = {}));
+exports.ShortLinkVerificationStrategy = ShortLinkVerificationStrategy;
 class InputsClient {
-    getNoIdVerificationStrategy() {
-        core.info('Get noid_verification_strategy');
-        const input = core.getInput('noid_verification_strategy');
+    getGlobalVerificationStrategy() {
+        core.info('Get global_verification_strategy.');
+        const input = core.getInput('global_verification_strategy');
         switch (input) {
-            case 'any_case':
-                return NoIdVerificationStrategy.AnyCase;
-            case 'upper_case':
-                return NoIdVerificationStrategy.UpperCase;
-            case 'lower_case':
-                return NoIdVerificationStrategy.LowerCase;
-            case 'never':
-                return NoIdVerificationStrategy.Never;
+            case 'commits':
+                return GlobalVerificationStrategy.Commits;
+            case 'commits_and_pr_title':
+                return GlobalVerificationStrategy.CommitsAndPRTitle;
+            case 'disabled':
+                return GlobalVerificationStrategy.Disabled;
             default:
-                throw new Error(`Unrecognised value ${input} for "noid_verification_strategy"`);
+                throw new Error(`Unrecognised value ${input} for "global_verification_strategy"`);
         }
     }
-    getCommitVerificationStrategy() {
-        core.info('Get commit_verification_strategy');
-        const input = core.getInput('commit_verification_strategy');
+    getShortLinkVerificationStrategy() {
+        core.info('Get short_link_verification_strategy.');
+        const input = core.getInput('short_link_verification_strategy');
         switch (input) {
-            case 'all_commits':
-                return CommitVerificationStrategy.AllCommits;
-            case 'never':
-                return CommitVerificationStrategy.Never;
+            case 'trello':
+                return ShortLinkVerificationStrategy.Trello;
+            case 'trello_or_noid':
+                return ShortLinkVerificationStrategy.TrelloOrNoId;
             default:
-                throw new Error(`Unrecognised value ${input} for "commit_verification_strategy"`);
+                throw new Error(`Unrecognised value ${input} for "short_link_verification_strategy"`);
         }
     }
-    getTitleVerificationStrategy() {
-        core.info('Get title_verification_strategy');
-        const input = core.getInput('title_verification_strategy');
-        switch (input) {
-            case 'always':
-                return TitleVerificationStrategy.Always;
-            case 'never':
-                return TitleVerificationStrategy.Never;
-            default:
-                throw new Error(`Unrecognised value ${input} for "title_verification_strategy"`);
-        }
+    getNoIdShortLinkPattern() {
+        core.info('Get noid_short_link_pattern.');
+        return new RegExp(core.getInput('noid_short_link_pattern'));
     }
     getTrelloApiKey() {
-        core.info('Get trello_api_key');
+        core.info('Get trello_api_key.');
         return core.getInput('trello_api_key', { required: true });
     }
     getTrelloApiToken() {
-        core.info('Get trello_api_token');
+        core.info('Get trello_api_token.');
         return core.getInput('trello_api_token', { required: true });
     }
     getGitHubApiToken() {
-        core.info('Get github_api_token');
+        core.info('Get github_api_token.');
         return core.getInput('github_api_token', { required: true });
     }
 }
@@ -9795,9 +9777,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.TrelloClient = void 0;
+exports.TrelloClient = exports.TrelloShortLink = exports.NoIdShortLink = exports.ShortLink = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const node_fetch_1 = __importDefault(__nccwpck_require__(467));
+class ShortLink {
+    constructor(id) {
+        this.id = id;
+    }
+}
+exports.ShortLink = ShortLink;
+class NoIdShortLink extends ShortLink {
+    constructor(id) {
+        super(id);
+    }
+}
+exports.NoIdShortLink = NoIdShortLink;
+class TrelloShortLink extends ShortLink {
+    constructor(id) {
+        super(id);
+    }
+}
+exports.TrelloShortLink = TrelloShortLink;
 class TrelloClient {
     constructor(apiKey, apiToken) {
         this.apiKey = apiKey;
@@ -9817,7 +9817,7 @@ class TrelloClient {
     // https://developer.atlassian.com/cloud/trello/rest/api-group-cards/#api-cards-id-get
     getCard(shortLink) {
         return __awaiter(this, void 0, void 0, function* () {
-            core.info('Get Trello card');
+            core.info('Get Trello card.');
             const path = `/cards/${shortLink}`;
             const options = Object.assign({}, this.apiBaseHeaders);
             return (0, node_fetch_1.default)(this.buildApiUrl(path), options)
@@ -9835,7 +9835,7 @@ class TrelloClient {
     // https://developer.atlassian.com/cloud/trello/rest/api-group-cards/#api-cards-id-attachments-get
     getCardAttachments(shortLink) {
         return __awaiter(this, void 0, void 0, function* () {
-            core.info('Get Trello card attachments');
+            core.info('Get Trello card attachments.');
             const path = `/cards/${shortLink}/attachments`;
             const options = Object.assign({}, this.apiBaseHeaders);
             return (0, node_fetch_1.default)(this.buildApiUrl(path), options)
@@ -9853,7 +9853,7 @@ class TrelloClient {
     // https://developer.atlassian.com/cloud/trello/rest/api-group-cards/#api-cards-id-attachments-post
     addUrlAttachmentToCard(shortLink, attachmentUrl) {
         return __awaiter(this, void 0, void 0, function* () {
-            core.info('Get attachment to Trello card');
+            core.info('Add attachment to Trello card.');
             const path = `/cards/${shortLink}/attachments`;
             const options = Object.assign(Object.assign({}, this.apiBaseHeaders), { method: 'POST' });
             const queryParams = new URLSearchParams();
@@ -9909,7 +9909,7 @@ const client_github_1 = __nccwpck_require__(9236);
 const client_trello_1 = __nccwpck_require__(6901);
 const run_1 = __nccwpck_require__(7764);
 const inputs = new client_inputs_1.InputsClient();
-const github = new client_github_1.GithubClient(inputs.getGitHubApiToken());
+const github = new client_github_1.GitHubClient(inputs.getGitHubApiToken());
 const trello = new client_trello_1.TrelloClient(inputs.getTrelloApiKey(), inputs.getTrelloApiToken());
 (0, run_1.run)(inputs, github, trello)
     .then(() => {
@@ -9966,62 +9966,66 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const client_inputs_1 = __nccwpck_require__(5867);
-const verification_service_1 = __nccwpck_require__(1508);
-const utils_1 = __nccwpck_require__(1314);
+const service_assertions_1 = __nccwpck_require__(3718);
+const client_trello_1 = __nccwpck_require__(6901);
+const service_utils_1 = __nccwpck_require__(3118);
+const attachPullRequestToTrello = (inputs, trello, github, trelloShortLink) => __awaiter(void 0, void 0, void 0, function* () {
+    core.info('Start attaching pull request to Trello card.');
+    const assertions = new service_assertions_1.AssertionsService(inputs, github, trello);
+    const url = github.getPullRequestUrl();
+    const card = yield trello.getCard(trelloShortLink.id);
+    assertions.validateCardOpen(card);
+    const attachments = yield trello.getCardAttachments(trelloShortLink.id);
+    if (attachments.find((attachment) => attachment.url === url)) {
+        core.info('Trello card already has an attachment for this pull request. Skipping.');
+    }
+    else {
+        yield trello.addUrlAttachmentToCard(trelloShortLink.id, url);
+    }
+    return;
+});
 const run = (inputs, github, trello) => __awaiter(void 0, void 0, void 0, function* () {
-    const service = new verification_service_1.VerificationService(github, inputs, trello);
+    const assertions = new service_assertions_1.AssertionsService(inputs, github, trello);
+    const utils = new service_utils_1.UtilsService(inputs);
     core.info('Start GitHub event verification.');
-    (0, utils_1.assertSupportedEvent)(github);
-    (0, utils_1.assertSupportedAction)(github);
-    core.info('Start commit messages verification.');
-    switch (inputs.getCommitVerificationStrategy()) {
-        case client_inputs_1.CommitVerificationStrategy.AllCommits:
-            yield service.assertAllCommitsContainShortLink();
-            break;
-        case client_inputs_1.CommitVerificationStrategy.Never:
-            core.info('Skipping commit verification.');
-            break;
+    assertions.validateSupportedEvent(github);
+    assertions.validateSupportedAction(github);
+    core.info('Start global verification verification.');
+    switch (inputs.getGlobalVerificationStrategy()) {
+        case client_inputs_1.GlobalVerificationStrategy.CommitsAndPRTitle: {
+            const commits = yield github.getPullRequestCommitMessages();
+            const commitShortLinks = commits.map(utils.extractShortLink.bind(utils));
+            const title = github.getPullRequestTitle();
+            const titleShortLinks = utils.extractShortLink(title);
+            const shortLinks = [titleShortLinks, ...commitShortLinks];
+            const trelloShortLinks = shortLinks.filter((shortLink) => shortLink instanceof client_trello_1.TrelloShortLink);
+            assertions.validateShortLinksStrategy(shortLinks);
+            if (trelloShortLinks.length > 0) {
+                yield attachPullRequestToTrello(inputs, trello, github, trelloShortLinks[0]);
+            }
+            return;
+        }
+        case client_inputs_1.GlobalVerificationStrategy.Commits: {
+            const commits = yield github.getPullRequestCommitMessages();
+            const shortLinks = commits.map(utils.extractShortLink.bind(utils));
+            const trelloShortLinks = shortLinks.filter((shortLink) => shortLink instanceof client_trello_1.TrelloShortLink);
+            assertions.validateShortLinksStrategy(shortLinks);
+            if (trelloShortLinks.length > 0) {
+                yield attachPullRequestToTrello(inputs, trello, github, trelloShortLinks[0]);
+            }
+            return;
+        }
+        case client_inputs_1.GlobalVerificationStrategy.Disabled:
+            return;
     }
-    core.info('Start PR title verification.');
-    switch (inputs.getTitleVerificationStrategy()) {
-        case client_inputs_1.TitleVerificationStrategy.Always:
-            yield service.assertTitleContainsShortLink();
-            break;
-        case client_inputs_1.TitleVerificationStrategy.Never:
-            core.info('Skipping title verification.');
-            break;
-    }
-    core.info('PR validated successfully.');
+    core.info('Pull request validated successfully.');
 });
 exports.run = run;
 
 
 /***/ }),
 
-/***/ 1314:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.assertSupportedAction = exports.assertSupportedEvent = void 0;
-const assertSupportedEvent = (githubClient) => {
-    if (githubClient.getContextEvent() !== 'pull_request')
-        throw new Error(`Github event "${githubClient.getContextEvent()}" is unsupported. ` +
-            'Only "pull_request" is supported.');
-};
-exports.assertSupportedEvent = assertSupportedEvent;
-const assertSupportedAction = (githubClient) => {
-    if (!['opened', 'reopened', 'edited', 'synchronize'].some((el) => el === githubClient.getContextAction()))
-        throw new Error(`Github action "${githubClient.getContextAction()}" is unsupported. Only "opened", "reopened", ` +
-            '"edited", "synchronize" are supported.');
-};
-exports.assertSupportedAction = assertSupportedAction;
-
-
-/***/ }),
-
-/***/ 1508:
+/***/ 3718:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -10049,147 +10053,146 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.VerificationService = void 0;
+exports.AssertionsService = void 0;
 const client_inputs_1 = __nccwpck_require__(5867);
-const client_github_1 = __nccwpck_require__(9236);
+const client_trello_1 = __nccwpck_require__(6901);
 const core = __importStar(__nccwpck_require__(2186));
-class VerificationService {
-    constructor(github, inputs, trello) {
+class AssertionsService {
+    constructor(inputs, github, trello) {
         this.github = github;
         this.inputs = inputs;
         this.trello = trello;
     }
-    extractTrelloShortLink(description, descriptionType) {
-        const REGEX_TRELLO_SHORT_LINK = new RegExp('^\\[([a-z0-9]+|NOID)\\].+', 'i');
-        const match = REGEX_TRELLO_SHORT_LINK.exec(description);
-        if (match === null) {
-            switch (descriptionType) {
-                case client_github_1.ChangeDescriptionType.Title:
-                    throw new Error(`PR title "${description}" did not contain a valid trello short link. Please include one ` +
-                        'like in the following examples: "[abc123] My work description" or "[NOID] My work description"');
-                case client_github_1.ChangeDescriptionType.CommitMessage:
-                    throw new Error(`Commit message "${description}" did not contain a valid trello short link. Please include one ` +
-                        'like in the following examples: "[abc123] My work description" or "[NOID] My work description"');
-            }
-        }
-        return match[1];
+    validateSupportedEvent(githubClient) {
+        core.info('Verify Github event type.');
+        if (githubClient.getContextEvent() !== 'pull_request')
+            throw new Error(`GitHub event "${githubClient.getContextEvent()}" is unsupported. ` +
+                'Only "pull_request" is supported.');
     }
-    assertAtLeastOneShortLink(shortLinks, descriptionType) {
-        if (shortLinks.length === 0) {
-            switch (descriptionType) {
-                case client_github_1.ChangeDescriptionType.Title:
-                    throw new Error('A Trello short link is missing from the title in your PR. Please include one ' +
-                        'like in the following examples: "[abc123] My work description" or "[NOID] My work description"');
-                case client_github_1.ChangeDescriptionType.CommitMessage:
-                    throw new Error('A Trello short link is missing from all commits in your PR. Please include at least one ' +
-                        'like the following examples: "[abc123] My work description" or "[NOID] My work description"');
-            }
-        }
+    validateSupportedAction(githubClient) {
+        core.info('Verify Github action type.');
+        if (!['opened', 'reopened', 'edited', 'synchronize'].some((el) => el === githubClient.getContextAction()))
+            throw new Error(`GitHub action "${githubClient.getContextAction()}" is unsupported. Only "opened", "reopened", ` +
+                '"edited", "synchronize" are supported.');
     }
-    assertAllShortLinksAreIdentical(shortLinks) {
-        if (shortLinks.length === 0)
-            return;
-        const head = shortLinks[0];
+    validateExclusivelyTrelloShortLinks(shortLinks) {
+        core.info('Verify short links only contain Trello short links.');
         shortLinks.forEach((shortLink) => {
-            if (shortLink !== head) {
-                throw new Error(`Your PR contained Trello short links that did not match: "${head}" and "${shortLink}" differ. ` +
-                    'You cannot currently include more than one Trello card per PR. But please reach out to me if this is ' +
-                    'something your team needs, you savages.');
+            if (shortLink instanceof client_trello_1.NoIdShortLink) {
+                throw new Error(`Unexpected NOID short link "${shortLink.id}". Only Trello short links are allowed in your ` +
+                    'project, please provide one in the form of "[a2bd4d] My change description".');
             }
         });
     }
-    assertCardNotClosed(card) {
+    validateTrelloShortLinksAreIdentical(shortLinks) {
+        core.info('Verify all Trello short links are identical.');
+        if (shortLinks.length === 0) {
+            return;
+        }
+        const head = shortLinks[0];
+        shortLinks.forEach((shortLink) => {
+            if (head.id !== shortLink.id) {
+                throw new Error(`All Trello short links must be identical, but "${shortLink.id}" and "${shortLink.id}" ` +
+                    'were different.');
+            }
+        });
+    }
+    validateShortLinksStrategy(shortLinks) {
+        core.info('Verify short link strategy.');
+        const trelloShortLinks = shortLinks.filter((shortLink) => shortLink instanceof client_trello_1.TrelloShortLink);
+        switch (this.inputs.getShortLinkVerificationStrategy()) {
+            case client_inputs_1.ShortLinkVerificationStrategy.Trello: {
+                this.validateExclusivelyTrelloShortLinks(shortLinks);
+                this.validateTrelloShortLinksAreIdentical(trelloShortLinks);
+                return;
+            }
+            case client_inputs_1.ShortLinkVerificationStrategy.TrelloOrNoId: {
+                this.validateTrelloShortLinksAreIdentical(trelloShortLinks);
+                return;
+            }
+        }
+    }
+    validateCardOpen(card) {
+        core.info('Verify Trello card is open.');
         if (card.closed) {
             throw new Error(`Trello card "${card.shortLink}" needs to be in an open state, ` +
                 'but it is currently marked as closed.');
         }
     }
-    assertNoIdShortLinkStrategy(strategy, shortLinks) {
-        const REGEX_TRELLO_NOID_ANYCASE = new RegExp('^NOID$', 'i');
-        const REGEX_TRELLO_NOID_UPPERCASE = new RegExp('^NOID$');
-        const REGEX_TRELLO_NOID_LOWERCASE = new RegExp('^noid$');
-        shortLinks.forEach((shortLink) => {
-            switch (strategy) {
-                case client_inputs_1.NoIdVerificationStrategy.AnyCase:
-                    return;
-                case client_inputs_1.NoIdVerificationStrategy.UpperCase:
-                    if (REGEX_TRELLO_NOID_ANYCASE.test(shortLink) &&
-                        REGEX_TRELLO_NOID_LOWERCASE.test(shortLink)) {
-                        throw new Error(`NOID short link needed to be upper case but was "${shortLink}"`);
-                    }
-                    return;
-                case client_inputs_1.NoIdVerificationStrategy.LowerCase:
-                    if (REGEX_TRELLO_NOID_ANYCASE.test(shortLink) &&
-                        REGEX_TRELLO_NOID_UPPERCASE.test(shortLink)) {
-                        throw new Error(`NOID short link needed to be lower case but was "${shortLink}"`);
-                    }
-                    return;
-                case client_inputs_1.NoIdVerificationStrategy.Never:
-                    if (REGEX_TRELLO_NOID_ANYCASE.test(shortLink)) {
-                        throw new Error('This PR should not include any NOID short links. If you need this functionality please enable it ' +
-                            'via the "noid_verification_strategy" setting for this Github Action');
-                    }
-                    return;
-            }
-        });
+}
+exports.AssertionsService = AssertionsService;
+
+
+/***/ }),
+
+/***/ 3118:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
     }
-    assertAllCommitsContainShortLink() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const pullRequestUrl = this.github.getPullRequestUrl();
-            const commitMessages = yield this.github.getPullRequestCommitMessages();
-            const commitMessageShortLinks = commitMessages.map((msg) => this.extractTrelloShortLink(msg, client_github_1.ChangeDescriptionType.CommitMessage));
-            this.assertAtLeastOneShortLink(commitMessageShortLinks, client_github_1.ChangeDescriptionType.CommitMessage);
-            this.assertAllShortLinksAreIdentical(commitMessageShortLinks);
-            this.assertNoIdShortLinkStrategy(this.inputs.getNoIdVerificationStrategy(), commitMessageShortLinks);
-            const shortLink = commitMessageShortLinks[0];
-            if (shortLink.toUpperCase() === 'NOID') {
-                return;
-            }
-            const card = yield this.trello.getCard(shortLink);
-            this.assertCardNotClosed(card);
-            const attachments = yield this.trello.getCardAttachments(shortLink);
-            if (attachments.find((attachment) => attachment.url === pullRequestUrl)) {
-                core.info('Trello card already has an attachment for this pull request. Skipping');
-            }
-            else {
-                yield this.trello.addUrlAttachmentToCard(shortLink, pullRequestUrl);
-            }
-        });
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.UtilsService = void 0;
+const core = __importStar(__nccwpck_require__(2186));
+const client_trello_1 = __nccwpck_require__(6901);
+class UtilsService {
+    constructor(inputs) {
+        this.inputs = inputs;
     }
-    assertTitleContainsShortLink() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const pullRequestUrl = this.github.getPullRequestUrl();
-            const pullRequestTitle = this.github.getPullRequestTitle();
-            const titleShortLink = this.extractTrelloShortLink(pullRequestTitle, client_github_1.ChangeDescriptionType.Title);
-            this.assertAtLeastOneShortLink([titleShortLink], client_github_1.ChangeDescriptionType.Title);
-            this.assertNoIdShortLinkStrategy(this.inputs.getNoIdVerificationStrategy(), [titleShortLink]);
-            if (titleShortLink.toUpperCase() === 'NOID') {
-                return;
-            }
-            const card = yield this.trello.getCard(titleShortLink);
-            this.assertCardNotClosed(card);
-            const attachments = yield this.trello.getCardAttachments(titleShortLink);
-            if (attachments.find((attachment) => attachment.url === pullRequestUrl)) {
-                core.info('Trello card already has an attachment for this pull request. Skipping');
-            }
-            else {
-                yield this.trello.addUrlAttachmentToCard(titleShortLink, pullRequestUrl);
-            }
-            return;
-        });
+    extractTrelloShortLink(description) {
+        const pattern = new RegExp(`^\\[([a-zA-Z0-9]+)\\].+`);
+        const match = pattern.exec(description);
+        if (match !== null) {
+            return new client_trello_1.TrelloShortLink(match[1]);
+        }
+    }
+    extractNoIdShortLink(description) {
+        const pattern = this.inputs.getNoIdShortLinkPattern();
+        const match = pattern.exec(description);
+        if (match !== null) {
+            return new client_trello_1.NoIdShortLink(match[1]);
+        }
+    }
+    extractShortLink(description) {
+        core.info(`Extracting short links from "${description}".`);
+        const noIdShortLink = this.extractNoIdShortLink(description);
+        const trelloShortLink = this.extractTrelloShortLink(description);
+        if (noIdShortLink) {
+            return noIdShortLink;
+        }
+        else if (trelloShortLink) {
+            return trelloShortLink;
+        }
+        else {
+            throw new Error(`Description "${description}" did not contain a valid short link. Please include one ` +
+                'like in the following examples: "[abc123] My work description" or "[NOID] My work description".');
+        }
     }
 }
-exports.VerificationService = VerificationService;
+exports.UtilsService = UtilsService;
 
 
 /***/ }),

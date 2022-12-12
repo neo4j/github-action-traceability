@@ -2,18 +2,18 @@ name: "Traceability GitHub Action"
 author: "Daniel Leaver"
 description: "Ensures git commit messages contain a Trello short link"
 inputs:
-  noid_verification_strategy:
+  global_verification_strategy:
     required: false
-    default: "upper_case"
-    description: "One of any_case, upper_case, lower_case, never."
-  commit_verification_strategy:
+    default: "commits"
+    description: "One of commits, commits_and_pr_title, disabled."
+  short_link_verification_strategy:
     required: false
-    default: "all_commits"
-    description: "One of all_commits, never."
-  title_verification_strategy:
+    default: "trello_or_noid"
+    description: "One of trello, trello_or_noid."
+  noid_short_link_pattern:
     required: false
-    default: "always"
-    description: "One of always, never."
+    default: "\[(NOID)\]"
+    description: "Regex pattern for the NOID short link."
   trello_api_key:
     required: true
     description: "API key for Trello. Use GitHub secrets. Don't use plaintext."

@@ -2,6 +2,26 @@ import * as core from '@actions/core';
 
 import fetch, { RequestInit } from 'node-fetch';
 
+class ShortLink {
+  id: string;
+
+  constructor(id: string) {
+    this.id = id;
+  }
+}
+
+class NoIdShortLink extends ShortLink {
+  constructor(id: string) {
+    super(id);
+  }
+}
+
+class TrelloShortLink extends ShortLink {
+  constructor(id: string) {
+    super(id);
+  }
+}
+
 interface TrelloCard {
   shortLink: string;
   closed: boolean;
@@ -44,7 +64,7 @@ class TrelloClient implements TrelloClientI {
 
   // https://developer.atlassian.com/cloud/trello/rest/api-group-cards/#api-cards-id-get
   async getCard(shortLink: string): Promise<TrelloCard> {
-    core.info('Get Trello card');
+    core.info('Get Trello card.');
     const path = `/cards/${shortLink}`;
     const options = { ...this.apiBaseHeaders };
 
@@ -62,7 +82,7 @@ class TrelloClient implements TrelloClientI {
 
   // https://developer.atlassian.com/cloud/trello/rest/api-group-cards/#api-cards-id-attachments-get
   async getCardAttachments(shortLink: string): Promise<TrelloAttachment[]> {
-    core.info('Get Trello card attachments');
+    core.info('Get Trello card attachments.');
     const path = `/cards/${shortLink}/attachments`;
     const options = { ...this.apiBaseHeaders };
 
@@ -85,7 +105,7 @@ class TrelloClient implements TrelloClientI {
     shortLink: string,
     attachmentUrl: string,
   ): Promise<TrelloAttachment> {
-    core.info('Get attachment to Trello card');
+    core.info('Add attachment to Trello card.');
     const path = `/cards/${shortLink}/attachments`;
     const options = {
       ...this.apiBaseHeaders,
@@ -106,4 +126,12 @@ class TrelloClient implements TrelloClientI {
   }
 }
 
-export { TrelloCard, TrelloAttachment, TrelloClient, TrelloClientI };
+export {
+  ShortLink,
+  NoIdShortLink,
+  TrelloShortLink,
+  TrelloCard,
+  TrelloAttachment,
+  TrelloClient,
+  TrelloClientI,
+};

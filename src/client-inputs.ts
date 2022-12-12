@@ -1,95 +1,73 @@
 import * as core from '@actions/core';
 
-enum NoIdVerificationStrategy {
-  AnyCase,
-  UpperCase,
-  LowerCase,
-  Never,
+enum GlobalVerificationStrategy {
+  Commits = 'commits',
+  CommitsAndPRTitle = 'commits_and_pr_title',
+  Disabled = 'disabled',
 }
 
-enum CommitVerificationStrategy {
-  AllCommits,
-  Never,
-}
-
-enum TitleVerificationStrategy {
-  Always,
-  Never,
+enum ShortLinkVerificationStrategy {
+  Trello = 'trello',
+  TrelloOrNoId = 'trello_or_noid',
 }
 
 interface InputsClientI {
-  getNoIdVerificationStrategy(): NoIdVerificationStrategy;
-  getCommitVerificationStrategy(): CommitVerificationStrategy;
-  getTitleVerificationStrategy(): TitleVerificationStrategy;
+  getGlobalVerificationStrategy(): GlobalVerificationStrategy;
+  getShortLinkVerificationStrategy(): ShortLinkVerificationStrategy;
+  getNoIdShortLinkPattern(): RegExp;
   getTrelloApiKey(): string;
   getTrelloApiToken(): string;
   getGitHubApiToken(): string;
 }
 
 class InputsClient implements InputsClientI {
-  getNoIdVerificationStrategy(): NoIdVerificationStrategy {
-    core.info('Get noid_verification_strategy');
-    const input = core.getInput('noid_verification_strategy');
+  getGlobalVerificationStrategy(): GlobalVerificationStrategy {
+    core.info('Get global_verification_strategy.');
+    const input = core.getInput('global_verification_strategy');
     switch (input) {
-      case 'any_case':
-        return NoIdVerificationStrategy.AnyCase;
-      case 'upper_case':
-        return NoIdVerificationStrategy.UpperCase;
-      case 'lower_case':
-        return NoIdVerificationStrategy.LowerCase;
-      case 'never':
-        return NoIdVerificationStrategy.Never;
+      case 'commits':
+        return GlobalVerificationStrategy.Commits;
+      case 'commits_and_pr_title':
+        return GlobalVerificationStrategy.CommitsAndPRTitle;
+      case 'disabled':
+        return GlobalVerificationStrategy.Disabled;
       default:
-        throw new Error(`Unrecognised value ${input} for "noid_verification_strategy"`);
+        throw new Error(`Unrecognised value ${input} for "global_verification_strategy"`);
     }
   }
 
-  getCommitVerificationStrategy(): CommitVerificationStrategy {
-    core.info('Get commit_verification_strategy');
-    const input = core.getInput('commit_verification_strategy');
+  getShortLinkVerificationStrategy(): ShortLinkVerificationStrategy {
+    core.info('Get short_link_verification_strategy.');
+    const input = core.getInput('short_link_verification_strategy');
     switch (input) {
-      case 'all_commits':
-        return CommitVerificationStrategy.AllCommits;
-      case 'never':
-        return CommitVerificationStrategy.Never;
+      case 'trello':
+        return ShortLinkVerificationStrategy.Trello;
+      case 'trello_or_noid':
+        return ShortLinkVerificationStrategy.TrelloOrNoId;
       default:
-        throw new Error(`Unrecognised value ${input} for "commit_verification_strategy"`);
+        throw new Error(`Unrecognised value ${input} for "short_link_verification_strategy"`);
     }
   }
 
-  getTitleVerificationStrategy(): TitleVerificationStrategy {
-    core.info('Get title_verification_strategy');
-    const input = core.getInput('title_verification_strategy');
-    switch (input) {
-      case 'always':
-        return TitleVerificationStrategy.Always;
-      case 'never':
-        return TitleVerificationStrategy.Never;
-      default:
-        throw new Error(`Unrecognised value ${input} for "title_verification_strategy"`);
-    }
+  getNoIdShortLinkPattern(): RegExp {
+    core.info('Get noid_short_link_pattern.');
+    return new RegExp(core.getInput('noid_short_link_pattern'));
   }
 
   getTrelloApiKey(): string {
-    core.info('Get trello_api_key');
+    core.info('Get trello_api_key.');
     return core.getInput('trello_api_key', { required: true });
   }
 
   getTrelloApiToken(): string {
-    core.info('Get trello_api_token');
+    core.info('Get trello_api_token.');
     return core.getInput('trello_api_token', { required: true });
   }
 
   getGitHubApiToken(): string {
-    core.info('Get github_api_token');
+    core.info('Get github_api_token.');
     return core.getInput('github_api_token', { required: true });
   }
 }
 
-export {
-  InputsClient,
-  InputsClientI,
-  NoIdVerificationStrategy,
-  TitleVerificationStrategy,
-  CommitVerificationStrategy,
-};
+export { InputsClient, InputsClientI, GlobalVerificationStrategy, ShortLinkVerificationStrategy };

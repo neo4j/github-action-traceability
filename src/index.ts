@@ -1,11 +1,11 @@
 import * as core from '@actions/core';
 import { InputsClient } from './client-inputs';
-import { GithubClient } from './client-github';
+import { GitHubClient } from './client-github';
 import { TrelloClient } from './client-trello';
 import { run } from './run';
 
 const inputs = new InputsClient();
-const github = new GithubClient(inputs.getGitHubApiToken());
+const github = new GitHubClient(inputs.getGitHubApiToken());
 const trello = new TrelloClient(inputs.getTrelloApiKey(), inputs.getTrelloApiToken());
 run(inputs, github, trello)
   .then(() => {
