@@ -1,6 +1,9 @@
 name: "Traceability GitHub Action"
 author: "Daniel Leaver"
 description: "Ensures git commit messages contain a Trello short link"
+branding:
+  icon: 'award'
+  color: 'green'
 inputs:
   global_verification_strategy:
     required: false
@@ -24,5 +27,5 @@ inputs:
     required: true
     description: "API token for GitHub. Use GitHub secrets. Don't use plaintext."
 runs:
-  using: "node12"
+  using: "node16"
   main: "dist/index.js"
