@@ -1,5 +1,5 @@
-name: "Traceability GitHub Action"
-author: "Daniel Leaver"
+name: "Trello Traceability GitHub Action"
+author: "Neo4j"
 description: "Ensures git commit messages contain a Trello short link"
 branding:
   icon: 'award'

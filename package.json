@@ -2,7 +2,7 @@
   "name": "github-action-traceability",
   "description": "Ensures git commit messages contain a Trello short link",
   "version": "1.0.0",
-  "author": "Daniel Leaver",
+  "author": "Neo4j",
   "license": "Apache-2.0",
   "main": "dist/index.js",
   "homepage": "https://github.com/neo-technology/github-action-traceability#readme",
