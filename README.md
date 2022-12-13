@@ -50,7 +50,7 @@ jobs:
   validate-pr:
     runs-on: ubuntu-latest
     steps:
-      - uses: AzuObs/github-action-traceability@v1.0.10
+      - uses: neo4j/github-action-traceability@v1
         with:
           global_verification_strategy: commits_and_pr_title
           short_link_verification_strategy: trello_or_noid

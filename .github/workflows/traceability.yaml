@@ -14,7 +14,7 @@ jobs:
   validate-pr:
     runs-on: ubuntu-latest
     steps:
-      - uses: AzuObs/github-action-traceability@v1
+      - uses: neo4j/github-action-traceability@v1
         with:
           trello_api_key: ${{ secrets.TRELLO_API_KEY }}
           trello_api_token: ${{ secrets.TRELLO_API_TOKEN }}

@@ -50,7 +50,7 @@ git commit -m "[NOID] Change description"
 
 3. Create a PR against dev and add a regular contributor as Assigned.
 
-[https://github.com/AzuObs/github-action-traceability/compare](https://github.com/AzuObs/github-action-traceability/compare)
+[https://github.com/neo4j/github-action-traceability/compare](https://github.com/neo4j/github-action-traceability/compare)
 
 4. Once the PR is merged, tag it with a new semver. Also, update the existing major semver tag.
 
@@ -62,4 +62,4 @@ git push origin --tags --force
 
 5. Create a release on GitHub with a Changelog.
 
-[https://github.com/AzuObs/github-action-traceability/releases](https://github.com/AzuObs/github-action-traceability/releases)
+[https://github.com/neo4j/github-action-traceability/releases](https://github.com/neo4j/github-action-traceability/releases)
