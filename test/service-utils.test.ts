@@ -17,19 +17,34 @@ describe('UtilsService', () => {
       expect(service.extractShortLink('[NOID] Foobar')).toEqual(new NoIdShortLink('NOID'));
     });
 
-    it('extracts a NOID short link with a custom pattern', () => {
-      const inputs = new InputsClientBuilder().withNoIdShortLinkPattern('\\[(NULL)\\]').build();
-      const service = new UtilsService(inputs);
-      expect(service.extractShortLink('[NULL] Foobar')).toEqual(new NoIdShortLink('NULL'));
-    });
-
-    it('throws when it cannot extract a short link', () => {
+    it('throws when it cannot extract a short link because of missing brackets', () => {
       const inputs = new InputsClientBuilder().build();
       const service = new UtilsService(inputs);
       expect(() => service.extractShortLink('Foobar')).toThrow(
         'Description "Foobar" did not contain a valid short link. Please include one like in the ' +
           'following examples: "[abc123] My work description" or "[NOID] My work description".',
       );
+    });
+
+    it('throws when it cannot extract a short link because of special characters', () => {
+      const inputs = new InputsClientBuilder().build();
+      const service = new UtilsService(inputs);
+      expect(() => service.extractShortLink('[abc-123] Foobar')).toThrow(
+          'Description "[abc-123] Foobar" did not contain a valid short link. Please include one like in the ' +
+          'following examples: "[abc123] My work description" or "[NOID] My work description".',
+      );
+    });
+
+    it('extracts a NOID short link with a custom pattern that is also a valid trello short link pattern', () => {
+      const inputs = new InputsClientBuilder().withNoIdShortLinkPattern('\\[(abc123)\\]').build();
+      const service = new UtilsService(inputs);
+      expect(service.extractShortLink('[abc123] Foobar')).toEqual(new NoIdShortLink('abc123'));
+    });
+
+    it('extracts a NOID short link with a custom pattern that is an invalid trello short link', () => {
+      const inputs = new InputsClientBuilder().withNoIdShortLinkPattern('\\[(abc-123)\\]').build();
+      const service = new UtilsService(inputs);
+      expect(service.extractShortLink('[abc-123] Foobar')).toEqual(new NoIdShortLink('abc-123'));
     });
   });
 });
