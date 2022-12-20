@@ -30,7 +30,7 @@ describe('UtilsService', () => {
       const inputs = new InputsClientBuilder().build();
       const service = new UtilsService(inputs);
       expect(() => service.extractShortLink('[abc-123] Foobar')).toThrow(
-          'Description "[abc-123] Foobar" did not contain a valid short link. Please include one like in the ' +
+        'Description "[abc-123] Foobar" did not contain a valid short link. Please include one like in the ' +
           'following examples: "[abc123] My work description" or "[NOID] My work description".',
       );
     });
