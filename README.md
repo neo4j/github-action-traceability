@@ -63,20 +63,26 @@ jobs:
 
 ### global_verification_strategy
 
+**Default**: `commits`
+
 | Option                   | Descriptions                                                                                                      |
 |--------------------------|-------------------------------------------------------------------------------------------------------------------|
-| **commits** (default)    | The GHA will only check the commits contained within your PR.                                                     |
+| **commits**              | The GHA will only check the commits contained within your PR.                                                     |
 | **commits_and_pr_title** | The GHA will check the commits in your PR as well as your PR title.                                               |
 | **disabled**             | Disables the GHA. If you intend to permanently disable the GHA, then you should just remove it from your project. |
 
 ### short_link_verification_strategy
 
-| Option                       | Descriptions                                                     |
-|------------------------------|------------------------------------------------------------------|
-| **trello_or_noid** (default) | The GHA will allow Trello short links and also NOID short links. |
-| **trello**                   | The GHA will only allow Trello short links.                      |
+**Default**: `trello_or_noid`
+
+| Option               | Descriptions                                                     |
+|----------------------|------------------------------------------------------------------|
+| **trello_or_noid**   | The GHA will allow Trello short links and also NOID short links. |
+| **trello**           | The GHA will only allow Trello short links.                      |
 
 ### noid_short_link_pattern
+
+**Default**: `\\[(NOID)\\]`
 
 The GHA will use this regex pattern to extract NOID short links from your work descriptions. The pattern should contain 
 a capture group wrapping your desire NOID tag.
