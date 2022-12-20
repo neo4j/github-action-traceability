@@ -51,11 +51,11 @@ class DummyGitHubClient implements GitHubClientI {
   pullRequestCommitMessages: string[];
 
   constructor(
-    event: string = 'pull_request',
-    action: string = 'opened',
-    pullRequestUrl: string = 'https://www.github.com/neo4j/apoc',
-    pullRequestTitle: string = 'Install Traceability GitHub Action',
-    pullRequestCommitMessages: string[] = [],
+    event: string,
+    action: string,
+    pullRequestUrl: string,
+    pullRequestTitle: string,
+    pullRequestCommitMessages: string[],
   ) {
     this.event = event;
     this.action = action;
