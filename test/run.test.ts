@@ -341,17 +341,17 @@ describe('Adding attachments to Trello cards', () => {
 
   it('does not create duplicate attachments', async () => {
     const inputs = new InputsClientBuilder()
-        .withGlobalVerificationStrategy(GlobalVerificationStrategy.Commits)
-        .withShortLinkVerificationStrategy(ShortLinkVerificationStrategy.Trello)
-        .build();
+      .withGlobalVerificationStrategy(GlobalVerificationStrategy.Commits)
+      .withShortLinkVerificationStrategy(ShortLinkVerificationStrategy.Trello)
+      .build();
     const github = new GitHubClientBuilder()
-        .withPullRequestUrl('github.com/namespace/project/pulls/96')
-        .withPullRequestCommitMessage('[abc123] Commit')
-        .build();
+      .withPullRequestUrl('github.com/namespace/project/pulls/96')
+      .withPullRequestCommitMessage('[abc123] Commit')
+      .build();
     const trello = new TrelloClientBuilder()
-        .withCard('abc123', false)
-        .withCardAttachment('abc123', 'github.com/namespace/project/pulls/96')
-        .build();
+      .withCard('abc123', false)
+      .withCardAttachment('abc123', 'github.com/namespace/project/pulls/96')
+      .build();
     await expectSuccess(run(inputs, github, trello));
     await expect(trello.getCardAttachments('abc123')).resolves.toEqual([
       {

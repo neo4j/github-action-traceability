@@ -9990,7 +9990,7 @@ const run = (inputs, github, trello) => __awaiter(void 0, void 0, void 0, functi
     core.info('Start GitHub event verification.');
     assertions.validateSupportedEvent(github);
     assertions.validateSupportedAction(github);
-    core.info('Start global verification verification.');
+    core.info('Start global verification strategy.');
     switch (inputs.getGlobalVerificationStrategy()) {
         case client_inputs_1.GlobalVerificationStrategy.CommitsAndPRTitle: {
             const commits = yield github.getPullRequestCommitMessages();
@@ -10093,7 +10093,7 @@ class AssertionsService {
         const head = shortLinks[0];
         shortLinks.forEach((shortLink) => {
             if (head.id !== shortLink.id) {
-                throw new Error(`All Trello short links must be identical, but "${shortLink.id}" and "${shortLink.id}" ` +
+                throw new Error(`All Trello short links must be identical, but "${shortLink.id}" and "${head.id}" ` +
                     'were different.');
             }
         });
