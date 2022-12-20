@@ -63,3 +63,8 @@ git push origin --tags --force
 5. Create a release on GitHub with a Changelog.
 
 [https://github.com/neo4j/github-action-traceability/releases](https://github.com/neo4j/github-action-traceability/releases)
+
+# Contributor License Agreement
+
+In order to contribute we would like to request that you first sign Neo4j's [Contributor License Agreement](https://neo4j.com/developer/cla/) as we will not
+be able to accept your contributions without it.
