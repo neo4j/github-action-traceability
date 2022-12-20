@@ -65,16 +65,16 @@ jobs:
 
 | Option                   | Descriptions                                                                                                      |
 |--------------------------|-------------------------------------------------------------------------------------------------------------------|
-| **commits**              | The GHA will only check the commits contained within your PR.                                                     |
+| **commits** (default)    | The GHA will only check the commits contained within your PR.                                                     |
 | **commits_and_pr_title** | The GHA will check the commits in your PR as well as your PR title.                                               |
 | **disabled**             | Disables the GHA. If you intend to permanently disable the GHA, then you should just remove it from your project. |
 
 ### short_link_verification_strategy
 
-| Option                    | Descriptions                                                     |
-|---------------------------|------------------------------------------------------------------|
-| **trello**                | The GHA will only allow Trello short links.                      |
-| **commits_and_pr_title**  | The GHA will allow Trello short links and also NOID short links. |
+| Option                       | Descriptions                                                     |
+|------------------------------|------------------------------------------------------------------|
+| **trello_or_noid** (default) | The GHA will allow Trello short links and also NOID short links. |
+| **trello**                   | The GHA will only allow Trello short links.                      |
 
 ### noid_short_link_pattern
 
