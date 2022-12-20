@@ -63,7 +63,7 @@ class AssertionsService {
     shortLinks.forEach((shortLink) => {
       if (head.id !== shortLink.id) {
         throw new Error(
-          `All Trello short links must be identical, but "${shortLink.id}" and "${shortLink.id}" ` +
+          `All Trello short links must be identical, but "${shortLink.id}" and "${head.id}" ` +
             'were different.',
         );
       }

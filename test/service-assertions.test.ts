@@ -79,7 +79,7 @@ describe('AssertionService', () => {
           new TrelloShortLink('def345'),
         ]),
       ).toThrow(
-        'All Trello short links must be identical, but "def345" and "def345" were different.',
+        'All Trello short links must be identical, but "def345" and "abc123" were different.',
       );
     });
   });
