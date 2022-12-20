@@ -151,7 +151,7 @@ describe('GlobalVerificationStrategy', () => {
         .withGlobalVerificationStrategy(GlobalVerificationStrategy.Disabled)
         .build();
       const github = new GitHubClientBuilder()
-        .withPullRequestCommitMessage('Invalid title')
+        .withPullRequestCommitMessage('Invalid commit')
         .build();
       const trello = new TrelloClientBuilder().build();
       await expectSuccess(run(inputs, github, trello));
@@ -167,8 +167,8 @@ describe('ShortLinkVerificationStrategy', () => {
         .withShortLinkVerificationStrategy(ShortLinkVerificationStrategy.Trello)
         .build();
       const github = new GitHubClientBuilder()
-        .withPullRequestTitle('[abc123] Valid Title')
-        .withPullRequestCommitMessage('[abc123] Valid Commit')
+        .withPullRequestTitle('[abc123] Valid title')
+        .withPullRequestCommitMessage('[abc123] Valid commit')
         .build();
       const trello = new TrelloClientBuilder().withCard('abc123', false).build();
       await expectSuccess(run(inputs, github, trello));
@@ -180,8 +180,8 @@ describe('ShortLinkVerificationStrategy', () => {
         .withShortLinkVerificationStrategy(ShortLinkVerificationStrategy.Trello)
         .build();
       const github = new GitHubClientBuilder()
-        .withPullRequestTitle('[NOID] Invalid Title')
-        .withPullRequestCommitMessage('[abc123] Valid Commit')
+        .withPullRequestTitle('[NOID] Invalid title')
+        .withPullRequestCommitMessage('[abc123] Commit')
         .build();
       const trello = new TrelloClientBuilder().build();
       await expectThrows(
@@ -197,8 +197,8 @@ describe('ShortLinkVerificationStrategy', () => {
         .withShortLinkVerificationStrategy(ShortLinkVerificationStrategy.Trello)
         .build();
       const github = new GitHubClientBuilder()
-        .withPullRequestTitle('[NOID] Valid Title')
-        .withPullRequestCommitMessage('[abc123] Invalid Commit')
+        .withPullRequestTitle('[abc123] Title')
+        .withPullRequestCommitMessage('[NOID] Invalid commit')
         .build();
       const trello = new TrelloClientBuilder().build();
       await expectThrows(
@@ -216,9 +216,9 @@ describe('ShortLinkVerificationStrategy', () => {
         .withShortLinkVerificationStrategy(ShortLinkVerificationStrategy.TrelloOrNoId)
         .build();
       const github = new GitHubClientBuilder()
-        .withPullRequestTitle('[abc123] Valid Title')
-        .withPullRequestCommitMessage('[abc123] Invalid Commit')
-        .withPullRequestCommitMessage('[abc123] Invalid Commit')
+        .withPullRequestTitle('[abc123] Valid title')
+        .withPullRequestCommitMessage('[abc123] Valid commit')
+        .withPullRequestCommitMessage('[abc123] Valid commit')
         .build();
       const trello = new TrelloClientBuilder().withCard('abc123', false).build();
       await expectSuccess(run(inputs, github, trello));
@@ -230,9 +230,9 @@ describe('ShortLinkVerificationStrategy', () => {
         .withShortLinkVerificationStrategy(ShortLinkVerificationStrategy.TrelloOrNoId)
         .build();
       const github = new GitHubClientBuilder()
-        .withPullRequestTitle('[NOID] Valid Title')
-        .withPullRequestCommitMessage('[NOID] Invalid Commit')
-        .withPullRequestCommitMessage('[NOID] Invalid Commit')
+        .withPullRequestTitle('[NOID] Valid title')
+        .withPullRequestCommitMessage('[NOID] Valid commit')
+        .withPullRequestCommitMessage('[NOID] Valid commit')
         .build();
       const trello = new TrelloClientBuilder().build();
       await expectSuccess(run(inputs, github, trello));
@@ -244,9 +244,9 @@ describe('ShortLinkVerificationStrategy', () => {
         .withShortLinkVerificationStrategy(ShortLinkVerificationStrategy.TrelloOrNoId)
         .build();
       const github = new GitHubClientBuilder()
-        .withPullRequestTitle('[abc123] Valid Title')
-        .withPullRequestCommitMessage('[abc123] Invalid Commit')
-        .withPullRequestCommitMessage('[NOID] Invalid Commit')
+        .withPullRequestTitle('[abc123] Valid title')
+        .withPullRequestCommitMessage('[abc123] Valid commit')
+        .withPullRequestCommitMessage('[NOID] Valid commit')
         .build();
       const trello = new TrelloClientBuilder().withCard('abc123', false).build();
       await expectSuccess(run(inputs, github, trello));
@@ -258,8 +258,8 @@ describe('ShortLinkVerificationStrategy', () => {
         .withShortLinkVerificationStrategy(ShortLinkVerificationStrategy.TrelloOrNoId)
         .build();
       const github = new GitHubClientBuilder()
-        .withPullRequestTitle('[abc123] Invalid Commit')
-        .withPullRequestCommitMessage('[def345] Invalid Commit')
+        .withPullRequestTitle('[abc123] Title')
+        .withPullRequestCommitMessage('[def345] Commit')
         .build();
       const trello = new TrelloClientBuilder()
         .withCard('abc123', false)
@@ -277,8 +277,8 @@ describe('ShortLinkVerificationStrategy', () => {
         .withShortLinkVerificationStrategy(ShortLinkVerificationStrategy.TrelloOrNoId)
         .build();
       const github = new GitHubClientBuilder()
-        .withPullRequestCommitMessage('[123abc] Invalid Commit')
-        .withPullRequestCommitMessage('[def345] Invalid Commit')
+        .withPullRequestCommitMessage('[123abc] Commit')
+        .withPullRequestCommitMessage('[def345] Commit')
         .build();
       const trello = new TrelloClientBuilder()
         .withCard('abc123', false)
@@ -299,7 +299,7 @@ describe('Adding attachments to Trello cards', () => {
       .withShortLinkVerificationStrategy(ShortLinkVerificationStrategy.Trello)
       .build();
     const github = new GitHubClientBuilder()
-      .withPullRequestCommitMessage('[abc123] Foobar')
+      .withPullRequestCommitMessage('[abc123] Invalid commit')
       .build();
     const trello = new TrelloClientBuilder().build();
     await expectThrows(run(inputs, github, trello), 'Card does not exist.');
@@ -311,7 +311,7 @@ describe('Adding attachments to Trello cards', () => {
       .withShortLinkVerificationStrategy(ShortLinkVerificationStrategy.Trello)
       .build();
     const github = new GitHubClientBuilder()
-      .withPullRequestCommitMessage('[abc123] Foobar')
+      .withPullRequestCommitMessage('[abc123] Invalid commit')
       .build();
     const trello = new TrelloClientBuilder().withCard('abc123', true).build();
     await expectThrows(
@@ -327,7 +327,7 @@ describe('Adding attachments to Trello cards', () => {
       .build();
     const github = new GitHubClientBuilder()
       .withPullRequestUrl('github.com/namespace/project/pulls/96')
-      .withPullRequestCommitMessage('[abc123] Foo')
+      .withPullRequestCommitMessage('[abc123] Commit')
       .build();
     const trello = new TrelloClientBuilder().withCard('abc123', false).build();
     await expectSuccess(run(inputs, github, trello));

@@ -35,7 +35,7 @@ const run = async (inputs: InputsClientI, github: GitHubClientI, trello: TrelloC
   assertions.validateSupportedEvent(github);
   assertions.validateSupportedAction(github);
 
-  core.info('Start global verification verification.');
+  core.info('Start global verification strategy.');
   switch (inputs.getGlobalVerificationStrategy()) {
     case GlobalVerificationStrategy.CommitsAndPRTitle: {
       const commits = await github.getPullRequestCommitMessages();
