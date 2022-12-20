@@ -22,7 +22,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/neo-technology/github-action-traceability"
+    "url": "https://github.com/neo-technology/github-action-traceability"
   },
   "bugs": {
     "url": "https://github.com/neo-technology/github-action-traceability/issues"
