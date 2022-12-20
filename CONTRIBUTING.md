@@ -34,25 +34,25 @@ Does all of the above, building the project only once it's been formatted, linte
 
 # Releasing
 
-1. Build the release artefacts locally.
+### Build the release artefacts locally.
 
 ```bash
 yarn install
 yarn package
 ```
 
-2. Commit your changes.
+### Commit your changes.
 
 ```bash
 git add .
 git commit -m "[NOID] Change description"
 ```
 
-3. Create a PR against dev and add a regular contributor as Assigned.
+### Create a PR against dev and add a regular contributor as Assigned.
 
 [https://github.com/neo4j/github-action-traceability/compare](https://github.com/neo4j/github-action-traceability/compare)
 
-4. Once the PR is merged, tag it with a new semver. Also, update the existing major semver tag.
+### Once the PR is merged, tag it with a new semver. Also, update the existing major semver tag.
 
 ```bash
 git tag -a v1.0.12
@@ -60,7 +60,7 @@ git tag -fa v1
 git push origin --tags --force
 ```
 
-5. Create a release on GitHub with a Changelog.
+### Create a release on GitHub with a Changelog.
 
 [https://github.com/neo4j/github-action-traceability/releases](https://github.com/neo4j/github-action-traceability/releases)
 
