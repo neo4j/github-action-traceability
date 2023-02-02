@@ -80,13 +80,6 @@ jobs:
 | **trello_or_noid**   | The GHA will allow Trello short links and also NOID short links. |
 | **trello**           | The GHA will only allow Trello short links.                      |
 
-### noid_short_link_pattern
-
-**Default**: `\\[(NOID)\\]`
-
-The GHA will use this regex pattern to extract NOID short links from your work descriptions. The pattern should contain 
-a capture group wrapping your desire NOID tag.
-
 ### trello_api_key
 
 Use the public key of the existing PowerUp [ManageTrelloPowerUps>GithubIntegration](https://trello.com/power-ups/639711253572cf0030b9bb20/edit/api-key).
