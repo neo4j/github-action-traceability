@@ -9714,10 +9714,6 @@ class InputsClient {
                 throw new Error(`Unrecognised value ${input} for "short_link_verification_strategy"`);
         }
     }
-    getNoIdShortLinkPattern() {
-        core.info('Get noid_short_link_pattern.');
-        return new RegExp(core.getInput('noid_short_link_pattern'));
-    }
     getTrelloApiKey() {
         core.info('Get trello_api_key.');
         return core.getInput('trello_api_key', { required: true });
@@ -10170,7 +10166,7 @@ class UtilsService {
         }
     }
     extractNoIdShortLink(description) {
-        const pattern = this.inputs.getNoIdShortLinkPattern();
+        const pattern = new RegExp(`^\\[(NOID)\\].+`);
         const match = pattern.exec(description);
         if (match !== null) {
             return new client_trello_1.NoIdShortLink(match[1]);

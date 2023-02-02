@@ -34,17 +34,5 @@ describe('UtilsService', () => {
           'following examples: "[abc123] My work description" or "[NOID] My work description".',
       );
     });
-
-    it('extracts a NOID short link with a custom pattern that is also a valid trello short link pattern', () => {
-      const inputs = new InputsClientBuilder().withNoIdShortLinkPattern('\\[(abc123)\\]').build();
-      const service = new UtilsService(inputs);
-      expect(service.extractShortLink('[abc123] Foobar')).toEqual(new NoIdShortLink('abc123'));
-    });
-
-    it('extracts a NOID short link with a custom pattern that is an invalid trello short link', () => {
-      const inputs = new InputsClientBuilder().withNoIdShortLinkPattern('\\[(abc-123)\\]').build();
-      const service = new UtilsService(inputs);
-      expect(service.extractShortLink('[abc-123] Foobar')).toEqual(new NoIdShortLink('abc-123'));
-    });
   });
 });

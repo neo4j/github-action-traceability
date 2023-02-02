@@ -18,7 +18,7 @@ class UtilsService {
   }
 
   private extractNoIdShortLink(description: string): NoIdShortLink | void {
-    const pattern = this.inputs.getNoIdShortLinkPattern();
+    const pattern = new RegExp(`^\\[(NOID)\\].+`);
     const match = pattern.exec(description);
     if (match !== null) {
       return new NoIdShortLink(match[1]);

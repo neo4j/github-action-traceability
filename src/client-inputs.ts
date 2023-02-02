@@ -14,7 +14,6 @@ enum ShortLinkVerificationStrategy {
 interface InputsClientI {
   getGlobalVerificationStrategy(): GlobalVerificationStrategy;
   getShortLinkVerificationStrategy(): ShortLinkVerificationStrategy;
-  getNoIdShortLinkPattern(): RegExp;
   getTrelloApiKey(): string;
   getTrelloApiToken(): string;
   getGitHubApiToken(): string;
@@ -47,11 +46,6 @@ class InputsClient implements InputsClientI {
       default:
         throw new Error(`Unrecognised value ${input} for "short_link_verification_strategy"`);
     }
-  }
-
-  getNoIdShortLinkPattern(): RegExp {
-    core.info('Get noid_short_link_pattern.');
-    return new RegExp(core.getInput('noid_short_link_pattern'));
   }
 
   getTrelloApiKey(): string {
