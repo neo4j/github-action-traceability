@@ -251,44 +251,6 @@ describe('ShortLinkVerificationStrategy', () => {
       const trello = new TrelloClientBuilder().withCard('abc123', false).build();
       await expectSuccess(run(inputs, github, trello));
     });
-
-    it('fails if there are different Trello short links in title and commit', async () => {
-      const inputs = new InputsClientBuilder()
-        .withGlobalVerificationStrategy(GlobalVerificationStrategy.CommitsAndPRTitle)
-        .withShortLinkVerificationStrategy(ShortLinkVerificationStrategy.TrelloOrNoId)
-        .build();
-      const github = new GitHubClientBuilder()
-        .withPullRequestTitle('[abc123] Title')
-        .withPullRequestCommitMessage('[def345] Commit')
-        .build();
-      const trello = new TrelloClientBuilder()
-        .withCard('abc123', false)
-        .withCard('def345', false)
-        .build();
-      await expectThrows(
-        run(inputs, github, trello),
-        'All Trello short links must be identical, but "def345" and "abc123" were different.',
-      );
-    });
-
-    it('fails if there are different Trello short links in commit', async () => {
-      const inputs = new InputsClientBuilder()
-        .withGlobalVerificationStrategy(GlobalVerificationStrategy.Commits)
-        .withShortLinkVerificationStrategy(ShortLinkVerificationStrategy.TrelloOrNoId)
-        .build();
-      const github = new GitHubClientBuilder()
-        .withPullRequestCommitMessage('[123abc] Commit')
-        .withPullRequestCommitMessage('[def345] Commit')
-        .build();
-      const trello = new TrelloClientBuilder()
-        .withCard('abc123', false)
-        .withCard('def345', false)
-        .build();
-      await expectThrows(
-        run(inputs, github, trello),
-        'All Trello short links must be identical, but "def345" and "123abc" were different.',
-      );
-    });
   });
 });
 
@@ -334,6 +296,35 @@ describe('Adding attachments to Trello cards', () => {
     await expect(trello.getCardAttachments('abc123')).resolves.toEqual([
       {
         shortLink: 'abc123',
+        url: 'github.com/namespace/project/pulls/96',
+      },
+    ]);
+  });
+
+  it('attaches the PR url to multiple Trello cards if there are multiple Trello short links', async () => {
+    const inputs = new InputsClientBuilder()
+      .withGlobalVerificationStrategy(GlobalVerificationStrategy.Commits)
+      .withShortLinkVerificationStrategy(ShortLinkVerificationStrategy.Trello)
+      .build();
+    const github = new GitHubClientBuilder()
+      .withPullRequestUrl('github.com/namespace/project/pulls/96')
+      .withPullRequestCommitMessage('[abc123] Commit')
+      .withPullRequestCommitMessage('[bcd345] Commit')
+      .build();
+    const trello = new TrelloClientBuilder()
+      .withCard('abc123', false)
+      .withCard('bcd345', false)
+      .build();
+    await expectSuccess(run(inputs, github, trello));
+    await expect(trello.getCardAttachments('abc123')).resolves.toEqual([
+      {
+        shortLink: 'abc123',
+        url: 'github.com/namespace/project/pulls/96',
+      },
+    ]);
+    await expect(trello.getCardAttachments('bcd345')).resolves.toEqual([
+      {
+        shortLink: 'bcd345',
         url: 'github.com/namespace/project/pulls/96',
       },
     ]);
