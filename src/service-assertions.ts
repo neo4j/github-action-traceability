@@ -1,11 +1,5 @@
 import { InputsClientI, ShortLinkVerificationStrategy } from './client-inputs';
-import {
-  NoIdShortLink,
-  ShortLink,
-  TrelloCard,
-  TrelloClientI,
-  TrelloShortLink,
-} from './client-trello';
+import { NoIdShortLink, ShortLink, TrelloCard, TrelloClientI } from './client-trello';
 import { GitHubClientI } from './client-github';
 import * as core from '@actions/core';
 
@@ -54,34 +48,15 @@ class AssertionsService {
     });
   }
 
-  validateTrelloShortLinksAreIdentical(shortLinks: TrelloShortLink[]): void {
-    core.info('Verify all Trello short links are identical.');
-    if (shortLinks.length === 0) {
-      return;
-    }
-    const head = shortLinks[0];
-    shortLinks.forEach((shortLink) => {
-      if (head.id !== shortLink.id) {
-        throw new Error(
-          `All Trello short links must be identical, but "${shortLink.id}" and "${head.id}" ` +
-            'were different.',
-        );
-      }
-    });
-  }
-
   validateShortLinksStrategy(shortLinks: ShortLink[]): void {
     core.info('Verify short link strategy.');
-    const trelloShortLinks = shortLinks.filter((shortLink) => shortLink instanceof TrelloShortLink);
 
     switch (this.inputs.getShortLinkVerificationStrategy()) {
       case ShortLinkVerificationStrategy.Trello: {
         this.validateExclusivelyTrelloShortLinks(shortLinks);
-        this.validateTrelloShortLinksAreIdentical(trelloShortLinks);
         return;
       }
       case ShortLinkVerificationStrategy.TrelloOrNoId: {
-        this.validateTrelloShortLinksAreIdentical(trelloShortLinks);
         return;
       }
     }

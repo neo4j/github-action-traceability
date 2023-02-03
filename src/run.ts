@@ -38,29 +38,27 @@ const run = async (inputs: InputsClientI, github: GitHubClientI, trello: TrelloC
   core.info('Start global verification strategy.');
   switch (inputs.getGlobalVerificationStrategy()) {
     case GlobalVerificationStrategy.CommitsAndPRTitle: {
-      const commits = await github.getPullRequestCommitMessages();
-      const commitShortLinks = commits.map(utils.extractShortLink.bind(utils));
       const title = github.getPullRequestTitle();
       const titleShortLinks = utils.extractShortLink(title);
-      const shortLinks = [titleShortLinks, ...commitShortLinks];
-      const trelloShortLinks = shortLinks.filter(
-        (shortLink) => shortLink instanceof TrelloShortLink,
-      );
+      const commits = await github.getPullRequestCommitMessages();
+      const commitShortLinks = commits.map(utils.extractShortLink.bind(utils));
+      const shortLinks = [...new Set([titleShortLinks, ...commitShortLinks])];
       assertions.validateShortLinksStrategy(shortLinks);
-      if (trelloShortLinks.length > 0) {
-        await attachPullRequestToTrello(inputs, trello, github, trelloShortLinks[0]);
+      for (const shortLink of shortLinks) {
+        if (shortLink instanceof TrelloShortLink) {
+          await attachPullRequestToTrello(inputs, trello, github, shortLink);
+        }
       }
       return;
     }
     case GlobalVerificationStrategy.Commits: {
       const commits = await github.getPullRequestCommitMessages();
-      const shortLinks = commits.map(utils.extractShortLink.bind(utils));
-      const trelloShortLinks = shortLinks.filter(
-        (shortLink) => shortLink instanceof TrelloShortLink,
-      );
+      const shortLinks = [...new Set(commits.map(utils.extractShortLink.bind(utils)))];
       assertions.validateShortLinksStrategy(shortLinks);
-      if (trelloShortLinks.length > 0) {
-        await attachPullRequestToTrello(inputs, trello, github, trelloShortLinks[0]);
+      for (const shortLink of shortLinks) {
+        if (shortLink instanceof TrelloShortLink) {
+          await attachPullRequestToTrello(inputs, trello, github, shortLink);
+        }
       }
       return;
     }

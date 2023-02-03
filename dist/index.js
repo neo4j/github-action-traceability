@@ -9989,25 +9989,27 @@ const run = (inputs, github, trello) => __awaiter(void 0, void 0, void 0, functi
     core.info('Start global verification strategy.');
     switch (inputs.getGlobalVerificationStrategy()) {
         case client_inputs_1.GlobalVerificationStrategy.CommitsAndPRTitle: {
-            const commits = yield github.getPullRequestCommitMessages();
-            const commitShortLinks = commits.map(utils.extractShortLink.bind(utils));
             const title = github.getPullRequestTitle();
             const titleShortLinks = utils.extractShortLink(title);
-            const shortLinks = [titleShortLinks, ...commitShortLinks];
-            const trelloShortLinks = shortLinks.filter((shortLink) => shortLink instanceof client_trello_1.TrelloShortLink);
+            const commits = yield github.getPullRequestCommitMessages();
+            const commitShortLinks = commits.map(utils.extractShortLink.bind(utils));
+            const shortLinks = [...new Set([titleShortLinks, ...commitShortLinks])];
             assertions.validateShortLinksStrategy(shortLinks);
-            if (trelloShortLinks.length > 0) {
-                yield attachPullRequestToTrello(inputs, trello, github, trelloShortLinks[0]);
+            for (const shortLink of shortLinks) {
+                if (shortLink instanceof client_trello_1.TrelloShortLink) {
+                    yield attachPullRequestToTrello(inputs, trello, github, shortLink);
+                }
             }
             return;
         }
         case client_inputs_1.GlobalVerificationStrategy.Commits: {
             const commits = yield github.getPullRequestCommitMessages();
-            const shortLinks = commits.map(utils.extractShortLink.bind(utils));
-            const trelloShortLinks = shortLinks.filter((shortLink) => shortLink instanceof client_trello_1.TrelloShortLink);
+            const shortLinks = [...new Set(commits.map(utils.extractShortLink.bind(utils)))];
             assertions.validateShortLinksStrategy(shortLinks);
-            if (trelloShortLinks.length > 0) {
-                yield attachPullRequestToTrello(inputs, trello, github, trelloShortLinks[0]);
+            for (const shortLink of shortLinks) {
+                if (shortLink instanceof client_trello_1.TrelloShortLink) {
+                    yield attachPullRequestToTrello(inputs, trello, github, shortLink);
+                }
             }
             return;
         }
@@ -10081,30 +10083,14 @@ class AssertionsService {
             }
         });
     }
-    validateTrelloShortLinksAreIdentical(shortLinks) {
-        core.info('Verify all Trello short links are identical.');
-        if (shortLinks.length === 0) {
-            return;
-        }
-        const head = shortLinks[0];
-        shortLinks.forEach((shortLink) => {
-            if (head.id !== shortLink.id) {
-                throw new Error(`All Trello short links must be identical, but "${shortLink.id}" and "${head.id}" ` +
-                    'were different.');
-            }
-        });
-    }
     validateShortLinksStrategy(shortLinks) {
         core.info('Verify short link strategy.');
-        const trelloShortLinks = shortLinks.filter((shortLink) => shortLink instanceof client_trello_1.TrelloShortLink);
         switch (this.inputs.getShortLinkVerificationStrategy()) {
             case client_inputs_1.ShortLinkVerificationStrategy.Trello: {
                 this.validateExclusivelyTrelloShortLinks(shortLinks);
-                this.validateTrelloShortLinksAreIdentical(trelloShortLinks);
                 return;
             }
             case client_inputs_1.ShortLinkVerificationStrategy.TrelloOrNoId: {
-                this.validateTrelloShortLinksAreIdentical(trelloShortLinks);
                 return;
             }
         }
