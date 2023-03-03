@@ -85,7 +85,7 @@ jobs:
 Use the public key of the existing PowerUp 
 [ManageTrelloPowerUps>GithubIntegration](https://trello.com/power-ups/639711253572cf0030b9bb20/edit/api-key).
 
-Alternative, follow instructions 
+Alternatively, follow instructions 
 [here](https://developer.atlassian.com/cloud/trello/guides/rest-api/api-introduction/#managing-your-api-key) 
 and make your own power up. It takes 5 minutes, and you don't need particularly advanced privileges to create it.
 
@@ -95,7 +95,7 @@ Go to existing PowerUp in
 [ManageTrelloPowerUps>GithubIntegration](https://trello.com/power-ups/639711253572cf0030b9bb20/edit/api-key) 
 and click on "Token".
 
-Alternative, follow instructions 
+Alternatively, follow instructions 
 [here](https://developer.atlassian.com/cloud/trello/guides/rest-api/api-introduction/#managing-your-api-key)
 and make your own power up. It takes 5 minutes, and you don't need particularly advanced privileges to create it.
 
