@@ -43,7 +43,7 @@ jobs:
 #        with:
 #          trello_api_key: ${{ secrets.TRELLO_API_KEY }}
 #          trello_api_token: ${{ secrets.TRELLO_API_TOKEN }}
-#          github_api_token: ${{ secrets.GITHUB_TOKEN }}
+#          github_api_token: ${{ secrets.GITHUB_TOKEN }} // daniel
   pr-update:
     runs-on: ubuntu-latest
     steps:
