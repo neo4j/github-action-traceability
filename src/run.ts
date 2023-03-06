@@ -31,10 +31,6 @@ const run = async (inputs: InputsClientI, github: GitHubClientI, trello: TrelloC
   const assertions = new AssertionsService(inputs, github, trello);
   const utils = new UtilsService(inputs);
 
-  core.info('Start GitHub event verification.');
-  assertions.validateSupportedEvent(github);
-  assertions.validateSupportedAction(github);
-
   core.info('Start global verification strategy.');
   switch (inputs.getGlobalVerificationStrategy()) {
     case GlobalVerificationStrategy.CommitsAndPRTitle: {

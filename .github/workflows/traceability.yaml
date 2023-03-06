@@ -1,10 +1,17 @@
 name: traceability
 
 on:
+  issue_comment: # // daniel document
+    types:
+      - created
+      - edited
+      - deleted
   pull_request:
     branches:
       - dev
     types:
+      - labeled # // daniel document
+      - unlabeled # // daniel document
       - opened
       - edited
       - reopened
@@ -14,7 +21,7 @@ jobs:
   validate-pr:
     runs-on: ubuntu-latest
     steps:
-      - uses: neo4j/github-action-traceability@v1
+      - uses: neo4j/github-action-traceability@v2
         with:
           trello_api_key: ${{ secrets.TRELLO_API_KEY }}
           trello_api_token: ${{ secrets.TRELLO_API_TOKEN }}
