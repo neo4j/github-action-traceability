@@ -9583,7 +9583,8 @@ class GitHubClient {
             throw new Error('No title found in the PR.');
         return github.context.payload.pull_request.title;
     }
-    getPullRequestCommitMessages() {
+    // https://docs.github.com/en/graphql/reference/objects#pullrequest
+    getPullRequestCommits() {
         return __awaiter(this, void 0, void 0, function* () {
             core.info('Get pull request commits.');
             if (!github.context.payload)
@@ -9634,7 +9635,66 @@ class GitHubClient {
     `;
             const response = yield (0, graphql_1.graphql)(query, variables);
             const repository = response.repository;
-            return repository.pullRequest.commits.edges.map((edge) => edge.node.commit.message);
+            return repository.pullRequest.commits.edges.map((edge) => edge.node);
+        });
+    }
+    // https://docs.github.com/en/graphql/reference/objects#pullrequest
+    getPullRequestComments() {
+        return __awaiter(this, void 0, void 0, function* () {
+            core.info('Get pull request comments.');
+            if (!github.context.payload)
+                throw new Error('No payload found in the context.');
+            if (!github.context.payload.pull_request)
+                throw new Error('No PR found in the payload.');
+            if (!github.context.payload.pull_request.number)
+                throw new Error('No number found in the PR.');
+            if (!github.context.payload.repository)
+                throw new Error('No repository found in the payload.');
+            if (!github.context.payload.repository.name)
+                throw new Error('No name found in the repository.');
+            if (!github.context.payload.repository.owner ||
+                (!github.context.payload.repository.owner.login &&
+                    !github.context.payload.repository.owner.name))
+                throw new Error('No owner found in the repository.');
+            const variables = {
+                baseUrl: 'https://api.github.com',
+                repositoryOwner: github.context.payload.repository.owner.name ||
+                    github.context.payload.repository.owner.login,
+                repositoryName: github.context.payload.repository.name,
+                pullRequestNumber: github.context.payload.pull_request.number,
+                headers: {
+                    authorization: `token ${this.githubApiToken}`,
+                },
+            };
+            const query = `
+      query comments(
+        $pullRequestNumber: Int!
+        $repositoryName: String!
+        $repositoryOwner: String!
+        $numberOfComments: Int = 100
+      ) {
+        repository(owner: $repositoryOwner, name: $repositoryName) {
+          pullRequest(number: $pullRequestNumber) {
+            comments(last: $numberOfComments) {
+              edges {
+                node {
+                  author {
+                    login
+                  }
+                  body,
+                  bodyText,
+                  bodyHTML,
+                  url
+                }
+              }
+            }
+          }
+        }
+      }
+    `;
+            const response = yield (0, graphql_1.graphql)(query, variables);
+            const repository = response.repository;
+            return repository.pullRequest.comments.edges.map((edge) => edge.node);
         });
     }
 }
@@ -9991,8 +10051,10 @@ const run = (inputs, github, trello) => __awaiter(void 0, void 0, void 0, functi
         case client_inputs_1.GlobalVerificationStrategy.CommitsAndPRTitle: {
             const title = github.getPullRequestTitle();
             const titleShortLinks = utils.extractShortLink(title);
-            const commits = yield github.getPullRequestCommitMessages();
-            const commitShortLinks = commits.map(utils.extractShortLink.bind(utils));
+            const commits = yield github.getPullRequestCommits();
+            const commitShortLinks = commits
+                .map((c) => c.commit.message)
+                .map(utils.extractShortLink.bind(utils));
             const shortLinks = [...new Set([titleShortLinks, ...commitShortLinks])];
             assertions.validateShortLinksStrategy(shortLinks);
             for (const shortLink of shortLinks) {
@@ -10003,8 +10065,11 @@ const run = (inputs, github, trello) => __awaiter(void 0, void 0, void 0, functi
             return;
         }
         case client_inputs_1.GlobalVerificationStrategy.Commits: {
-            const commits = yield github.getPullRequestCommitMessages();
-            const shortLinks = [...new Set(commits.map(utils.extractShortLink.bind(utils)))];
+            console.log(JSON.stringify({ comments: yield github.getPullRequestComments() }, null, 2)); // daniel
+            const commits = yield github.getPullRequestCommits();
+            const shortLinks = [
+                ...new Set(commits.map((c) => c.commit.message).map(utils.extractShortLink.bind(utils))),
+            ];
             assertions.validateShortLinksStrategy(shortLinks);
             for (const shortLink of shortLinks) {
                 if (shortLink instanceof client_trello_1.TrelloShortLink) {

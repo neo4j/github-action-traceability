@@ -1,11 +1,12 @@
-import { GitHubClientI } from '../src/client-github';
+import { GitHubClientI, Commit, Comment } from '../src/client-github';
 
 class GitHubClientBuilder {
   event: string = 'pull_request';
   action: string = 'opened';
   pullRequestUrl: string = 'https://www.github.com/neo4j/apoc';
   pullRequestTitle: string = 'Install Traceability GitHub Action';
-  pullRequestCommitMessages: string[] = [];
+  pullRequestCommits: Commit[] = [];
+  pullRequestComments: Comment[] = [];
 
   public withEvent(event: string): GitHubClientBuilder {
     this.event = event;
@@ -28,7 +29,20 @@ class GitHubClientBuilder {
   }
 
   public withPullRequestCommitMessage(pullRequestCommitMessage: string): GitHubClientBuilder {
-    this.pullRequestCommitMessages.push(pullRequestCommitMessage);
+    this.pullRequestCommits.push({ commit: { message: pullRequestCommitMessage } });
+    return this;
+  }
+
+  public withPullRequestComment(author: string, body: string, url: string): GitHubClientBuilder {
+    this.pullRequestComments.push({
+      author: {
+        login: author,
+      },
+      body,
+      bodyHTML: body,
+      bodyText: body,
+      url,
+    });
     return this;
   }
 
@@ -38,7 +52,8 @@ class GitHubClientBuilder {
       this.action,
       this.pullRequestUrl,
       this.pullRequestTitle,
-      this.pullRequestCommitMessages,
+      this.pullRequestCommits,
+      this.pullRequestComments,
     );
   }
 }
@@ -48,20 +63,23 @@ class DummyGitHubClient implements GitHubClientI {
   action: string;
   pullRequestUrl: string;
   pullRequestTitle: string;
-  pullRequestCommitMessages: string[];
+  pullRequestCommits: Commit[];
+  pullRequestComments: Comment[];
 
   constructor(
     event: string,
     action: string,
     pullRequestUrl: string,
     pullRequestTitle: string,
-    pullRequestCommitMessages: string[],
+    pullRequestCommitMessages: Commit[],
+    pullRequestComments: Comment[],
   ) {
     this.event = event;
     this.action = action;
     this.pullRequestUrl = pullRequestUrl;
     this.pullRequestTitle = pullRequestTitle;
-    this.pullRequestCommitMessages = pullRequestCommitMessages;
+    this.pullRequestCommits = pullRequestCommitMessages;
+    this.pullRequestComments = pullRequestComments;
   }
 
   getContextAction(): string {
@@ -72,8 +90,12 @@ class DummyGitHubClient implements GitHubClientI {
     return this.event;
   }
 
-  getPullRequestCommitMessages(): Promise<string[]> {
-    return Promise.resolve(this.pullRequestCommitMessages);
+  getPullRequestCommits(): Promise<Commit[]> {
+    return Promise.resolve(this.pullRequestCommits);
+  }
+
+  getPullRequestComments(): Promise<Comment[]> {
+    return Promise.resolve(this.pullRequestComments);
   }
 
   getPullRequestTitle(): string {
