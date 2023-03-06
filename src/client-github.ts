@@ -43,8 +43,6 @@ interface GetCommentsResponse {
 }
 
 interface GitHubClientI {
-  getContextEvent(): string;
-  getContextAction(): string;
   getPullRequestUrl(): string;
   getPullRequestTitle(): string;
   getPullRequestCommits(): Promise<Commit[]>;
@@ -56,16 +54,6 @@ class GitHubClient implements GitHubClientI {
 
   constructor(githubApiToken: string) {
     this.githubApiToken = githubApiToken;
-  }
-
-  getContextEvent(): string {
-    if (!github.context.eventName) throw new Error('No event in the payload');
-    return github.context.eventName;
-  }
-
-  getContextAction(): string {
-    if (!github.context.payload.action) throw new Error('No action in the payload');
-    return github.context.payload.action;
   }
 
   getPullRequestUrl(): string {

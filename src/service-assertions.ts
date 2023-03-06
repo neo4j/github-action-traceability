@@ -14,28 +14,6 @@ class AssertionsService {
     this.trello = trello;
   }
 
-  validateSupportedEvent(githubClient: GitHubClientI): void {
-    core.info('Verify Github event type.');
-    if (githubClient.getContextEvent() !== 'pull_request')
-      throw new Error(
-        `GitHub event "${githubClient.getContextEvent()}" is unsupported. ` +
-          'Only "pull_request" is supported.',
-      );
-  }
-
-  validateSupportedAction(githubClient: GitHubClientI): void {
-    core.info('Verify Github action type.');
-    if (
-      !['opened', 'reopened', 'edited', 'synchronize'].some(
-        (el) => el === githubClient.getContextAction(),
-      )
-    )
-      throw new Error(
-        `GitHub action "${githubClient.getContextAction()}" is unsupported. Only "opened", "reopened", ` +
-          '"edited", "synchronize" are supported.',
-      );
-  }
-
   validateExclusivelyTrelloShortLinks(shortLinks: ShortLink[]): void {
     core.info('Verify short links only contain Trello short links.');
     shortLinks.forEach((shortLink) => {

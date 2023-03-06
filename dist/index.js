@@ -9553,16 +9553,6 @@ class GitHubClient {
     constructor(githubApiToken) {
         this.githubApiToken = githubApiToken;
     }
-    getContextEvent() {
-        if (!github.context.eventName)
-            throw new Error('No event in the payload');
-        return github.context.eventName;
-    }
-    getContextAction() {
-        if (!github.context.payload.action)
-            throw new Error('No action in the payload');
-        return github.context.payload.action;
-    }
     getPullRequestUrl() {
         core.info('Get pull request URL.');
         if (!github.context.payload)
@@ -10043,9 +10033,6 @@ const attachPullRequestToTrello = (inputs, trello, github, trelloShortLink) => _
 const run = (inputs, github, trello) => __awaiter(void 0, void 0, void 0, function* () {
     const assertions = new service_assertions_1.AssertionsService(inputs, github, trello);
     const utils = new service_utils_1.UtilsService(inputs);
-    core.info('Start GitHub event verification.');
-    assertions.validateSupportedEvent(github);
-    assertions.validateSupportedAction(github);
     core.info('Start global verification strategy.');
     switch (inputs.getGlobalVerificationStrategy()) {
         case client_inputs_1.GlobalVerificationStrategy.CommitsAndPRTitle: {
@@ -10126,18 +10113,6 @@ class AssertionsService {
         this.github = github;
         this.inputs = inputs;
         this.trello = trello;
-    }
-    validateSupportedEvent(githubClient) {
-        core.info('Verify Github event type.');
-        if (githubClient.getContextEvent() !== 'pull_request')
-            throw new Error(`GitHub event "${githubClient.getContextEvent()}" is unsupported. ` +
-                'Only "pull_request" is supported.');
-    }
-    validateSupportedAction(githubClient) {
-        core.info('Verify Github action type.');
-        if (!['opened', 'reopened', 'edited', 'synchronize'].some((el) => el === githubClient.getContextAction()))
-            throw new Error(`GitHub action "${githubClient.getContextAction()}" is unsupported. Only "opened", "reopened", ` +
-                '"edited", "synchronize" are supported.');
     }
     validateExclusivelyTrelloShortLinks(shortLinks) {
         core.info('Verify short links only contain Trello short links.');
