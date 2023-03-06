@@ -40,8 +40,10 @@ const run = async (inputs: InputsClientI, github: GitHubClientI, trello: TrelloC
     case GlobalVerificationStrategy.CommitsAndPRTitle: {
       const title = github.getPullRequestTitle();
       const titleShortLinks = utils.extractShortLink(title);
-      const commits = await github.getPullRequestCommitMessages();
-      const commitShortLinks = commits.map(utils.extractShortLink.bind(utils));
+      const commits = await github.getPullRequestCommits();
+      const commitShortLinks = commits
+        .map((c) => c.commit.message)
+        .map(utils.extractShortLink.bind(utils));
       const shortLinks = [...new Set([titleShortLinks, ...commitShortLinks])];
       assertions.validateShortLinksStrategy(shortLinks);
       for (const shortLink of shortLinks) {
@@ -52,8 +54,11 @@ const run = async (inputs: InputsClientI, github: GitHubClientI, trello: TrelloC
       return;
     }
     case GlobalVerificationStrategy.Commits: {
-      const commits = await github.getPullRequestCommitMessages();
-      const shortLinks = [...new Set(commits.map(utils.extractShortLink.bind(utils)))];
+      console.log(JSON.stringify({ comments: await github.getPullRequestComments() }, null, 2)); // daniel
+      const commits = await github.getPullRequestCommits();
+      const shortLinks = [
+        ...new Set(commits.map((c) => c.commit.message).map(utils.extractShortLink.bind(utils))),
+      ];
       assertions.validateShortLinksStrategy(shortLinks);
       for (const shortLink of shortLinks) {
         if (shortLink instanceof TrelloShortLink) {
