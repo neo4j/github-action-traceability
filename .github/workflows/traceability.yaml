@@ -19,13 +19,13 @@ on:
       - synchronize
 
 jobs:
-  pr-comment:
-    runs-on: ubuntu-latest
-    steps:
-      - name: hello world
-        if: ${{ github.event.issue.pull_request }}
-        run: |
-          echo "hello world"
+#  pr-comment:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: hello world
+#        if: ${{ github.event.issue.pull_request }}
+#        run: |
+#          echo "hello world"
 #      - name: do something??? // daniel
 #        id: request
 #        uses: octokit/request-action@v2
@@ -47,6 +47,10 @@ jobs:
   pr-update:
     runs-on: ubuntu-latest
     steps:
+      - name: hello world
+        if: ${{ github.event.issue.pull_request }}
+        run: |
+          echo "hello world"
       - uses: neo4j/github-action-traceability@v2
         with:
           trello_api_key: ${{ secrets.TRELLO_API_KEY }}
