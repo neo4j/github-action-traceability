@@ -1,5 +1,8 @@
 name: traceability
 
+permissions:
+  checks: read
+
 on:
   issue_comment: # // daniel document
     types:
