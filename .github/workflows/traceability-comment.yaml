@@ -12,6 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.issue.pull_request
     steps:
+      - name: "Echo event"
+        run: |
+          echo ${{ github }}
       - name: "Get check suites for a git commit"
         run: |
           curl -L \
