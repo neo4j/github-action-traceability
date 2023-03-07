@@ -14,8 +14,8 @@ jobs:
     steps:
       - name: "Echo event"
         run: |
-          echo ${{ github.event.issue.pullRequest.baseRef }}
-          echo ${{ github.event.issue.pullRequest.headRef }}
+          echo ${{ github.event.issue.pull_request.base_ref }}
+          echo ${{ github.event.issue.pull_request.head_ref }}
       - name: "Get check suites for a git commit"
         run: |
           curl -L \
