@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        if: ${{ github.event.issue.pull_request }}
+      - if: ${{ github.event.issue.pull_request }}
         run: |
           gh pr checkout ${{ github.event.issue.number }}
       - uses: neo4j/github-action-traceability@v2
