@@ -19,55 +19,13 @@ on:
       - synchronize
 
 jobs:
-#  pr-comment:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: hello world
-#        if: ${{ github.event.issue.pull_request }}
-#        run: |
-#          echo "hello world"
-#      - name: do something??? // daniel
-#        id: request
-#        uses: octokit/request-action@v2
-#        with:
-#          route: ${{ github.event.issue.pull_request.url }}
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#      - name: checkout pull request
-#        uses: actions/checkout@v2
-#        with:
-#          token: ${{ secrets.GITHUB_TOKEN }}
-#          repository: ${{ fromJson(steps.request.outputs.data).head.repo.full_name }}
-#          ref: ${{ steps.pr_data.outputs.branch }}
-#      - uses: neo4j/github-action-traceability@v2
-#        with:
-#          trello_api_key: ${{ secrets.TRELLO_API_KEY }}
-#          trello_api_token: ${{ secrets.TRELLO_API_TOKEN }}
-#          github_api_token: ${{ secrets.GITHUB_TOKEN }}
   pr-update:
     runs-on: ubuntu-latest
     steps:
-      - name: Github API Request
-        if: ${{ github.event.issue.pull_request }}
-        id: request
-        uses: octokit/request-action@v2.0.0
-        with:
-          route: ${{ github.event.issue.pull_request.url }}
-        env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - if: ${{ github.event.issue.pull_request }}
-        run: |
-          echo "::set-output name=branch::${{ fromJson(steps.request.outputs.data).head.ref }}"
-          echo "::set-output name=repo_name::${{ fromJson(steps.request.outputs.data).base.repo.full_name }}"
-          echo "::set-output name=repo_clone_url::${{ fromJson(steps.request.outputs.data).base.repo.clone_url }}"
-          echo "::set-output name=repo_ssh_url::${{ fromJson(steps.request.outputs.data).base.repo.ssh_url }}"
       - uses: actions/checkout@v3
         if: ${{ github.event.issue.pull_request }}
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{ fromJson(steps.request.outputs.data).head.repo.full_name }}
-          ref: ${{ steps.pr_data.outputs.branch }}
-          pr_data: ''
+        run: |
+          gh pr checkout ${{ github.event.issue.number }}
       - uses: neo4j/github-action-traceability@v2
         with:
           trello_api_key: ${{ secrets.TRELLO_API_KEY }}
