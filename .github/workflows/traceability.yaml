@@ -28,11 +28,12 @@ jobs:
         id: comment-branch
 
       - name: Set PR Status to pending
-        uses: teamniteo/pull_request_status_action@v1.0.0
+        uses: teamniteo/pull_request_status_action@v1
         with:
           pr_number: 12
           repository: neo4j/github-action-traceability
           state: pending
+          context: traceability / pr-update (pull_request)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
