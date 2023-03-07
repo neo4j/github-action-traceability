@@ -24,11 +24,11 @@ jobs:
     if: github.event.issue.pull_request
     steps:
       - env:
-          TOKEN: secrets.GITHUB_TOKEN
+          TOKEN: {{ secrets.GITHUB_TOKEN }}
         run: |
           echo "My token is $TOKEN"
       - env:
-          TOKEN: secrets.GITHUB_TOKEN
+          TOKEN: {{ secrets.GITHUB_TOKEN }}
         run: |
           curl -L \
             -H "Accept: application/vnd.github+json" \
