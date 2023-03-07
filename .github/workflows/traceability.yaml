@@ -23,13 +23,11 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.issue.pull_request
     steps:
-      - name:
-          env:
-            TOKEN: secrets.GITHUB_TOKEN
+      - env:
+          TOKEN: secrets.GITHUB_TOKEN
         run: |
           echo "My token is $TOKEN"
-      - name:
-        env:
+      - env:
           TOKEN: secrets.GITHUB_TOKEN
         run: |
           curl -L \
