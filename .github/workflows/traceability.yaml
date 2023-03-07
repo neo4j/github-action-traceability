@@ -27,12 +27,23 @@ jobs:
         uses: xt0rted/pull-request-comment-branch@v1
         id: comment-branch
 
-      - name: Set latest commit status as pending
-        uses: myrotvorets/set-commit-status-action@master
+      - name: Set PR Status to pending
+        uses: teamniteo/pull_request_status_action@v1.0.0
         with:
-          sha: ${{ steps.comment-branch.outputs.head_sha }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-          status: pending
+          pr_number: 16
+          repository: neo4j/github-action-traceability
+          state: pending
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+# // daniel works but doesn't have the right job...
+#      - name: Set latest commit status as pending
+#        uses: myrotvorets/set-commit-status-action@master
+#        with:
+#          sha: ${{ steps.comment-branch.outputs.head_sha }}
+#          token: ${{ secrets.GITHUB_TOKEN }}
+#          status: pending
+
 #      - uses: neo4j/github-action-traceability@v2
 #        with:
 #          trello_api_key: ${{ secrets.TRELLO_API_KEY }}
