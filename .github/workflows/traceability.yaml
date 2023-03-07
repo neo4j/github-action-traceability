@@ -30,7 +30,7 @@ jobs:
       - name: Set PR Status to pending
         uses: teamniteo/pull_request_status_action@v1.0.0
         with:
-          pr_number: 16
+          pr_number: 12
           repository: neo4j/github-action-traceability
           state: pending
         env:
