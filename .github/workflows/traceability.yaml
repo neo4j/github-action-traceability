@@ -23,18 +23,27 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.issue.pull_request
     steps:
-      - run: |
+      - name: "Get check suites for a git commit"
+        run: |
           curl -L \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"\
             -H "X-GitHub-Api-Version: 2022-11-28" \
             https://api.github.com/repos/neo4j/github-action-traceability/commits/040187ff3e4364e58c3535159868a60888231ef1/check-suites
-      - run: |
+      - name: "Get check suite"
+        run: |
           curl -L \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"\
             -H "X-GitHub-Api-Version: 2022-11-28" \
             https://api.github.com/repos/neo4j/github-action-traceability/check-suites/11399901024
+      - name: "Get check runs for a git commit"
+        run: |
+          curl -L \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"\
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/neo4j/github-action-traceability/commits/040187ff3e4364e58c3535159868a60888231ef1/check-runs
 
 # // daniel works but doesn't update an existing pr check...
 #      - name: Get PR branch
