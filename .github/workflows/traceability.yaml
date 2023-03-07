@@ -28,7 +28,7 @@ jobs:
 
       - name: Deploy
         run: |
-          echo "Deploying..."
+          echo $github
 #      - uses: neo4j/github-action-traceability@v2
 #        with:
 #          trello_api_key: ${{ secrets.TRELLO_API_KEY }}
