@@ -26,6 +26,8 @@ jobs:
       - if: ${{ github.event.issue.pull_request }}
         run: |
           gh pr checkout ${{ github.event.issue.number }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: neo4j/github-action-traceability@v2
         with:
           trello_api_key: ${{ secrets.TRELLO_API_KEY }}
