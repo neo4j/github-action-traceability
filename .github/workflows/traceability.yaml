@@ -21,22 +21,14 @@ on:
 jobs:
   pr-update:
     runs-on: ubuntu-latest
+    if: github.event.issue.pull_request && contains(github.event.comment.body, '/deploy')
     steps:
-      - uses: actions/github-script@v6
-        with:
-          script: |
-              const requiredLabels = ['no release notes', 'public release notes'];
-              let labels = [];
+      - name: Checkout
+        uses: actions/checkout@v3
 
-              if (context.payload.pull_request) {
-                labels = context.payload.pull_request.labels;
-              } else if (context.payload.issue) {
-                labels = context.payload.issue.labels;
-              }
-
-              if (labels.filter(l => requiredLabels.includes(l.name)).length === 0) {
-                throw new Error(`Required labels: ${requiredLabels.join(', ')}`);
-              }
+      - name: Deploy
+        run: |
+          echo "Deploying..."
 #      - uses: neo4j/github-action-traceability@v2
 #        with:
 #          trello_api_key: ${{ secrets.TRELLO_API_KEY }}
