@@ -24,6 +24,11 @@ jobs:
     if: github.event.issue.pull_request
     steps:
       - name:
+          env:
+            TOKEN: secrets.GITHUB_TOKEN
+        run: |
+          echo "My token is $TOKEN"
+      - name:
         env:
           TOKEN: secrets.GITHUB_TOKEN
         run: |
