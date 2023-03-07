@@ -16,6 +16,7 @@ jobs:
         run: |
           echo ${{ github.event.issue.pull_request.base_ref }}
           echo ${{ github.event.issue.pull_request.head_ref }}
+          echo ${{ github.event.issue.pull_request.url }}
       - name: "Get check suites for a git commit"
         run: |
           curl -L \
