@@ -19,50 +19,26 @@ on:
       - synchronize
 
 jobs:
-#  pr-comment:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: hello world
-#        if: ${{ github.event.issue.pull_request }}
-#        run: |
-#          echo "hello world"
-#      - name: do something??? // daniel
-#        id: request
-#        uses: octokit/request-action@v2
-#        with:
-#          route: ${{ github.event.issue.pull_request.url }}
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#      - name: checkout pull request
-#        uses: actions/checkout@v2
-#        with:
-#          token: ${{ secrets.GITHUB_TOKEN }}
-#          repository: ${{ fromJson(steps.request.outputs.data).head.repo.full_name }}
-#          ref: ${{ steps.pr_data.outputs.branch }}
+  pr-update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v6
+        with:
+          script: |
+              const requiredLabels = ['no release notes', 'public release notes'];
+              let labels = [];
+
+              if (context.payload.pull_request) {
+                labels = context.payload.pull_request.labels;
+              } else if (context.payload.issue) {
+                labels = context.payload.issue.labels;
+              }
+
+              if (labels.filter(l => requiredLabels.includes(l.name)).length === 0) {
+                throw new Error(`Required labels: ${requiredLabels.join(', ')}`);
+              }
 #      - uses: neo4j/github-action-traceability@v2
 #        with:
 #          trello_api_key: ${{ secrets.TRELLO_API_KEY }}
 #          trello_api_token: ${{ secrets.TRELLO_API_TOKEN }}
-#          github_api_token: ${{ secrets.GITHUB_TOKEN }} // daniel
-  pr-update:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Github API Request
-        if: ${{ github.event.issue.pull_request }}
-        id: request
-        uses: octokit/request-action@v2.0.0
-        with:
-          route: ${{ github.event.issue.pull_request.url }}
-        env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/checkout@v3
-        if: ${{ github.event.issue.pull_request }}
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{ fromJson(steps.request.outputs.data).head.repo.full_name }}
-          ref: ${{ steps.pr_data.outputs.branch }}
-      - uses: neo4j/github-action-traceability@v2
-        with:
-          trello_api_key: ${{ secrets.TRELLO_API_KEY }}
-          trello_api_token: ${{ secrets.TRELLO_API_TOKEN }}
-          github_api_token: ${{ secrets.GITHUB_TOKEN }}
+#          github_api_token: ${{ secrets.GITHUB_TOKEN }}
