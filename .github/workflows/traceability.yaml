@@ -23,12 +23,16 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.issue.pull_request
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Get PR branch
+        uses: xt0rted/pull-request-comment-branch@v1
+        id: comment-branch
 
-      - name: Deploy
-        run: |
-          echo $github
+      - name: Set latest commit status as pending
+        uses: myrotvorets/set-commit-status-action@master
+        with:
+          sha: ${{ steps.comment-branch.outputs.head_sha }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          status: pending
 #      - uses: neo4j/github-action-traceability@v2
 #        with:
 #          trello_api_key: ${{ secrets.TRELLO_API_KEY }}
