@@ -1,7 +1,7 @@
 name: traceability-comments-trigger
 
 permissions:
-  checks: read
+  checks: write
 
 on:
   issue_comment:
