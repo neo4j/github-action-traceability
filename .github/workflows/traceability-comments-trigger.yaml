@@ -60,7 +60,7 @@ jobs:
               repo: context.repo.repo,
               ref: context.issue.number
             }
-            core.info(JSON.stringify({sha: ${{ steps.get-commit.outputs.sha }} }, null, 2))
+            core.info(JSON.stringify({sha: `${{ steps.get-commit.outputs.sha }}`}, null, 2))
             core.info(`Getting PR #${request.pull_number} from ${request.owner}/${request.repo}`)
             try {
               const result = await github.pulls.get(context)
