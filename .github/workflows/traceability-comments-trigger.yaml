@@ -45,7 +45,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: "Show result"
-        run: echo ${{ fromJSON(steps.get-pr.outputs.result).headRefOid }}
+        run: echo ${{ fromJSON(steps.get-pr.outputs).headRefOid }}
       - name: "Get check suites for a git commit"
         run: |
           curl -L \
