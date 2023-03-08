@@ -53,6 +53,7 @@ jobs:
       - name: "Get Suite"
         id: get-run
         run: |
+          echo ${{ steps.get-runs.outputs.runs }}
           echo "run=${{ fromJSON(steps.get-runs.outputs.runs).check_runs[0].check_suite.id }}"
           echo "run=${{ fromJSON(steps.get-runs.outputs.runs).check_runs[0].check_suite.id }}" > $GITHUB_OUTPUT
       - name: "Re-request check suite"
