@@ -36,6 +36,7 @@ jobs:
       - name: "Show result"
         run: |
           echo ${{ steps.get-commit.outputs.commit }}
+          echo "foo"
       - name: "Get check suites for a git commit"
         run: |
           curl -L \
