@@ -43,19 +43,9 @@ jobs:
           echo "sha=$SHA" > $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#      - name: "Get Suite"
-#        id: get-runs
-#        run: |
-#          RUNS=$( curl -L \
-#            -H "Accept: application/vnd.github+json" \
-#            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"\
-#            -H "X-GitHub-Api-Version: 2022-11-28" \
-#            "https://api.github.com/repos/$GITHUB_REPOSITORY/commits/${{ steps.get-commit.outputs.sha }}/check-runs?check_name=traceability-comments"
-#          )
-#          echo "run=$RUNS" > $GITHUB_OUTPUT
       - name: "Get Suite"
-        uses: actions/github-script@v3
-        id: get-runs
+        uses: actions/github-script@v6
+        id: get-suite
         with:
           script: |
             const request = {
@@ -67,16 +57,16 @@ jobs:
             core.info(`Getting check-runs for ${request.ref} from ${request.owner}/${request.repo}`)
             try {
               const result = await github.checks.listForRef(request)
-              core.info(JSON.stringify({result}, null, 2))
-              return result.data
+              return result.data.check_runs[0].check_suite.id
             } catch (err) {
               core.setFailed(`Request failed with error ${err}`)
             }
       - name: "Re-request check suite"
         run: |
-          curl -L \
-            -X POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"\
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            "https://api.github.com/repos/$GITHUB_REPOSITORY/check-suites/11407763024/rerequest"
+          echo ${{ steps.get-suite.outputs.result }}
+#          curl -L \
+#            -X POST \
+#            -H "Accept: application/vnd.github+json" \
+#            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"\
+#            -H "X-GitHub-Api-Version: 2022-11-28" \
+#            "https://api.github.com/repos/$GITHUB_REPOSITORY/check-suites/11407763024/rerequest"
