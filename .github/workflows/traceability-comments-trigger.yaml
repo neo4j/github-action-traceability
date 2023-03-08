@@ -42,7 +42,8 @@ jobs:
         id: get-commit
         run: |
           ref=$( gh pr view ${{ github.event.issue.number }} --repo $GITHUB_REPOSITORY --json headRefOid --jq .headRefOId )
-          echo "commitId=$ref" >> $GITHUB_OUTPUT
+          echo "commitId=$ref" > $GITHUB_OUTPUT
+          echo $ref
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: "Show result"
