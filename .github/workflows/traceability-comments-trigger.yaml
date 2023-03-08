@@ -15,7 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.issue.pull_request
     steps:
-      - uses: actions/github-script@v6
+      - name: "Get Commit"
+        uses: actions/github-script@v6
         id: get-commit
         with:
           script: |
@@ -32,24 +33,15 @@ jobs:
             } catch (err) {
               core.setFailed(`Request failed with error ${err}`)
             }
-#      - id: get-commit
-#        run: |
-#          SHA=$( gh pr view ${{ github.event.issue.number }} \
-#            --repo $GITHUB_REPOSITORY \
-#            --json headRefOid \
-#            --jq .headRefOid
-#          )
-#          echo "sha=$SHA" > $GITHUB_OUTPUT
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/github-script@v6
+      - name: "Get Check Suite For Commit"
+        uses: actions/github-script@v6
         id: get-suite
         with:
           script: |
             const request = {
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: `${{ steps.get-commit.outputs.sha }}`,
+              ref: `${{ steps.get-commit.outputs.result.head.sha }}`,
               check_name: 'traceability-commits'
             }
             core.info(`Getting check-suites for ${request.ref} from ${request.owner}/${request.repo}`)
