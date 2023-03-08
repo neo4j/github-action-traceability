@@ -23,7 +23,7 @@ jobs:
       - name: "Get Commit"
         id: get-commit
         run: |
-          gh get view ${{ github.event.issue.number }}
+          gh pr view ${{ github.event.issue.number }}
       - name: "Get check suites for a git commit"
         run: |
           curl -L \
