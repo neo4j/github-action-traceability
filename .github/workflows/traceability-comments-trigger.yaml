@@ -53,9 +53,7 @@ jobs:
           )
           echo "suites=$SUITES"
       - name: "Get Suite"
-        run: |
-          echo ${{ fromJSON(steps.get-suites.outputs).
-          
+        run: |          
           curl -L \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"\
