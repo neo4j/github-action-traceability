@@ -40,7 +40,9 @@ jobs:
             "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/${{ github.event.issue.number }}"
       - name: "Get Commit"
         id: get-commit
-        run: gh pr view ${{ github.event.issue.number }} --repo $GITHUB_REPOSITORY --json headRefOid >> $GITHUB_OUTPUT
+        run: |
+        ref=$( gh pr view ${{ github.event.issue.number }} --repo $GITHUB_REPOSITORY --json headRefOid --jq .headRefOId )
+        echo "commitId=$ref" >> $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: "Show result"
