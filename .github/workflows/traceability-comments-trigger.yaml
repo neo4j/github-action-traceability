@@ -12,9 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.issue.pull_request
     steps:
-      - name: "Echo issue"
-        run: |
-          echo ${{ github.event.issue.number }}
       - name: "Get Pull Request"
         id: get-pr
         run: |
@@ -28,6 +25,8 @@ jobs:
         run: gh pr view ${{ github.event.issue.number }} --repo $GITHUB_REPOSITORY --json headRefOid --jq ".headRefOid"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: "Show result"
+        run: echo ${{ steps.get-pr.outputs.result }}
       - name: "Get check suites for a git commit"
         run: |
           curl -L \
