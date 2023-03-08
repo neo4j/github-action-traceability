@@ -40,12 +40,12 @@ jobs:
             "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/${{ github.event.issue.number }}"
       - name: "Get Commit"
         id: get-commit
-        run: gh pr view ${{ github.event.issue.number }} --repo $GITHUB_REPOSITORY --json headRefOid --jq ".headRefOid" >> $GITHUB_OUTPUT
+        run: gh pr view ${{ github.event.issue.number }} --repo $GITHUB_REPOSITORY --json headRefOid >> $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: "Show result"
         run: |
-          echo ${{ steps.get-commit.outputs }}
+          echo ${{ fromJSON(steps.get-commit.outputs).headRefOid }}
       - name: "Get check suites for a git commit"
         run: |
           curl -L \
