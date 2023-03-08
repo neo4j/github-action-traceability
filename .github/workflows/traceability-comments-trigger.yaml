@@ -41,13 +41,12 @@ jobs:
       - name: "Get Commit"
         id: get-commit
 #        run: gh pr view ${{ github.event.issue.number }} --repo $GITHUB_REPOSITORY --json headRefOid --jq ".headRefOid"
-        run: gh pr view ${{ github.event.issue.number }} --repo $GITHUB_REPOSITORY --json headRefOid
+        run: gh pr view ${{ github.event.issue.number }} --repo $GITHUB_REPOSITORY --json headRefOid >> $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: "Show result"
         run: |
-          echo ${{ fromJSON(steps.get-commit.outputs).headRefOid }}
-          echo ${{ fromJSON(steps.get-commit.outputs.result).headRefOid }}
+          echo ${{ steps.get-commit.outputs }}
       - name: "Get check suites for a git commit"
         run: |
           curl -L \
