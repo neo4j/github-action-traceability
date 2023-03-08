@@ -22,8 +22,9 @@ jobs:
             "https://api.github.com/repos/neo4j/github-action-traceability/pulls/${{ github.event.issue.number }}"
       - name: "Get Commit"
         id: get-commit
-        run: |
-          gh pr view ${{ github.event.issue.number }}
+        run: gh pr view ${{ github.event.issue.number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: "Get check suites for a git commit"
         run: |
           curl -L \
