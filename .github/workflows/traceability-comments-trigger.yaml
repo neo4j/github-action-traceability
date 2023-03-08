@@ -38,13 +38,11 @@ jobs:
         id: get-suite
         with:
           script: |
-            core.info(`${{ steps.get-commit.outputs.result }}`)
-            core.info(`${{ steps.get-commit.outputs.result.head }}`)
-            core.info(`${{ fromJSON(steps.get-commit.outputs.result).head }}`)
+            core.info(`${{ fromJSON(steps.get-commit.outputs.result).head.sha }}`)
             const request = {
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: `${{ steps.get-commit.outputs.head.sha }}`,
+              ref: `${{ fromJSON(steps.get-commit.outputs.result).head.sha }}`,
               check_name: 'traceability-commits'
             }
             core.info(`Getting check-suites for ${request.ref} from ${request.owner}/${request.repo}`)
