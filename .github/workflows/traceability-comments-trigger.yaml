@@ -41,7 +41,7 @@ jobs:
             const request = {
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: `${{ steps.get-commit.outputs.result.head.sha }}`,
+              ref: `${{ steps.get-commit.outputs.head.sha }}`,
               check_name: 'traceability-commits'
             }
             core.info(`Getting check-suites for ${request.ref} from ${request.owner}/${request.repo}`)
