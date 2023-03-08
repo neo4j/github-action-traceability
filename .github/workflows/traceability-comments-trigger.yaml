@@ -38,10 +38,9 @@ jobs:
         id: get-suite
         with:
           script: |
-            core.info(`${{ steps.get-commit.outputs }}`)
             core.info(`${{ steps.get-commit.outputs.result }}`)
-            core.info(`${{ steps.get-commit.outputs.results }}`)
-            core.info(`${{ steps.get-commit.outputs.head }}`)
+            core.info(`${{ steps.get-commit.outputs.result.head }}`)
+            core.info(`${{ fromJSON(steps.get-commit.outputs.result).head }}`)
             const request = {
               owner: context.repo.owner,
               repo: context.repo.repo,
