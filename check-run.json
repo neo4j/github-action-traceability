@@ -2,27 +2,27 @@
   "total_count": 1,
   "check_runs": [
     {
-      "id": 11854694775,
+      "id": 11855100870,
       "name": "traceability-comments",
-      "node_id": "CR_kwDOIm8rS88AAAACwphJdw",
-      "head_sha": "0a39c57f2ed727d66548e361c8ac414c0fe857b5",
+      "node_id": "CR_kwDOIm8rS88AAAACwp57xg",
+      "head_sha": "8d816a6c2a12a18e4d81b9a889c46575cdf9afc9",
       "external_id": "cd6dfd59-916f-571e-6ae3-b81d407bad4f",
-      "url": "https://api.github.com/repos/neo4j/github-action-traceability/check-runs/11854694775",
-      "html_url": "https://github.com/neo4j/github-action-traceability/actions/runs/4365671683/jobs/7634618922",
-      "details_url": "https://github.com/neo4j/github-action-traceability/actions/runs/4365671683/jobs/7634618922",
+      "url": "https://api.github.com/repos/neo4j/github-action-traceability/check-runs/11855100870",
+      "html_url": "https://github.com/neo4j/github-action-traceability/actions/runs/4365802300/jobs/7634929379",
+      "details_url": "https://github.com/neo4j/github-action-traceability/actions/runs/4365802300/jobs/7634929379",
       "status": "completed",
       "conclusion": "success",
-      "started_at": "2023-03-08T15:11:05Z",
-      "completed_at": "2023-03-08T15:11:09Z",
+      "started_at": "2023-03-08T15:25:17Z",
+      "completed_at": "2023-03-08T15:25:20Z",
       "output": {
         "title": null,
         "summary": null,
         "text": null,
         "annotations_count": 0,
-        "annotations_url": "https://api.github.com/repos/neo4j/github-action-traceability/check-runs/11854694775/annotations"
+        "annotations_url": "https://api.github.com/repos/neo4j/github-action-traceability/check-runs/11855100870/annotations"
       },
       "check_suite": {
-        "id": 11430868544
+        "id": 11431233172
       },
       "app": {
         "id": 15368,
@@ -116,7 +116,7 @@
           "number": 14,
           "head": {
             "ref": "comments-mode-8",
-            "sha": "0a39c57f2ed727d66548e361c8ac414c0fe857b5",
+            "sha": "8d816a6c2a12a18e4d81b9a889c46575cdf9afc9",
             "repo": {
               "id": 577710923,
               "url": "https://api.github.com/repos/neo4j/github-action-traceability",
@@ -125,7 +125,7 @@
           },
           "base": {
             "ref": "dev",
-            "sha": "528685a0f8e3eb5221ec18968c76378aebd3e2fc",
+            "sha": "143e69538ca369c6f8371ec186a5b4ee71bda7ad",
             "repo": {
               "id": 577710923,
               "url": "https://api.github.com/repos/neo4j/github-action-traceability",

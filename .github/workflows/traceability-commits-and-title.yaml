@@ -14,8 +14,7 @@ jobs:
   traceability-commits-and-title:
     runs-on: ubuntu-latest
     steps:
-      - name: "traceability-commits-and-title"
-        uses: neo4j/github-action-traceability@v2
+      - uses: neo4j/github-action-traceability@v2
         with:
           global_verification_strategy: commits_and_pr_title
           trello_api_key: ${{ secrets.TRELLO_API_KEY }}

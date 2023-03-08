@@ -16,8 +16,7 @@ jobs:
   traceability-comments:
     runs-on: ubuntu-latest
     steps:
-      - name: "traceability-comments"
-        uses: neo4j/github-action-traceability@v2
+      - uses: neo4j/github-action-traceability@v2
         with:
           trello_api_key: ${{ secrets.TRELLO_API_KEY }}
           trello_api_token: ${{ secrets.TRELLO_API_TOKEN }}
