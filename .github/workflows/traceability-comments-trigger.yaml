@@ -1,4 +1,4 @@
-name: traceability
+name: traceability-comments-trigger
 
 on:
   issue_comment:
@@ -8,11 +8,11 @@ on:
       - deleted
 
 jobs:
-  pr-update:
+  traceability-comments-trigger:
     runs-on: ubuntu-latest
     if: github.event.issue.pull_request
     steps:
-      - name: "Echo event"
+      - name: "Echo Github event"
         run: |
           echo ${{ github.event.issue.pull_request.base_ref }}
           echo ${{ github.event.issue.pull_request.head_ref }}

@@ -1,0 +1,22 @@
+name: traceability-disabled
+
+on:
+  pull_request:
+    branches:
+      - dev
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+
+jobs:
+  traceability-disabled:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: neo4j/github-action-traceability@v2
+        with:
+          global_verification_strategy: disabled
+          trello_api_key: ""
+          trello_api_token: ""
+          github_api_token: ""
