@@ -1,41 +1,29 @@
 {
-  "total_count": 7,
-  "check_suites": [
+  "total_count": 5,
+  "check_runs": [
     {
-      "id": 11407763024,
-      "node_id": "CS_kwDOIm8rS88AAAACp_SmUA",
-      "head_branch": "comments-mode-8",
-      "head_sha": "d78e404d6a9e6a7fcaef454ebb710ec58af01561",
+      "id": 11854695157,
+      "name": "traceability-commits",
+      "node_id": "CR_kwDOIm8rS88AAAACwphK9Q",
+      "head_sha": "0a39c57f2ed727d66548e361c8ac414c0fe857b5",
+      "external_id": "1b91a9c8-d5cd-5eda-41a7-56d0b121bc68",
+      "url": "https://api.github.com/repos/neo4j/github-action-traceability/check-runs/11854695157",
+      "html_url": "https://github.com/neo4j/github-action-traceability/actions/runs/4365671725/jobs/7634619213",
+      "details_url": "https://github.com/neo4j/github-action-traceability/actions/runs/4365671725/jobs/7634619213",
       "status": "completed",
       "conclusion": "success",
-      "url": "https://api.github.com/repos/neo4j/github-action-traceability/check-suites/11407763024",
-      "before": "0000000000000000000000000000000000000000",
-      "after": "d78e404d6a9e6a7fcaef454ebb710ec58af01561",
-      "pull_requests": [
-        {
-          "url": "https://api.github.com/repos/neo4j/github-action-traceability/pulls/14",
-          "id": 1267571389,
-          "number": 14,
-          "head": {
-            "ref": "comments-mode-8",
-            "sha": "d78e404d6a9e6a7fcaef454ebb710ec58af01561",
-            "repo": {
-              "id": 577710923,
-              "url": "https://api.github.com/repos/neo4j/github-action-traceability",
-              "name": "github-action-traceability"
-            }
-          },
-          "base": {
-            "ref": "dev",
-            "sha": "880f0caf74e41e4a568a660a9cf46eb4814ce052",
-            "repo": {
-              "id": 577710923,
-              "url": "https://api.github.com/repos/neo4j/github-action-traceability",
-              "name": "github-action-traceability"
-            }
-          }
-        }
-      ],
+      "started_at": "2023-03-08T15:11:07Z",
+      "completed_at": "2023-03-08T15:11:10Z",
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/neo4j/github-action-traceability/check-runs/11854695157/annotations"
+      },
+      "check_suite": {
+        "id": 11430868659
+      },
       "app": {
         "id": 15368,
         "slug": "github-actions",
@@ -121,129 +109,55 @@
           "workflow_run"
         ]
       },
-      "created_at": "2023-03-07T16:41:09Z",
-      "updated_at": "2023-03-08T15:06:06Z",
-      "rerequestable": true,
-      "runs_rerequestable": false,
-      "latest_check_runs_count": 1,
-      "check_runs_url": "https://api.github.com/repos/neo4j/github-action-traceability/check-suites/11407763024/check-runs",
-      "head_commit": {
-        "id": "d78e404d6a9e6a7fcaef454ebb710ec58af01561",
-        "tree_id": "b2136b1b14639bcb94db538bd535e7cfd3bce938",
-        "message": "[NOID] Trigger CI",
-        "timestamp": "2023-03-07T16:40:49Z",
-        "author": {
-          "name": "Daniel Leaver",
-          "email": "daniel.leaver@neo4j.com"
-        },
-        "committer": {
-          "name": "Daniel Leaver",
-          "email": "daniel.leaver@neo4j.com"
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/neo4j/github-action-traceability/pulls/14",
+          "id": 1267571389,
+          "number": 14,
+          "head": {
+            "ref": "comments-mode-8",
+            "sha": "0a39c57f2ed727d66548e361c8ac414c0fe857b5",
+            "repo": {
+              "id": 577710923,
+              "url": "https://api.github.com/repos/neo4j/github-action-traceability",
+              "name": "github-action-traceability"
+            }
+          },
+          "base": {
+            "ref": "dev",
+            "sha": "528685a0f8e3eb5221ec18968c76378aebd3e2fc",
+            "repo": {
+              "id": 577710923,
+              "url": "https://api.github.com/repos/neo4j/github-action-traceability",
+              "name": "github-action-traceability"
+            }
+          }
         }
-      },
-      "repository": {
-        "id": 577710923,
-        "node_id": "R_kgDOIm8rSw",
-        "name": "github-action-traceability",
-        "full_name": "neo4j/github-action-traceability",
-        "private": false,
-        "owner": {
-          "login": "neo4j",
-          "id": 201120,
-          "node_id": "MDEyOk9yZ2FuaXphdGlvbjIwMTEyMA==",
-          "avatar_url": "https://avatars.githubusercontent.com/u/201120?v=4",
-          "gravatar_id": "",
-          "url": "https://api.github.com/users/neo4j",
-          "html_url": "https://github.com/neo4j",
-          "followers_url": "https://api.github.com/users/neo4j/followers",
-          "following_url": "https://api.github.com/users/neo4j/following{/other_user}",
-          "gists_url": "https://api.github.com/users/neo4j/gists{/gist_id}",
-          "starred_url": "https://api.github.com/users/neo4j/starred{/owner}{/repo}",
-          "subscriptions_url": "https://api.github.com/users/neo4j/subscriptions",
-          "organizations_url": "https://api.github.com/users/neo4j/orgs",
-          "repos_url": "https://api.github.com/users/neo4j/repos",
-          "events_url": "https://api.github.com/users/neo4j/events{/privacy}",
-          "received_events_url": "https://api.github.com/users/neo4j/received_events",
-          "type": "Organization",
-          "site_admin": false
-        },
-        "html_url": "https://github.com/neo4j/github-action-traceability",
-        "description": null,
-        "fork": false,
-        "url": "https://api.github.com/repos/neo4j/github-action-traceability",
-        "forks_url": "https://api.github.com/repos/neo4j/github-action-traceability/forks",
-        "keys_url": "https://api.github.com/repos/neo4j/github-action-traceability/keys{/key_id}",
-        "collaborators_url": "https://api.github.com/repos/neo4j/github-action-traceability/collaborators{/collaborator}",
-        "teams_url": "https://api.github.com/repos/neo4j/github-action-traceability/teams",
-        "hooks_url": "https://api.github.com/repos/neo4j/github-action-traceability/hooks",
-        "issue_events_url": "https://api.github.com/repos/neo4j/github-action-traceability/issues/events{/number}",
-        "events_url": "https://api.github.com/repos/neo4j/github-action-traceability/events",
-        "assignees_url": "https://api.github.com/repos/neo4j/github-action-traceability/assignees{/user}",
-        "branches_url": "https://api.github.com/repos/neo4j/github-action-traceability/branches{/branch}",
-        "tags_url": "https://api.github.com/repos/neo4j/github-action-traceability/tags",
-        "blobs_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/blobs{/sha}",
-        "git_tags_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/tags{/sha}",
-        "git_refs_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/refs{/sha}",
-        "trees_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/trees{/sha}",
-        "statuses_url": "https://api.github.com/repos/neo4j/github-action-traceability/statuses/{sha}",
-        "languages_url": "https://api.github.com/repos/neo4j/github-action-traceability/languages",
-        "stargazers_url": "https://api.github.com/repos/neo4j/github-action-traceability/stargazers",
-        "contributors_url": "https://api.github.com/repos/neo4j/github-action-traceability/contributors",
-        "subscribers_url": "https://api.github.com/repos/neo4j/github-action-traceability/subscribers",
-        "subscription_url": "https://api.github.com/repos/neo4j/github-action-traceability/subscription",
-        "commits_url": "https://api.github.com/repos/neo4j/github-action-traceability/commits{/sha}",
-        "git_commits_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/commits{/sha}",
-        "comments_url": "https://api.github.com/repos/neo4j/github-action-traceability/comments{/number}",
-        "issue_comment_url": "https://api.github.com/repos/neo4j/github-action-traceability/issues/comments{/number}",
-        "contents_url": "https://api.github.com/repos/neo4j/github-action-traceability/contents/{+path}",
-        "compare_url": "https://api.github.com/repos/neo4j/github-action-traceability/compare/{base}...{head}",
-        "merges_url": "https://api.github.com/repos/neo4j/github-action-traceability/merges",
-        "archive_url": "https://api.github.com/repos/neo4j/github-action-traceability/{archive_format}{/ref}",
-        "downloads_url": "https://api.github.com/repos/neo4j/github-action-traceability/downloads",
-        "issues_url": "https://api.github.com/repos/neo4j/github-action-traceability/issues{/number}",
-        "pulls_url": "https://api.github.com/repos/neo4j/github-action-traceability/pulls{/number}",
-        "milestones_url": "https://api.github.com/repos/neo4j/github-action-traceability/milestones{/number}",
-        "notifications_url": "https://api.github.com/repos/neo4j/github-action-traceability/notifications{?since,all,participating}",
-        "labels_url": "https://api.github.com/repos/neo4j/github-action-traceability/labels{/name}",
-        "releases_url": "https://api.github.com/repos/neo4j/github-action-traceability/releases{/id}",
-        "deployments_url": "https://api.github.com/repos/neo4j/github-action-traceability/deployments"
-      }
+      ]
     },
     {
-      "id": 11407763030,
-      "node_id": "CS_kwDOIm8rS88AAAACp_SmVg",
-      "head_branch": "comments-mode-8",
-      "head_sha": "d78e404d6a9e6a7fcaef454ebb710ec58af01561",
+      "id": 11854694997,
+      "name": "traceability-commits-and-title",
+      "node_id": "CR_kwDOIm8rS88AAAACwphKVQ",
+      "head_sha": "0a39c57f2ed727d66548e361c8ac414c0fe857b5",
+      "external_id": "14c74d10-1cf5-5e45-31bf-4f61e7de3a0d",
+      "url": "https://api.github.com/repos/neo4j/github-action-traceability/check-runs/11854694997",
+      "html_url": "https://github.com/neo4j/github-action-traceability/actions/runs/4365671682/jobs/7634619089",
+      "details_url": "https://github.com/neo4j/github-action-traceability/actions/runs/4365671682/jobs/7634619089",
       "status": "completed",
       "conclusion": "success",
-      "url": "https://api.github.com/repos/neo4j/github-action-traceability/check-suites/11407763030",
-      "before": "0000000000000000000000000000000000000000",
-      "after": "d78e404d6a9e6a7fcaef454ebb710ec58af01561",
-      "pull_requests": [
-        {
-          "url": "https://api.github.com/repos/neo4j/github-action-traceability/pulls/14",
-          "id": 1267571389,
-          "number": 14,
-          "head": {
-            "ref": "comments-mode-8",
-            "sha": "d78e404d6a9e6a7fcaef454ebb710ec58af01561",
-            "repo": {
-              "id": 577710923,
-              "url": "https://api.github.com/repos/neo4j/github-action-traceability",
-              "name": "github-action-traceability"
-            }
-          },
-          "base": {
-            "ref": "dev",
-            "sha": "880f0caf74e41e4a568a660a9cf46eb4814ce052",
-            "repo": {
-              "id": 577710923,
-              "url": "https://api.github.com/repos/neo4j/github-action-traceability",
-              "name": "github-action-traceability"
-            }
-          }
-        }
-      ],
+      "started_at": "2023-03-08T15:11:07Z",
+      "completed_at": "2023-03-08T15:11:09Z",
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/neo4j/github-action-traceability/check-runs/11854694997/annotations"
+      },
+      "check_suite": {
+        "id": 11430868545
+      },
       "app": {
         "id": 15368,
         "slug": "github-actions",
@@ -329,129 +243,55 @@
           "workflow_run"
         ]
       },
-      "created_at": "2023-03-07T16:41:09Z",
-      "updated_at": "2023-03-07T16:41:23Z",
-      "rerequestable": true,
-      "runs_rerequestable": false,
-      "latest_check_runs_count": 1,
-      "check_runs_url": "https://api.github.com/repos/neo4j/github-action-traceability/check-suites/11407763030/check-runs",
-      "head_commit": {
-        "id": "d78e404d6a9e6a7fcaef454ebb710ec58af01561",
-        "tree_id": "b2136b1b14639bcb94db538bd535e7cfd3bce938",
-        "message": "[NOID] Trigger CI",
-        "timestamp": "2023-03-07T16:40:49Z",
-        "author": {
-          "name": "Daniel Leaver",
-          "email": "daniel.leaver@neo4j.com"
-        },
-        "committer": {
-          "name": "Daniel Leaver",
-          "email": "daniel.leaver@neo4j.com"
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/neo4j/github-action-traceability/pulls/14",
+          "id": 1267571389,
+          "number": 14,
+          "head": {
+            "ref": "comments-mode-8",
+            "sha": "0a39c57f2ed727d66548e361c8ac414c0fe857b5",
+            "repo": {
+              "id": 577710923,
+              "url": "https://api.github.com/repos/neo4j/github-action-traceability",
+              "name": "github-action-traceability"
+            }
+          },
+          "base": {
+            "ref": "dev",
+            "sha": "528685a0f8e3eb5221ec18968c76378aebd3e2fc",
+            "repo": {
+              "id": 577710923,
+              "url": "https://api.github.com/repos/neo4j/github-action-traceability",
+              "name": "github-action-traceability"
+            }
+          }
         }
-      },
-      "repository": {
-        "id": 577710923,
-        "node_id": "R_kgDOIm8rSw",
-        "name": "github-action-traceability",
-        "full_name": "neo4j/github-action-traceability",
-        "private": false,
-        "owner": {
-          "login": "neo4j",
-          "id": 201120,
-          "node_id": "MDEyOk9yZ2FuaXphdGlvbjIwMTEyMA==",
-          "avatar_url": "https://avatars.githubusercontent.com/u/201120?v=4",
-          "gravatar_id": "",
-          "url": "https://api.github.com/users/neo4j",
-          "html_url": "https://github.com/neo4j",
-          "followers_url": "https://api.github.com/users/neo4j/followers",
-          "following_url": "https://api.github.com/users/neo4j/following{/other_user}",
-          "gists_url": "https://api.github.com/users/neo4j/gists{/gist_id}",
-          "starred_url": "https://api.github.com/users/neo4j/starred{/owner}{/repo}",
-          "subscriptions_url": "https://api.github.com/users/neo4j/subscriptions",
-          "organizations_url": "https://api.github.com/users/neo4j/orgs",
-          "repos_url": "https://api.github.com/users/neo4j/repos",
-          "events_url": "https://api.github.com/users/neo4j/events{/privacy}",
-          "received_events_url": "https://api.github.com/users/neo4j/received_events",
-          "type": "Organization",
-          "site_admin": false
-        },
-        "html_url": "https://github.com/neo4j/github-action-traceability",
-        "description": null,
-        "fork": false,
-        "url": "https://api.github.com/repos/neo4j/github-action-traceability",
-        "forks_url": "https://api.github.com/repos/neo4j/github-action-traceability/forks",
-        "keys_url": "https://api.github.com/repos/neo4j/github-action-traceability/keys{/key_id}",
-        "collaborators_url": "https://api.github.com/repos/neo4j/github-action-traceability/collaborators{/collaborator}",
-        "teams_url": "https://api.github.com/repos/neo4j/github-action-traceability/teams",
-        "hooks_url": "https://api.github.com/repos/neo4j/github-action-traceability/hooks",
-        "issue_events_url": "https://api.github.com/repos/neo4j/github-action-traceability/issues/events{/number}",
-        "events_url": "https://api.github.com/repos/neo4j/github-action-traceability/events",
-        "assignees_url": "https://api.github.com/repos/neo4j/github-action-traceability/assignees{/user}",
-        "branches_url": "https://api.github.com/repos/neo4j/github-action-traceability/branches{/branch}",
-        "tags_url": "https://api.github.com/repos/neo4j/github-action-traceability/tags",
-        "blobs_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/blobs{/sha}",
-        "git_tags_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/tags{/sha}",
-        "git_refs_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/refs{/sha}",
-        "trees_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/trees{/sha}",
-        "statuses_url": "https://api.github.com/repos/neo4j/github-action-traceability/statuses/{sha}",
-        "languages_url": "https://api.github.com/repos/neo4j/github-action-traceability/languages",
-        "stargazers_url": "https://api.github.com/repos/neo4j/github-action-traceability/stargazers",
-        "contributors_url": "https://api.github.com/repos/neo4j/github-action-traceability/contributors",
-        "subscribers_url": "https://api.github.com/repos/neo4j/github-action-traceability/subscribers",
-        "subscription_url": "https://api.github.com/repos/neo4j/github-action-traceability/subscription",
-        "commits_url": "https://api.github.com/repos/neo4j/github-action-traceability/commits{/sha}",
-        "git_commits_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/commits{/sha}",
-        "comments_url": "https://api.github.com/repos/neo4j/github-action-traceability/comments{/number}",
-        "issue_comment_url": "https://api.github.com/repos/neo4j/github-action-traceability/issues/comments{/number}",
-        "contents_url": "https://api.github.com/repos/neo4j/github-action-traceability/contents/{+path}",
-        "compare_url": "https://api.github.com/repos/neo4j/github-action-traceability/compare/{base}...{head}",
-        "merges_url": "https://api.github.com/repos/neo4j/github-action-traceability/merges",
-        "archive_url": "https://api.github.com/repos/neo4j/github-action-traceability/{archive_format}{/ref}",
-        "downloads_url": "https://api.github.com/repos/neo4j/github-action-traceability/downloads",
-        "issues_url": "https://api.github.com/repos/neo4j/github-action-traceability/issues{/number}",
-        "pulls_url": "https://api.github.com/repos/neo4j/github-action-traceability/pulls{/number}",
-        "milestones_url": "https://api.github.com/repos/neo4j/github-action-traceability/milestones{/number}",
-        "notifications_url": "https://api.github.com/repos/neo4j/github-action-traceability/notifications{?since,all,participating}",
-        "labels_url": "https://api.github.com/repos/neo4j/github-action-traceability/labels{/name}",
-        "releases_url": "https://api.github.com/repos/neo4j/github-action-traceability/releases{/id}",
-        "deployments_url": "https://api.github.com/repos/neo4j/github-action-traceability/deployments"
-      }
+      ]
     },
     {
-      "id": 11423683946,
-      "node_id": "CS_kwDOIm8rS88AAAACqOeVag",
-      "head_branch": "comments-mode-8",
-      "head_sha": "d78e404d6a9e6a7fcaef454ebb710ec58af01561",
+      "id": 11854694775,
+      "name": "traceability-comments",
+      "node_id": "CR_kwDOIm8rS88AAAACwphJdw",
+      "head_sha": "0a39c57f2ed727d66548e361c8ac414c0fe857b5",
+      "external_id": "cd6dfd59-916f-571e-6ae3-b81d407bad4f",
+      "url": "https://api.github.com/repos/neo4j/github-action-traceability/check-runs/11854694775",
+      "html_url": "https://github.com/neo4j/github-action-traceability/actions/runs/4365671683/jobs/7634618922",
+      "details_url": "https://github.com/neo4j/github-action-traceability/actions/runs/4365671683/jobs/7634618922",
       "status": "completed",
       "conclusion": "success",
-      "url": "https://api.github.com/repos/neo4j/github-action-traceability/check-suites/11423683946",
-      "before": "0000000000000000000000000000000000000000",
-      "after": "d78e404d6a9e6a7fcaef454ebb710ec58af01561",
-      "pull_requests": [
-        {
-          "url": "https://api.github.com/repos/neo4j/github-action-traceability/pulls/14",
-          "id": 1267571389,
-          "number": 14,
-          "head": {
-            "ref": "comments-mode-8",
-            "sha": "d78e404d6a9e6a7fcaef454ebb710ec58af01561",
-            "repo": {
-              "id": 577710923,
-              "url": "https://api.github.com/repos/neo4j/github-action-traceability",
-              "name": "github-action-traceability"
-            }
-          },
-          "base": {
-            "ref": "dev",
-            "sha": "880f0caf74e41e4a568a660a9cf46eb4814ce052",
-            "repo": {
-              "id": 577710923,
-              "url": "https://api.github.com/repos/neo4j/github-action-traceability",
-              "name": "github-action-traceability"
-            }
-          }
-        }
-      ],
+      "started_at": "2023-03-08T15:11:05Z",
+      "completed_at": "2023-03-08T15:11:09Z",
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/neo4j/github-action-traceability/check-runs/11854694775/annotations"
+      },
+      "check_suite": {
+        "id": 11430868544
+      },
       "app": {
         "id": 15368,
         "slug": "github-actions",
@@ -537,104 +377,6 @@
           "workflow_run"
         ]
       },
-      "created_at": "2023-03-08T09:24:34Z",
-      "updated_at": "2023-03-08T09:24:46Z",
-      "rerequestable": true,
-      "runs_rerequestable": false,
-      "latest_check_runs_count": 1,
-      "check_runs_url": "https://api.github.com/repos/neo4j/github-action-traceability/check-suites/11423683946/check-runs",
-      "head_commit": {
-        "id": "d78e404d6a9e6a7fcaef454ebb710ec58af01561",
-        "tree_id": "b2136b1b14639bcb94db538bd535e7cfd3bce938",
-        "message": "[NOID] Trigger CI",
-        "timestamp": "2023-03-07T16:40:49Z",
-        "author": {
-          "name": "Daniel Leaver",
-          "email": "daniel.leaver@neo4j.com"
-        },
-        "committer": {
-          "name": "Daniel Leaver",
-          "email": "daniel.leaver@neo4j.com"
-        }
-      },
-      "repository": {
-        "id": 577710923,
-        "node_id": "R_kgDOIm8rSw",
-        "name": "github-action-traceability",
-        "full_name": "neo4j/github-action-traceability",
-        "private": false,
-        "owner": {
-          "login": "neo4j",
-          "id": 201120,
-          "node_id": "MDEyOk9yZ2FuaXphdGlvbjIwMTEyMA==",
-          "avatar_url": "https://avatars.githubusercontent.com/u/201120?v=4",
-          "gravatar_id": "",
-          "url": "https://api.github.com/users/neo4j",
-          "html_url": "https://github.com/neo4j",
-          "followers_url": "https://api.github.com/users/neo4j/followers",
-          "following_url": "https://api.github.com/users/neo4j/following{/other_user}",
-          "gists_url": "https://api.github.com/users/neo4j/gists{/gist_id}",
-          "starred_url": "https://api.github.com/users/neo4j/starred{/owner}{/repo}",
-          "subscriptions_url": "https://api.github.com/users/neo4j/subscriptions",
-          "organizations_url": "https://api.github.com/users/neo4j/orgs",
-          "repos_url": "https://api.github.com/users/neo4j/repos",
-          "events_url": "https://api.github.com/users/neo4j/events{/privacy}",
-          "received_events_url": "https://api.github.com/users/neo4j/received_events",
-          "type": "Organization",
-          "site_admin": false
-        },
-        "html_url": "https://github.com/neo4j/github-action-traceability",
-        "description": null,
-        "fork": false,
-        "url": "https://api.github.com/repos/neo4j/github-action-traceability",
-        "forks_url": "https://api.github.com/repos/neo4j/github-action-traceability/forks",
-        "keys_url": "https://api.github.com/repos/neo4j/github-action-traceability/keys{/key_id}",
-        "collaborators_url": "https://api.github.com/repos/neo4j/github-action-traceability/collaborators{/collaborator}",
-        "teams_url": "https://api.github.com/repos/neo4j/github-action-traceability/teams",
-        "hooks_url": "https://api.github.com/repos/neo4j/github-action-traceability/hooks",
-        "issue_events_url": "https://api.github.com/repos/neo4j/github-action-traceability/issues/events{/number}",
-        "events_url": "https://api.github.com/repos/neo4j/github-action-traceability/events",
-        "assignees_url": "https://api.github.com/repos/neo4j/github-action-traceability/assignees{/user}",
-        "branches_url": "https://api.github.com/repos/neo4j/github-action-traceability/branches{/branch}",
-        "tags_url": "https://api.github.com/repos/neo4j/github-action-traceability/tags",
-        "blobs_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/blobs{/sha}",
-        "git_tags_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/tags{/sha}",
-        "git_refs_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/refs{/sha}",
-        "trees_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/trees{/sha}",
-        "statuses_url": "https://api.github.com/repos/neo4j/github-action-traceability/statuses/{sha}",
-        "languages_url": "https://api.github.com/repos/neo4j/github-action-traceability/languages",
-        "stargazers_url": "https://api.github.com/repos/neo4j/github-action-traceability/stargazers",
-        "contributors_url": "https://api.github.com/repos/neo4j/github-action-traceability/contributors",
-        "subscribers_url": "https://api.github.com/repos/neo4j/github-action-traceability/subscribers",
-        "subscription_url": "https://api.github.com/repos/neo4j/github-action-traceability/subscription",
-        "commits_url": "https://api.github.com/repos/neo4j/github-action-traceability/commits{/sha}",
-        "git_commits_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/commits{/sha}",
-        "comments_url": "https://api.github.com/repos/neo4j/github-action-traceability/comments{/number}",
-        "issue_comment_url": "https://api.github.com/repos/neo4j/github-action-traceability/issues/comments{/number}",
-        "contents_url": "https://api.github.com/repos/neo4j/github-action-traceability/contents/{+path}",
-        "compare_url": "https://api.github.com/repos/neo4j/github-action-traceability/compare/{base}...{head}",
-        "merges_url": "https://api.github.com/repos/neo4j/github-action-traceability/merges",
-        "archive_url": "https://api.github.com/repos/neo4j/github-action-traceability/{archive_format}{/ref}",
-        "downloads_url": "https://api.github.com/repos/neo4j/github-action-traceability/downloads",
-        "issues_url": "https://api.github.com/repos/neo4j/github-action-traceability/issues{/number}",
-        "pulls_url": "https://api.github.com/repos/neo4j/github-action-traceability/pulls{/number}",
-        "milestones_url": "https://api.github.com/repos/neo4j/github-action-traceability/milestones{/number}",
-        "notifications_url": "https://api.github.com/repos/neo4j/github-action-traceability/notifications{?since,all,participating}",
-        "labels_url": "https://api.github.com/repos/neo4j/github-action-traceability/labels{/name}",
-        "releases_url": "https://api.github.com/repos/neo4j/github-action-traceability/releases{/id}",
-        "deployments_url": "https://api.github.com/repos/neo4j/github-action-traceability/deployments"
-      }
-    },
-    {
-      "id": 11423683949,
-      "node_id": "CS_kwDOIm8rS88AAAACqOeVbQ",
-      "head_branch": "comments-mode-8",
-      "head_sha": "d78e404d6a9e6a7fcaef454ebb710ec58af01561",
-      "status": "completed",
-      "conclusion": "failure",
-      "url": "https://api.github.com/repos/neo4j/github-action-traceability/check-suites/11423683949",
-      "before": "0000000000000000000000000000000000000000",
-      "after": "d78e404d6a9e6a7fcaef454ebb710ec58af01561",
       "pull_requests": [
         {
           "url": "https://api.github.com/repos/neo4j/github-action-traceability/pulls/14",
@@ -642,7 +384,7 @@
           "number": 14,
           "head": {
             "ref": "comments-mode-8",
-            "sha": "d78e404d6a9e6a7fcaef454ebb710ec58af01561",
+            "sha": "0a39c57f2ed727d66548e361c8ac414c0fe857b5",
             "repo": {
               "id": 577710923,
               "url": "https://api.github.com/repos/neo4j/github-action-traceability",
@@ -651,7 +393,7 @@
           },
           "base": {
             "ref": "dev",
-            "sha": "880f0caf74e41e4a568a660a9cf46eb4814ce052",
+            "sha": "528685a0f8e3eb5221ec18968c76378aebd3e2fc",
             "repo": {
               "id": 577710923,
               "url": "https://api.github.com/repos/neo4j/github-action-traceability",
@@ -659,215 +401,31 @@
             }
           }
         }
-      ],
-      "app": {
-        "id": 15368,
-        "slug": "github-actions",
-        "node_id": "MDM6QXBwMTUzNjg=",
-        "owner": {
-          "login": "github",
-          "id": 9919,
-          "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
-          "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
-          "gravatar_id": "",
-          "url": "https://api.github.com/users/github",
-          "html_url": "https://github.com/github",
-          "followers_url": "https://api.github.com/users/github/followers",
-          "following_url": "https://api.github.com/users/github/following{/other_user}",
-          "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
-          "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
-          "subscriptions_url": "https://api.github.com/users/github/subscriptions",
-          "organizations_url": "https://api.github.com/users/github/orgs",
-          "repos_url": "https://api.github.com/users/github/repos",
-          "events_url": "https://api.github.com/users/github/events{/privacy}",
-          "received_events_url": "https://api.github.com/users/github/received_events",
-          "type": "Organization",
-          "site_admin": false
-        },
-        "name": "GitHub Actions",
-        "description": "Automate your workflow from idea to production",
-        "external_url": "https://help.github.com/en/actions",
-        "html_url": "https://github.com/apps/github-actions",
-        "created_at": "2018-07-30T09:30:17Z",
-        "updated_at": "2019-12-10T19:04:12Z",
-        "permissions": {
-          "actions": "write",
-          "administration": "read",
-          "checks": "write",
-          "contents": "write",
-          "deployments": "write",
-          "discussions": "write",
-          "issues": "write",
-          "merge_queues": "write",
-          "metadata": "read",
-          "packages": "write",
-          "pages": "write",
-          "pull_requests": "write",
-          "repository_hooks": "write",
-          "repository_projects": "write",
-          "security_events": "write",
-          "statuses": "write",
-          "vulnerability_alerts": "read"
-        },
-        "events": [
-          "branch_protection_rule",
-          "check_run",
-          "check_suite",
-          "create",
-          "delete",
-          "deployment",
-          "deployment_status",
-          "discussion",
-          "discussion_comment",
-          "fork",
-          "gollum",
-          "issues",
-          "issue_comment",
-          "label",
-          "merge_group",
-          "milestone",
-          "page_build",
-          "project",
-          "project_card",
-          "project_column",
-          "public",
-          "pull_request",
-          "pull_request_review",
-          "pull_request_review_comment",
-          "push",
-          "registry_package",
-          "release",
-          "repository",
-          "repository_dispatch",
-          "status",
-          "watch",
-          "workflow_dispatch",
-          "workflow_run"
-        ]
-      },
-      "created_at": "2023-03-08T09:24:34Z",
-      "updated_at": "2023-03-08T09:24:46Z",
-      "rerequestable": true,
-      "runs_rerequestable": false,
-      "latest_check_runs_count": 1,
-      "check_runs_url": "https://api.github.com/repos/neo4j/github-action-traceability/check-suites/11423683949/check-runs",
-      "head_commit": {
-        "id": "d78e404d6a9e6a7fcaef454ebb710ec58af01561",
-        "tree_id": "b2136b1b14639bcb94db538bd535e7cfd3bce938",
-        "message": "[NOID] Trigger CI",
-        "timestamp": "2023-03-07T16:40:49Z",
-        "author": {
-          "name": "Daniel Leaver",
-          "email": "daniel.leaver@neo4j.com"
-        },
-        "committer": {
-          "name": "Daniel Leaver",
-          "email": "daniel.leaver@neo4j.com"
-        }
-      },
-      "repository": {
-        "id": 577710923,
-        "node_id": "R_kgDOIm8rSw",
-        "name": "github-action-traceability",
-        "full_name": "neo4j/github-action-traceability",
-        "private": false,
-        "owner": {
-          "login": "neo4j",
-          "id": 201120,
-          "node_id": "MDEyOk9yZ2FuaXphdGlvbjIwMTEyMA==",
-          "avatar_url": "https://avatars.githubusercontent.com/u/201120?v=4",
-          "gravatar_id": "",
-          "url": "https://api.github.com/users/neo4j",
-          "html_url": "https://github.com/neo4j",
-          "followers_url": "https://api.github.com/users/neo4j/followers",
-          "following_url": "https://api.github.com/users/neo4j/following{/other_user}",
-          "gists_url": "https://api.github.com/users/neo4j/gists{/gist_id}",
-          "starred_url": "https://api.github.com/users/neo4j/starred{/owner}{/repo}",
-          "subscriptions_url": "https://api.github.com/users/neo4j/subscriptions",
-          "organizations_url": "https://api.github.com/users/neo4j/orgs",
-          "repos_url": "https://api.github.com/users/neo4j/repos",
-          "events_url": "https://api.github.com/users/neo4j/events{/privacy}",
-          "received_events_url": "https://api.github.com/users/neo4j/received_events",
-          "type": "Organization",
-          "site_admin": false
-        },
-        "html_url": "https://github.com/neo4j/github-action-traceability",
-        "description": null,
-        "fork": false,
-        "url": "https://api.github.com/repos/neo4j/github-action-traceability",
-        "forks_url": "https://api.github.com/repos/neo4j/github-action-traceability/forks",
-        "keys_url": "https://api.github.com/repos/neo4j/github-action-traceability/keys{/key_id}",
-        "collaborators_url": "https://api.github.com/repos/neo4j/github-action-traceability/collaborators{/collaborator}",
-        "teams_url": "https://api.github.com/repos/neo4j/github-action-traceability/teams",
-        "hooks_url": "https://api.github.com/repos/neo4j/github-action-traceability/hooks",
-        "issue_events_url": "https://api.github.com/repos/neo4j/github-action-traceability/issues/events{/number}",
-        "events_url": "https://api.github.com/repos/neo4j/github-action-traceability/events",
-        "assignees_url": "https://api.github.com/repos/neo4j/github-action-traceability/assignees{/user}",
-        "branches_url": "https://api.github.com/repos/neo4j/github-action-traceability/branches{/branch}",
-        "tags_url": "https://api.github.com/repos/neo4j/github-action-traceability/tags",
-        "blobs_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/blobs{/sha}",
-        "git_tags_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/tags{/sha}",
-        "git_refs_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/refs{/sha}",
-        "trees_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/trees{/sha}",
-        "statuses_url": "https://api.github.com/repos/neo4j/github-action-traceability/statuses/{sha}",
-        "languages_url": "https://api.github.com/repos/neo4j/github-action-traceability/languages",
-        "stargazers_url": "https://api.github.com/repos/neo4j/github-action-traceability/stargazers",
-        "contributors_url": "https://api.github.com/repos/neo4j/github-action-traceability/contributors",
-        "subscribers_url": "https://api.github.com/repos/neo4j/github-action-traceability/subscribers",
-        "subscription_url": "https://api.github.com/repos/neo4j/github-action-traceability/subscription",
-        "commits_url": "https://api.github.com/repos/neo4j/github-action-traceability/commits{/sha}",
-        "git_commits_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/commits{/sha}",
-        "comments_url": "https://api.github.com/repos/neo4j/github-action-traceability/comments{/number}",
-        "issue_comment_url": "https://api.github.com/repos/neo4j/github-action-traceability/issues/comments{/number}",
-        "contents_url": "https://api.github.com/repos/neo4j/github-action-traceability/contents/{+path}",
-        "compare_url": "https://api.github.com/repos/neo4j/github-action-traceability/compare/{base}...{head}",
-        "merges_url": "https://api.github.com/repos/neo4j/github-action-traceability/merges",
-        "archive_url": "https://api.github.com/repos/neo4j/github-action-traceability/{archive_format}{/ref}",
-        "downloads_url": "https://api.github.com/repos/neo4j/github-action-traceability/downloads",
-        "issues_url": "https://api.github.com/repos/neo4j/github-action-traceability/issues{/number}",
-        "pulls_url": "https://api.github.com/repos/neo4j/github-action-traceability/pulls{/number}",
-        "milestones_url": "https://api.github.com/repos/neo4j/github-action-traceability/milestones{/number}",
-        "notifications_url": "https://api.github.com/repos/neo4j/github-action-traceability/notifications{?since,all,participating}",
-        "labels_url": "https://api.github.com/repos/neo4j/github-action-traceability/labels{/name}",
-        "releases_url": "https://api.github.com/repos/neo4j/github-action-traceability/releases{/id}",
-        "deployments_url": "https://api.github.com/repos/neo4j/github-action-traceability/deployments"
-      }
+      ]
     },
     {
-      "id": 11423683954,
-      "node_id": "CS_kwDOIm8rS88AAAACqOeVcg",
-      "head_branch": "comments-mode-8",
-      "head_sha": "d78e404d6a9e6a7fcaef454ebb710ec58af01561",
+      "id": 11854694765,
+      "name": "traceability-disabled",
+      "node_id": "CR_kwDOIm8rS88AAAACwphJbQ",
+      "head_sha": "0a39c57f2ed727d66548e361c8ac414c0fe857b5",
+      "external_id": "c34a9a8d-8dea-58e8-56a8-abc1d0d12cda",
+      "url": "https://api.github.com/repos/neo4j/github-action-traceability/check-runs/11854694765",
+      "html_url": "https://github.com/neo4j/github-action-traceability/actions/runs/4365671684/jobs/7634618907",
+      "details_url": "https://github.com/neo4j/github-action-traceability/actions/runs/4365671684/jobs/7634618907",
       "status": "completed",
       "conclusion": "success",
-      "url": "https://api.github.com/repos/neo4j/github-action-traceability/check-suites/11423683954",
-      "before": "0000000000000000000000000000000000000000",
-      "after": "d78e404d6a9e6a7fcaef454ebb710ec58af01561",
-      "pull_requests": [
-        {
-          "url": "https://api.github.com/repos/neo4j/github-action-traceability/pulls/14",
-          "id": 1267571389,
-          "number": 14,
-          "head": {
-            "ref": "comments-mode-8",
-            "sha": "d78e404d6a9e6a7fcaef454ebb710ec58af01561",
-            "repo": {
-              "id": 577710923,
-              "url": "https://api.github.com/repos/neo4j/github-action-traceability",
-              "name": "github-action-traceability"
-            }
-          },
-          "base": {
-            "ref": "dev",
-            "sha": "880f0caf74e41e4a568a660a9cf46eb4814ce052",
-            "repo": {
-              "id": 577710923,
-              "url": "https://api.github.com/repos/neo4j/github-action-traceability",
-              "name": "github-action-traceability"
-            }
-          }
-        }
-      ],
+      "started_at": "2023-03-08T15:11:04Z",
+      "completed_at": "2023-03-08T15:11:08Z",
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/neo4j/github-action-traceability/check-runs/11854694765/annotations"
+      },
+      "check_suite": {
+        "id": 11430868553
+      },
       "app": {
         "id": 15368,
         "slug": "github-actions",
@@ -953,129 +511,55 @@
           "workflow_run"
         ]
       },
-      "created_at": "2023-03-08T09:24:34Z",
-      "updated_at": "2023-03-08T09:25:27Z",
-      "rerequestable": true,
-      "runs_rerequestable": false,
-      "latest_check_runs_count": 1,
-      "check_runs_url": "https://api.github.com/repos/neo4j/github-action-traceability/check-suites/11423683954/check-runs",
-      "head_commit": {
-        "id": "d78e404d6a9e6a7fcaef454ebb710ec58af01561",
-        "tree_id": "b2136b1b14639bcb94db538bd535e7cfd3bce938",
-        "message": "[NOID] Trigger CI",
-        "timestamp": "2023-03-07T16:40:49Z",
-        "author": {
-          "name": "Daniel Leaver",
-          "email": "daniel.leaver@neo4j.com"
-        },
-        "committer": {
-          "name": "Daniel Leaver",
-          "email": "daniel.leaver@neo4j.com"
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/neo4j/github-action-traceability/pulls/14",
+          "id": 1267571389,
+          "number": 14,
+          "head": {
+            "ref": "comments-mode-8",
+            "sha": "0a39c57f2ed727d66548e361c8ac414c0fe857b5",
+            "repo": {
+              "id": 577710923,
+              "url": "https://api.github.com/repos/neo4j/github-action-traceability",
+              "name": "github-action-traceability"
+            }
+          },
+          "base": {
+            "ref": "dev",
+            "sha": "528685a0f8e3eb5221ec18968c76378aebd3e2fc",
+            "repo": {
+              "id": 577710923,
+              "url": "https://api.github.com/repos/neo4j/github-action-traceability",
+              "name": "github-action-traceability"
+            }
+          }
         }
-      },
-      "repository": {
-        "id": 577710923,
-        "node_id": "R_kgDOIm8rSw",
-        "name": "github-action-traceability",
-        "full_name": "neo4j/github-action-traceability",
-        "private": false,
-        "owner": {
-          "login": "neo4j",
-          "id": 201120,
-          "node_id": "MDEyOk9yZ2FuaXphdGlvbjIwMTEyMA==",
-          "avatar_url": "https://avatars.githubusercontent.com/u/201120?v=4",
-          "gravatar_id": "",
-          "url": "https://api.github.com/users/neo4j",
-          "html_url": "https://github.com/neo4j",
-          "followers_url": "https://api.github.com/users/neo4j/followers",
-          "following_url": "https://api.github.com/users/neo4j/following{/other_user}",
-          "gists_url": "https://api.github.com/users/neo4j/gists{/gist_id}",
-          "starred_url": "https://api.github.com/users/neo4j/starred{/owner}{/repo}",
-          "subscriptions_url": "https://api.github.com/users/neo4j/subscriptions",
-          "organizations_url": "https://api.github.com/users/neo4j/orgs",
-          "repos_url": "https://api.github.com/users/neo4j/repos",
-          "events_url": "https://api.github.com/users/neo4j/events{/privacy}",
-          "received_events_url": "https://api.github.com/users/neo4j/received_events",
-          "type": "Organization",
-          "site_admin": false
-        },
-        "html_url": "https://github.com/neo4j/github-action-traceability",
-        "description": null,
-        "fork": false,
-        "url": "https://api.github.com/repos/neo4j/github-action-traceability",
-        "forks_url": "https://api.github.com/repos/neo4j/github-action-traceability/forks",
-        "keys_url": "https://api.github.com/repos/neo4j/github-action-traceability/keys{/key_id}",
-        "collaborators_url": "https://api.github.com/repos/neo4j/github-action-traceability/collaborators{/collaborator}",
-        "teams_url": "https://api.github.com/repos/neo4j/github-action-traceability/teams",
-        "hooks_url": "https://api.github.com/repos/neo4j/github-action-traceability/hooks",
-        "issue_events_url": "https://api.github.com/repos/neo4j/github-action-traceability/issues/events{/number}",
-        "events_url": "https://api.github.com/repos/neo4j/github-action-traceability/events",
-        "assignees_url": "https://api.github.com/repos/neo4j/github-action-traceability/assignees{/user}",
-        "branches_url": "https://api.github.com/repos/neo4j/github-action-traceability/branches{/branch}",
-        "tags_url": "https://api.github.com/repos/neo4j/github-action-traceability/tags",
-        "blobs_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/blobs{/sha}",
-        "git_tags_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/tags{/sha}",
-        "git_refs_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/refs{/sha}",
-        "trees_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/trees{/sha}",
-        "statuses_url": "https://api.github.com/repos/neo4j/github-action-traceability/statuses/{sha}",
-        "languages_url": "https://api.github.com/repos/neo4j/github-action-traceability/languages",
-        "stargazers_url": "https://api.github.com/repos/neo4j/github-action-traceability/stargazers",
-        "contributors_url": "https://api.github.com/repos/neo4j/github-action-traceability/contributors",
-        "subscribers_url": "https://api.github.com/repos/neo4j/github-action-traceability/subscribers",
-        "subscription_url": "https://api.github.com/repos/neo4j/github-action-traceability/subscription",
-        "commits_url": "https://api.github.com/repos/neo4j/github-action-traceability/commits{/sha}",
-        "git_commits_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/commits{/sha}",
-        "comments_url": "https://api.github.com/repos/neo4j/github-action-traceability/comments{/number}",
-        "issue_comment_url": "https://api.github.com/repos/neo4j/github-action-traceability/issues/comments{/number}",
-        "contents_url": "https://api.github.com/repos/neo4j/github-action-traceability/contents/{+path}",
-        "compare_url": "https://api.github.com/repos/neo4j/github-action-traceability/compare/{base}...{head}",
-        "merges_url": "https://api.github.com/repos/neo4j/github-action-traceability/merges",
-        "archive_url": "https://api.github.com/repos/neo4j/github-action-traceability/{archive_format}{/ref}",
-        "downloads_url": "https://api.github.com/repos/neo4j/github-action-traceability/downloads",
-        "issues_url": "https://api.github.com/repos/neo4j/github-action-traceability/issues{/number}",
-        "pulls_url": "https://api.github.com/repos/neo4j/github-action-traceability/pulls{/number}",
-        "milestones_url": "https://api.github.com/repos/neo4j/github-action-traceability/milestones{/number}",
-        "notifications_url": "https://api.github.com/repos/neo4j/github-action-traceability/notifications{?since,all,participating}",
-        "labels_url": "https://api.github.com/repos/neo4j/github-action-traceability/labels{/name}",
-        "releases_url": "https://api.github.com/repos/neo4j/github-action-traceability/releases{/id}",
-        "deployments_url": "https://api.github.com/repos/neo4j/github-action-traceability/deployments"
-      }
+      ]
     },
     {
-      "id": 11423683958,
-      "node_id": "CS_kwDOIm8rS88AAAACqOeVdg",
-      "head_branch": "comments-mode-8",
-      "head_sha": "d78e404d6a9e6a7fcaef454ebb710ec58af01561",
+      "id": 11854694753,
+      "name": "build",
+      "node_id": "CR_kwDOIm8rS88AAAACwphJYQ",
+      "head_sha": "0a39c57f2ed727d66548e361c8ac414c0fe857b5",
+      "external_id": "ca395085-040a-526b-2ce8-bdc85f692774",
+      "url": "https://api.github.com/repos/neo4j/github-action-traceability/check-runs/11854694753",
+      "html_url": "https://github.com/neo4j/github-action-traceability/actions/runs/4365671688/jobs/7634618895",
+      "details_url": "https://github.com/neo4j/github-action-traceability/actions/runs/4365671688/jobs/7634618895",
       "status": "completed",
       "conclusion": "success",
-      "url": "https://api.github.com/repos/neo4j/github-action-traceability/check-suites/11423683958",
-      "before": "0000000000000000000000000000000000000000",
-      "after": "d78e404d6a9e6a7fcaef454ebb710ec58af01561",
-      "pull_requests": [
-        {
-          "url": "https://api.github.com/repos/neo4j/github-action-traceability/pulls/14",
-          "id": 1267571389,
-          "number": 14,
-          "head": {
-            "ref": "comments-mode-8",
-            "sha": "d78e404d6a9e6a7fcaef454ebb710ec58af01561",
-            "repo": {
-              "id": 577710923,
-              "url": "https://api.github.com/repos/neo4j/github-action-traceability",
-              "name": "github-action-traceability"
-            }
-          },
-          "base": {
-            "ref": "dev",
-            "sha": "880f0caf74e41e4a568a660a9cf46eb4814ce052",
-            "repo": {
-              "id": 577710923,
-              "url": "https://api.github.com/repos/neo4j/github-action-traceability",
-              "name": "github-action-traceability"
-            }
-          }
-        }
-      ],
+      "started_at": "2023-03-08T15:11:04Z",
+      "completed_at": "2023-03-08T15:11:42Z",
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/neo4j/github-action-traceability/check-runs/11854694753/annotations"
+      },
+      "check_suite": {
+        "id": 11430868561
+      },
       "app": {
         "id": 15368,
         "slug": "github-actions",
@@ -1161,104 +645,6 @@
           "workflow_run"
         ]
       },
-      "created_at": "2023-03-08T09:24:34Z",
-      "updated_at": "2023-03-08T09:24:47Z",
-      "rerequestable": true,
-      "runs_rerequestable": false,
-      "latest_check_runs_count": 1,
-      "check_runs_url": "https://api.github.com/repos/neo4j/github-action-traceability/check-suites/11423683958/check-runs",
-      "head_commit": {
-        "id": "d78e404d6a9e6a7fcaef454ebb710ec58af01561",
-        "tree_id": "b2136b1b14639bcb94db538bd535e7cfd3bce938",
-        "message": "[NOID] Trigger CI",
-        "timestamp": "2023-03-07T16:40:49Z",
-        "author": {
-          "name": "Daniel Leaver",
-          "email": "daniel.leaver@neo4j.com"
-        },
-        "committer": {
-          "name": "Daniel Leaver",
-          "email": "daniel.leaver@neo4j.com"
-        }
-      },
-      "repository": {
-        "id": 577710923,
-        "node_id": "R_kgDOIm8rSw",
-        "name": "github-action-traceability",
-        "full_name": "neo4j/github-action-traceability",
-        "private": false,
-        "owner": {
-          "login": "neo4j",
-          "id": 201120,
-          "node_id": "MDEyOk9yZ2FuaXphdGlvbjIwMTEyMA==",
-          "avatar_url": "https://avatars.githubusercontent.com/u/201120?v=4",
-          "gravatar_id": "",
-          "url": "https://api.github.com/users/neo4j",
-          "html_url": "https://github.com/neo4j",
-          "followers_url": "https://api.github.com/users/neo4j/followers",
-          "following_url": "https://api.github.com/users/neo4j/following{/other_user}",
-          "gists_url": "https://api.github.com/users/neo4j/gists{/gist_id}",
-          "starred_url": "https://api.github.com/users/neo4j/starred{/owner}{/repo}",
-          "subscriptions_url": "https://api.github.com/users/neo4j/subscriptions",
-          "organizations_url": "https://api.github.com/users/neo4j/orgs",
-          "repos_url": "https://api.github.com/users/neo4j/repos",
-          "events_url": "https://api.github.com/users/neo4j/events{/privacy}",
-          "received_events_url": "https://api.github.com/users/neo4j/received_events",
-          "type": "Organization",
-          "site_admin": false
-        },
-        "html_url": "https://github.com/neo4j/github-action-traceability",
-        "description": null,
-        "fork": false,
-        "url": "https://api.github.com/repos/neo4j/github-action-traceability",
-        "forks_url": "https://api.github.com/repos/neo4j/github-action-traceability/forks",
-        "keys_url": "https://api.github.com/repos/neo4j/github-action-traceability/keys{/key_id}",
-        "collaborators_url": "https://api.github.com/repos/neo4j/github-action-traceability/collaborators{/collaborator}",
-        "teams_url": "https://api.github.com/repos/neo4j/github-action-traceability/teams",
-        "hooks_url": "https://api.github.com/repos/neo4j/github-action-traceability/hooks",
-        "issue_events_url": "https://api.github.com/repos/neo4j/github-action-traceability/issues/events{/number}",
-        "events_url": "https://api.github.com/repos/neo4j/github-action-traceability/events",
-        "assignees_url": "https://api.github.com/repos/neo4j/github-action-traceability/assignees{/user}",
-        "branches_url": "https://api.github.com/repos/neo4j/github-action-traceability/branches{/branch}",
-        "tags_url": "https://api.github.com/repos/neo4j/github-action-traceability/tags",
-        "blobs_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/blobs{/sha}",
-        "git_tags_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/tags{/sha}",
-        "git_refs_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/refs{/sha}",
-        "trees_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/trees{/sha}",
-        "statuses_url": "https://api.github.com/repos/neo4j/github-action-traceability/statuses/{sha}",
-        "languages_url": "https://api.github.com/repos/neo4j/github-action-traceability/languages",
-        "stargazers_url": "https://api.github.com/repos/neo4j/github-action-traceability/stargazers",
-        "contributors_url": "https://api.github.com/repos/neo4j/github-action-traceability/contributors",
-        "subscribers_url": "https://api.github.com/repos/neo4j/github-action-traceability/subscribers",
-        "subscription_url": "https://api.github.com/repos/neo4j/github-action-traceability/subscription",
-        "commits_url": "https://api.github.com/repos/neo4j/github-action-traceability/commits{/sha}",
-        "git_commits_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/commits{/sha}",
-        "comments_url": "https://api.github.com/repos/neo4j/github-action-traceability/comments{/number}",
-        "issue_comment_url": "https://api.github.com/repos/neo4j/github-action-traceability/issues/comments{/number}",
-        "contents_url": "https://api.github.com/repos/neo4j/github-action-traceability/contents/{+path}",
-        "compare_url": "https://api.github.com/repos/neo4j/github-action-traceability/compare/{base}...{head}",
-        "merges_url": "https://api.github.com/repos/neo4j/github-action-traceability/merges",
-        "archive_url": "https://api.github.com/repos/neo4j/github-action-traceability/{archive_format}{/ref}",
-        "downloads_url": "https://api.github.com/repos/neo4j/github-action-traceability/downloads",
-        "issues_url": "https://api.github.com/repos/neo4j/github-action-traceability/issues{/number}",
-        "pulls_url": "https://api.github.com/repos/neo4j/github-action-traceability/pulls{/number}",
-        "milestones_url": "https://api.github.com/repos/neo4j/github-action-traceability/milestones{/number}",
-        "notifications_url": "https://api.github.com/repos/neo4j/github-action-traceability/notifications{?since,all,participating}",
-        "labels_url": "https://api.github.com/repos/neo4j/github-action-traceability/labels{/name}",
-        "releases_url": "https://api.github.com/repos/neo4j/github-action-traceability/releases{/id}",
-        "deployments_url": "https://api.github.com/repos/neo4j/github-action-traceability/deployments"
-      }
-    },
-    {
-      "id": 11423683972,
-      "node_id": "CS_kwDOIm8rS88AAAACqOeVhA",
-      "head_branch": "comments-mode-8",
-      "head_sha": "d78e404d6a9e6a7fcaef454ebb710ec58af01561",
-      "status": "completed",
-      "conclusion": "success",
-      "url": "https://api.github.com/repos/neo4j/github-action-traceability/check-suites/11423683972",
-      "before": "0000000000000000000000000000000000000000",
-      "after": "d78e404d6a9e6a7fcaef454ebb710ec58af01561",
       "pull_requests": [
         {
           "url": "https://api.github.com/repos/neo4j/github-action-traceability/pulls/14",
@@ -1266,7 +652,7 @@
           "number": 14,
           "head": {
             "ref": "comments-mode-8",
-            "sha": "d78e404d6a9e6a7fcaef454ebb710ec58af01561",
+            "sha": "0a39c57f2ed727d66548e361c8ac414c0fe857b5",
             "repo": {
               "id": 577710923,
               "url": "https://api.github.com/repos/neo4j/github-action-traceability",
@@ -1275,7 +661,7 @@
           },
           "base": {
             "ref": "dev",
-            "sha": "880f0caf74e41e4a568a660a9cf46eb4814ce052",
+            "sha": "528685a0f8e3eb5221ec18968c76378aebd3e2fc",
             "repo": {
               "id": 577710923,
               "url": "https://api.github.com/repos/neo4j/github-action-traceability",
@@ -1283,179 +669,7 @@
             }
           }
         }
-      ],
-      "app": {
-        "id": 15368,
-        "slug": "github-actions",
-        "node_id": "MDM6QXBwMTUzNjg=",
-        "owner": {
-          "login": "github",
-          "id": 9919,
-          "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
-          "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
-          "gravatar_id": "",
-          "url": "https://api.github.com/users/github",
-          "html_url": "https://github.com/github",
-          "followers_url": "https://api.github.com/users/github/followers",
-          "following_url": "https://api.github.com/users/github/following{/other_user}",
-          "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
-          "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
-          "subscriptions_url": "https://api.github.com/users/github/subscriptions",
-          "organizations_url": "https://api.github.com/users/github/orgs",
-          "repos_url": "https://api.github.com/users/github/repos",
-          "events_url": "https://api.github.com/users/github/events{/privacy}",
-          "received_events_url": "https://api.github.com/users/github/received_events",
-          "type": "Organization",
-          "site_admin": false
-        },
-        "name": "GitHub Actions",
-        "description": "Automate your workflow from idea to production",
-        "external_url": "https://help.github.com/en/actions",
-        "html_url": "https://github.com/apps/github-actions",
-        "created_at": "2018-07-30T09:30:17Z",
-        "updated_at": "2019-12-10T19:04:12Z",
-        "permissions": {
-          "actions": "write",
-          "administration": "read",
-          "checks": "write",
-          "contents": "write",
-          "deployments": "write",
-          "discussions": "write",
-          "issues": "write",
-          "merge_queues": "write",
-          "metadata": "read",
-          "packages": "write",
-          "pages": "write",
-          "pull_requests": "write",
-          "repository_hooks": "write",
-          "repository_projects": "write",
-          "security_events": "write",
-          "statuses": "write",
-          "vulnerability_alerts": "read"
-        },
-        "events": [
-          "branch_protection_rule",
-          "check_run",
-          "check_suite",
-          "create",
-          "delete",
-          "deployment",
-          "deployment_status",
-          "discussion",
-          "discussion_comment",
-          "fork",
-          "gollum",
-          "issues",
-          "issue_comment",
-          "label",
-          "merge_group",
-          "milestone",
-          "page_build",
-          "project",
-          "project_card",
-          "project_column",
-          "public",
-          "pull_request",
-          "pull_request_review",
-          "pull_request_review_comment",
-          "push",
-          "registry_package",
-          "release",
-          "repository",
-          "repository_dispatch",
-          "status",
-          "watch",
-          "workflow_dispatch",
-          "workflow_run"
-        ]
-      },
-      "created_at": "2023-03-08T09:24:34Z",
-      "updated_at": "2023-03-08T09:24:48Z",
-      "rerequestable": true,
-      "runs_rerequestable": false,
-      "latest_check_runs_count": 1,
-      "check_runs_url": "https://api.github.com/repos/neo4j/github-action-traceability/check-suites/11423683972/check-runs",
-      "head_commit": {
-        "id": "d78e404d6a9e6a7fcaef454ebb710ec58af01561",
-        "tree_id": "b2136b1b14639bcb94db538bd535e7cfd3bce938",
-        "message": "[NOID] Trigger CI",
-        "timestamp": "2023-03-07T16:40:49Z",
-        "author": {
-          "name": "Daniel Leaver",
-          "email": "daniel.leaver@neo4j.com"
-        },
-        "committer": {
-          "name": "Daniel Leaver",
-          "email": "daniel.leaver@neo4j.com"
-        }
-      },
-      "repository": {
-        "id": 577710923,
-        "node_id": "R_kgDOIm8rSw",
-        "name": "github-action-traceability",
-        "full_name": "neo4j/github-action-traceability",
-        "private": false,
-        "owner": {
-          "login": "neo4j",
-          "id": 201120,
-          "node_id": "MDEyOk9yZ2FuaXphdGlvbjIwMTEyMA==",
-          "avatar_url": "https://avatars.githubusercontent.com/u/201120?v=4",
-          "gravatar_id": "",
-          "url": "https://api.github.com/users/neo4j",
-          "html_url": "https://github.com/neo4j",
-          "followers_url": "https://api.github.com/users/neo4j/followers",
-          "following_url": "https://api.github.com/users/neo4j/following{/other_user}",
-          "gists_url": "https://api.github.com/users/neo4j/gists{/gist_id}",
-          "starred_url": "https://api.github.com/users/neo4j/starred{/owner}{/repo}",
-          "subscriptions_url": "https://api.github.com/users/neo4j/subscriptions",
-          "organizations_url": "https://api.github.com/users/neo4j/orgs",
-          "repos_url": "https://api.github.com/users/neo4j/repos",
-          "events_url": "https://api.github.com/users/neo4j/events{/privacy}",
-          "received_events_url": "https://api.github.com/users/neo4j/received_events",
-          "type": "Organization",
-          "site_admin": false
-        },
-        "html_url": "https://github.com/neo4j/github-action-traceability",
-        "description": null,
-        "fork": false,
-        "url": "https://api.github.com/repos/neo4j/github-action-traceability",
-        "forks_url": "https://api.github.com/repos/neo4j/github-action-traceability/forks",
-        "keys_url": "https://api.github.com/repos/neo4j/github-action-traceability/keys{/key_id}",
-        "collaborators_url": "https://api.github.com/repos/neo4j/github-action-traceability/collaborators{/collaborator}",
-        "teams_url": "https://api.github.com/repos/neo4j/github-action-traceability/teams",
-        "hooks_url": "https://api.github.com/repos/neo4j/github-action-traceability/hooks",
-        "issue_events_url": "https://api.github.com/repos/neo4j/github-action-traceability/issues/events{/number}",
-        "events_url": "https://api.github.com/repos/neo4j/github-action-traceability/events",
-        "assignees_url": "https://api.github.com/repos/neo4j/github-action-traceability/assignees{/user}",
-        "branches_url": "https://api.github.com/repos/neo4j/github-action-traceability/branches{/branch}",
-        "tags_url": "https://api.github.com/repos/neo4j/github-action-traceability/tags",
-        "blobs_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/blobs{/sha}",
-        "git_tags_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/tags{/sha}",
-        "git_refs_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/refs{/sha}",
-        "trees_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/trees{/sha}",
-        "statuses_url": "https://api.github.com/repos/neo4j/github-action-traceability/statuses/{sha}",
-        "languages_url": "https://api.github.com/repos/neo4j/github-action-traceability/languages",
-        "stargazers_url": "https://api.github.com/repos/neo4j/github-action-traceability/stargazers",
-        "contributors_url": "https://api.github.com/repos/neo4j/github-action-traceability/contributors",
-        "subscribers_url": "https://api.github.com/repos/neo4j/github-action-traceability/subscribers",
-        "subscription_url": "https://api.github.com/repos/neo4j/github-action-traceability/subscription",
-        "commits_url": "https://api.github.com/repos/neo4j/github-action-traceability/commits{/sha}",
-        "git_commits_url": "https://api.github.com/repos/neo4j/github-action-traceability/git/commits{/sha}",
-        "comments_url": "https://api.github.com/repos/neo4j/github-action-traceability/comments{/number}",
-        "issue_comment_url": "https://api.github.com/repos/neo4j/github-action-traceability/issues/comments{/number}",
-        "contents_url": "https://api.github.com/repos/neo4j/github-action-traceability/contents/{+path}",
-        "compare_url": "https://api.github.com/repos/neo4j/github-action-traceability/compare/{base}...{head}",
-        "merges_url": "https://api.github.com/repos/neo4j/github-action-traceability/merges",
-        "archive_url": "https://api.github.com/repos/neo4j/github-action-traceability/{archive_format}{/ref}",
-        "downloads_url": "https://api.github.com/repos/neo4j/github-action-traceability/downloads",
-        "issues_url": "https://api.github.com/repos/neo4j/github-action-traceability/issues{/number}",
-        "pulls_url": "https://api.github.com/repos/neo4j/github-action-traceability/pulls{/number}",
-        "milestones_url": "https://api.github.com/repos/neo4j/github-action-traceability/milestones{/number}",
-        "notifications_url": "https://api.github.com/repos/neo4j/github-action-traceability/notifications{?since,all,participating}",
-        "labels_url": "https://api.github.com/repos/neo4j/github-action-traceability/labels{/name}",
-        "releases_url": "https://api.github.com/repos/neo4j/github-action-traceability/releases{/id}",
-        "deployments_url": "https://api.github.com/repos/neo4j/github-action-traceability/deployments"
-      }
+      ]
     }
   ]
 }
