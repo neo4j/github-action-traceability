@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.issue.pull_request
     steps:
+      - uses: actions/checkout@v3
       - name: "Get Pull Request"
         id: get-pr
         run: |
@@ -22,7 +23,7 @@ jobs:
             "https://api.github.com/repos/neo4j/github-action-traceability/pulls/${{ github.event.issue.number }}"
       - name: "Get Commit"
         id: get-commit
-        run: gh pr view ${{ github.event.issue.number }}
+        run: gh pr view ${{ github.event.issue.number }} --repo $GITHUB_REPOSITORY
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: "Get check suites for a git commit"
