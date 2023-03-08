@@ -40,22 +40,35 @@ jobs:
           echo "sha=$SHA" > $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: "Get Suite For Commit"
-        id: get-runs
-        run: |
-          RUNS=$( curl -L \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"\
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            "https://api.github.com/repos/$GITHUB_REPOSITORY/commits/${{ steps.get-commit.outputs.sha }}/check-runs?check_name=traceability-comments"
-          )
-          echo "run=$RUNS" > $GITHUB_OUTPUT
+#      - name: "Get Suite"
+#        id: get-runs
+#        run: |
+#          RUNS=$( curl -L \
+#            -H "Accept: application/vnd.github+json" \
+#            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"\
+#            -H "X-GitHub-Api-Version: 2022-11-28" \
+#            "https://api.github.com/repos/$GITHUB_REPOSITORY/commits/${{ steps.get-commit.outputs.sha }}/check-runs?check_name=traceability-comments"
+#          )
+#          echo "run=$RUNS" > $GITHUB_OUTPUT
       - name: "Get Suite"
-        id: get-run
-        run: |
-          echo ${{ steps.get-runs.outputs.runs }}
-          echo "run=${{ fromJSON(steps.get-runs.outputs.runs).check_runs[0].check_suite.id }}"
-          echo "run=${{ fromJSON(steps.get-runs.outputs.runs).check_runs[0].check_suite.id }}" > $GITHUB_OUTPUT
+        uses: actions/github-script@v3
+        id: get-runs
+        with:
+          script: |
+            const request = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: context.issue.number
+            }
+            core.info(JSON.stringify({context}, null, 2))
+            core.info(`Getting PR #${request.pull_number} from ${request.owner}/${request.repo}`)
+            try {
+              const result = await github.pulls.get(context)
+              core.info(JSON.stringify({result}, null, 2))
+              return result.data
+            } catch (err) {
+              core.setFailed(`Request failed with error ${err}`)
+            }
       - name: "Re-request check suite"
         run: |
           curl -L \
