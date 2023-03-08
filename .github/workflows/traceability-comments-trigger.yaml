@@ -61,8 +61,7 @@ jobs:
             }  
             core.info(`Re-requesting check-suite ${request.check_suite_id} from ${request.owner}/${request.repo}`)
             try {
-              const result = await github.rest.checks.rerequestSuite(request)
-              return result.data.check_runs[0].check_suite.id
+              await github.rest.checks.rerequestSuite(request)
             } catch (err) {
               core.setFailed(`Request failed with error ${err}`)
             }
