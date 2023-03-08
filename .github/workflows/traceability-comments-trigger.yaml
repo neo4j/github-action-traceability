@@ -58,8 +58,7 @@ jobs:
             const request = {
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: `${{ steps.get-commit.outputs.sha }}`,
-              check_name: "traceability-comments"
+              ref: `${{ steps.get-commit.outputs.sha }}`
             }
             core.info(`Getting check-runs for ${request.ref} from ${request.owner}/${request.repo}`)
             try {
