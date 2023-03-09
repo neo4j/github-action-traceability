@@ -90,8 +90,8 @@ class GitHubClient implements GitHubClientI {
         $repositoryOwner: String!
         $repositoryName: String!
         $pullRequestNumber: Int!
-        $numberOfCommits: Int = 500
-        $numberOfComments: Int = 500
+        $numberOfCommits: Int = 250
+        $numberOfComments: Int = 250
         $numberOfLabels: Int = 50
       ) {
         repository(owner: $repositoryOwner, name: $repositoryName) {
