@@ -40,15 +40,17 @@ interface PullRequest {
 }
 
 interface GetPullRequest {
-  pullRequest: {
-    url: string;
-    title: string;
-    author: {
-      login: string;
+  repository: {
+    pullRequest: {
+      url: string;
+      title: string;
+      author: {
+        login: string;
+      };
+      commits: EdgeItems<Commit>;
+      comments: EdgeItems<Comment>;
+      labels: EdgeItems<Label>;
     };
-    commits: EdgeItems<Commit>;
-    comments: EdgeItems<Comment>;
-    labels: EdgeItems<Label>;
   };
 }
 
@@ -138,12 +140,12 @@ class GitHubClient implements GitHubClientI {
     const response = await graphql<GetPullRequest>(query, variables);
     core.info(JSON.stringify({ response }, null, 2)); // daniel
     return {
-      url: response.pullRequest.url,
-      title: response.pullRequest.title,
-      author: response.pullRequest.author.login,
-      commits: response.pullRequest.commits.edges.map((e) => e.node),
-      comments: response.pullRequest.comments.edges.map((e) => e.node),
-      labels: response.pullRequest.labels.edges.map((e) => e.node),
+      url: response.repository.pullRequest.url,
+      title: response.repository.pullRequest.title,
+      author: response.repository.pullRequest.author.login,
+      commits: response.repository.pullRequest.commits.edges.map((e) => e.node),
+      comments: response.repository.pullRequest.comments.edges.map((e) => e.node),
+      labels: response.repository.pullRequest.labels.edges.map((e) => e.node),
     };
   }
 }
