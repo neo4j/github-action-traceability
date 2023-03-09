@@ -136,6 +136,7 @@ class GitHubClient implements GitHubClientI {
     `;
 
     const response = await graphql<GetPullRequest>(query, variables);
+    core.info(JSON.stringify({ response }, null, 2)); // daniel
     return {
       url: response.pullRequest.url,
       title: response.pullRequest.title,

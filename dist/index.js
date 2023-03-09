@@ -7644,6 +7644,7 @@ class GitHubClient {
       }
     `;
             const response = yield (0, graphql_1.graphql)(query, variables);
+            core.info(JSON.stringify({ response }, null, 2)); // daniel
             return {
                 url: response.pullRequest.url,
                 title: response.pullRequest.title,
