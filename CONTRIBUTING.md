@@ -55,8 +55,8 @@ git commit -m "[NOID] Change description"
 ### Once the PR is merged, tag it with a new semver. Also, update the existing major semver tag.
 
 ```bash
-git tag -a v1.0.12
-git tag -fa v1
+git tag v2.0.12
+git tag -f v2
 git push origin --tags --force
 ```
 
