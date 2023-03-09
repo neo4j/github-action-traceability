@@ -3,9 +3,11 @@ import * as github from '@actions/github';
 import { graphql } from '@octokit/graphql';
 
 interface EdgeItems<T> {
-  edges: [{
-    node: T;
-  }]
+  edges: [
+    {
+      node: T;
+    },
+  ];
 }
 
 interface Commit {
@@ -43,15 +45,19 @@ interface GetPullRequest {
     title: string;
     author: {
       login: string;
-    }
+    };
     commits: EdgeItems<Commit>;
-    comments: EdgeItems<Comment>
-    labels: EdgeItems<Label>
-  }
+    comments: EdgeItems<Comment>;
+    labels: EdgeItems<Label>;
+  };
 }
 
 interface GitHubClientI {
-  getPullRequest(pullRequestNumber: number, repositoryOwner: string, repositoryName: string): Promise<PullRequest>
+  getPullRequest(
+    pullRequestNumber: number,
+    repositoryOwner: string,
+    repositoryName: string,
+  ): Promise<PullRequest>;
 }
 
 class GitHubClient implements GitHubClientI {
@@ -62,7 +68,11 @@ class GitHubClient implements GitHubClientI {
   }
 
   // https://docs.github.com/en/graphql/reference/objects#pullrequest
-  async getPullRequest(pullRequestNumber: number, repositoryOwner: string, repositoryName: string): Promise<PullRequest> {
+  async getPullRequest(
+    pullRequestNumber: number,
+    repositoryOwner: string,
+    repositoryName: string,
+  ): Promise<PullRequest> {
     core.info('Get pull request.');
 
     const variables = {
@@ -130,10 +140,10 @@ class GitHubClient implements GitHubClientI {
       url: response.pullRequest.url,
       title: response.pullRequest.title,
       author: response.pullRequest.author.login,
-      commits: response.pullRequest.commits.edges.map(e => e.node),
-      comments: response.pullRequest.comments.edges.map(e => e.node),
-      labels: response.pullRequest.labels.edges.map(e => e.node)
-    }
+      commits: response.pullRequest.commits.edges.map((e) => e.node),
+      comments: response.pullRequest.comments.edges.map((e) => e.node),
+      labels: response.pullRequest.labels.edges.map((e) => e.node),
+    };
   }
 }
 

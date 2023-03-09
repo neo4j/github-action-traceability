@@ -1,4 +1,4 @@
-import {GitHubClientI, Commit, Comment, Label, PullRequest} from '../src/client-github';
+import { GitHubClientI, Commit, Comment, Label, PullRequest } from '../src/client-github';
 
 class GitHubClientBuilder {
   url: string = 'https://www.github.com/neo4j/apoc';
@@ -48,7 +48,7 @@ class GitHubClientBuilder {
       this.author,
       this.commits,
       this.comments,
-      this.labels
+      this.labels,
     );
   }
 }
@@ -77,14 +77,18 @@ class DummyGitHubClient implements GitHubClientI {
     this.labels = labels;
   }
 
-  getPullRequest(pullRequestNumber: number, repositoryOwner: string, repositoryName: string): Promise<PullRequest> {
+  getPullRequest(
+    pullRequestNumber: number,
+    repositoryOwner: string,
+    repositoryName: string,
+  ): Promise<PullRequest> {
     return Promise.resolve({
       url: this.url,
       title: this.title,
       author: this.author,
       commits: this.commits,
       comments: this.comments,
-      labels: this.labels
+      labels: this.labels,
     });
   }
 }

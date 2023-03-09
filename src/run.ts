@@ -1,6 +1,6 @@
 import * as core from '@actions/core';
 
-import {GitHubClientI, PullRequest} from './client-github';
+import { GitHubClientI, PullRequest } from './client-github';
 import { GlobalVerificationStrategy, InputsClientI } from './client-inputs';
 import { ValidationsService } from './service-validations';
 import { TrelloClientI, TrelloShortLink } from './client-trello';
@@ -10,9 +10,10 @@ const run = async (inputs: InputsClientI, github: GitHubClientI, trello: TrelloC
   const validations = new ValidationsService(inputs, github, trello);
   const utils = new UtilsService(inputs);
   const pullRequest = await github.getPullRequest(
-      inputs.getPullRequestNumber(),
-      inputs.getGithubRepositoryOwner(),
-      inputs.getGitHubRepositoryName());
+    inputs.getPullRequestNumber(),
+    inputs.getGithubRepositoryOwner(),
+    inputs.getGitHubRepositoryName(),
+  );
 
   core.info('Start global verification strategy.');
   switch (inputs.getGlobalVerificationStrategy()) {
@@ -31,10 +32,8 @@ const run = async (inputs: InputsClientI, github: GitHubClientI, trello: TrelloC
       return;
     }
     case GlobalVerificationStrategy.Commits: {
-      const commitMessages = pullRequest.commits.map(c => c.commit.message)
-      const shortLinks = [
-        ...new Set(commitMessages.map(utils.extractShortLink.bind(utils)))
-      ];
+      const commitMessages = pullRequest.commits.map((c) => c.commit.message);
+      const shortLinks = [...new Set(commitMessages.map(utils.extractShortLink.bind(utils)))];
       validations.validateShortLinksStrategy(shortLinks);
       for (const shortLink of shortLinks) {
         if (shortLink instanceof TrelloShortLink) {

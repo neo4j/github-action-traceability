@@ -68,18 +68,18 @@ class InputsClient implements InputsClientI {
 
   // daniel document three inputs below
   getGitHubRepositoryName(): string {
-    core.info('Get github_repository_name.')
-    return core.getInput('github_repository_name', {required: true})
+    core.info('Get github_repository_name.');
+    return core.getInput('github_repository_name', { required: true });
   }
 
   getGithubRepositoryOwner(): string {
-    core.info('Get github_repository_owner.')
-    return core.getInput('github_repository_owner', {required: true})
+    core.info('Get github_repository_owner.');
+    return core.getInput('github_repository_owner', { required: true });
   }
 
   getPullRequestNumber(): number {
-    core.info('Get pull_request_number.')
-    return Number(core.getInput('pull_request_number', {required: true}))
+    core.info('Get pull_request_number.');
+    return Number(core.getInput('pull_request_number', { required: true }));
   }
 }
 

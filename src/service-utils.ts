@@ -1,8 +1,8 @@
 import * as core from '@actions/core';
 import { InputsClientI } from './client-inputs';
-import {NoIdShortLink, ShortLink, TrelloClientI, TrelloShortLink} from './client-trello';
-import {GitHubClientI, PullRequest} from "./client-github";
-import {ValidationsService} from "./service-validations";
+import { NoIdShortLink, ShortLink, TrelloClientI, TrelloShortLink } from './client-trello';
+import { GitHubClientI, PullRequest } from './client-github';
+import { ValidationsService } from './service-validations';
 
 class UtilsService {
   inputs: InputsClientI;
@@ -45,11 +45,11 @@ class UtilsService {
   }
 
   async attachPullRequestToTrello(
-      inputs: InputsClientI,
-      trello: TrelloClientI,
-      github: GitHubClientI,
-      pullRequest: PullRequest,
-      trelloShortLink: TrelloShortLink,
+    inputs: InputsClientI,
+    trello: TrelloClientI,
+    github: GitHubClientI,
+    pullRequest: PullRequest,
+    trelloShortLink: TrelloShortLink,
   ): Promise<void> {
     core.info('Start attaching pull request to Trello card.');
     const assertions = new ValidationsService(inputs, github, trello);
@@ -63,7 +63,7 @@ class UtilsService {
       await trello.addUrlAttachmentToCard(trelloShortLink.id, pullRequest.url);
     }
     return;
-  };
+  }
 }
 
 export { UtilsService };
