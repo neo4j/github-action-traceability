@@ -1,28 +1,35 @@
-import { GitHubClientI, Commit, Comment } from '../src/client-github';
+import {GitHubClientI, Commit, Comment, Label, PullRequest} from '../src/client-github';
 
 class GitHubClientBuilder {
-  pullRequestUrl: string = 'https://www.github.com/neo4j/apoc';
-  pullRequestTitle: string = 'Install Traceability GitHub Action';
-  pullRequestCommits: Commit[] = [];
-  pullRequestComments: Comment[] = [];
+  url: string = 'https://www.github.com/neo4j/apoc';
+  title: string = 'Install Traceability GitHub Action';
+  author: string = 'Alice';
+  commits: Commit[] = [];
+  comments: Comment[] = [];
+  labels: Label[] = [];
 
-  public withPullRequestUrl(pullRequestUrl: string): GitHubClientBuilder {
-    this.pullRequestUrl = pullRequestUrl;
+  public withPullRequestUrl(url: string): GitHubClientBuilder {
+    this.url = url;
     return this;
   }
 
-  public withPullRequestTitle(pullRequestTitle: string): GitHubClientBuilder {
-    this.pullRequestTitle = pullRequestTitle;
+  public withPullRequestTitle(title: string): GitHubClientBuilder {
+    this.title = title;
     return this;
   }
 
-  public withPullRequestCommitMessage(pullRequestCommitMessage: string): GitHubClientBuilder {
-    this.pullRequestCommits.push({ commit: { message: pullRequestCommitMessage } });
+  public withPullRequestAuthor(author: string): GitHubClientBuilder {
+    this.author = author;
+    return this;
+  }
+
+  public withPullRequestCommitMessage(message: string): GitHubClientBuilder {
+    this.commits.push({ commit: { message: message } });
     return this;
   }
 
   public withPullRequestComment(author: string, body: string, url: string): GitHubClientBuilder {
-    this.pullRequestComments.push({
+    this.comments.push({
       author: {
         login: author,
       },
@@ -36,46 +43,49 @@ class GitHubClientBuilder {
 
   public build(): GitHubClientI {
     return new DummyGitHubClient(
-      this.pullRequestUrl,
-      this.pullRequestTitle,
-      this.pullRequestCommits,
-      this.pullRequestComments,
+      this.url,
+      this.title,
+      this.author,
+      this.commits,
+      this.comments,
+      this.labels
     );
   }
 }
 
 class DummyGitHubClient implements GitHubClientI {
-  pullRequestUrl: string;
-  pullRequestTitle: string;
-  pullRequestCommits: Commit[];
-  pullRequestComments: Comment[];
+  url: string;
+  title: string;
+  author: string;
+  commits: Commit[];
+  comments: Comment[];
+  labels: Label[];
 
   constructor(
-    pullRequestUrl: string,
-    pullRequestTitle: string,
-    pullRequestCommitMessages: Commit[],
-    pullRequestComments: Comment[],
+    url: string,
+    title: string,
+    author: string,
+    commits: Commit[],
+    comments: Comment[],
+    labels: Label[],
   ) {
-    this.pullRequestUrl = pullRequestUrl;
-    this.pullRequestTitle = pullRequestTitle;
-    this.pullRequestCommits = pullRequestCommitMessages;
-    this.pullRequestComments = pullRequestComments;
+    this.url = url;
+    this.title = title;
+    this.author = author;
+    this.commits = commits;
+    this.comments = comments;
+    this.labels = labels;
   }
 
-  getPullRequestCommits(): Promise<Commit[]> {
-    return Promise.resolve(this.pullRequestCommits);
-  }
-
-  getPullRequestComments(): Promise<Comment[]> {
-    return Promise.resolve(this.pullRequestComments);
-  }
-
-  getPullRequestTitle(): string {
-    return this.pullRequestTitle;
-  }
-
-  getPullRequestUrl(): string {
-    return this.pullRequestUrl;
+  getPullRequest(pullRequestNumber: number, repositoryOwner: string, repositoryName: string): Promise<PullRequest> {
+    return Promise.resolve({
+      url: this.url,
+      title: this.title,
+      author: this.author,
+      commits: this.commits,
+      comments: this.comments,
+      labels: this.labels
+    });
   }
 }
 

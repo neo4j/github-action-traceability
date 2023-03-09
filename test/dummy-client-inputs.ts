@@ -58,6 +58,18 @@ class DummyInputsClient implements InputsClientI {
   getTrelloApiToken(): string {
     return '';
   }
+
+  getGithubRepositoryOwner(): string {
+    return '';
+  }
+
+  getGitHubRepositoryName(): string {
+    return '';
+  }
+
+  getPullRequestNumber(): number {
+    return -1;
+  }
 }
 
 export { InputsClientBuilder };

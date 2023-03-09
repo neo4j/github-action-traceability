@@ -3,7 +3,7 @@ import { NoIdShortLink, ShortLink, TrelloCard, TrelloClientI } from './client-tr
 import { GitHubClientI } from './client-github';
 import * as core from '@actions/core';
 
-class AssertionsService {
+class ValidationsService {
   inputs: InputsClientI;
   github: GitHubClientI;
   trello: TrelloClientI;
@@ -51,4 +51,4 @@ class AssertionsService {
   }
 }
 
-export { AssertionsService };
+export { ValidationsService };

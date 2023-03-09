@@ -17,6 +17,9 @@ interface InputsClientI {
   getTrelloApiKey(): string;
   getTrelloApiToken(): string;
   getGitHubApiToken(): string;
+  getGitHubRepositoryName(): string;
+  getGithubRepositoryOwner(): string;
+  getPullRequestNumber(): number;
 }
 
 class InputsClient implements InputsClientI {
@@ -61,6 +64,22 @@ class InputsClient implements InputsClientI {
   getGitHubApiToken(): string {
     core.info('Get github_api_token.');
     return core.getInput('github_api_token', { required: true });
+  }
+
+  // daniel document three inputs below
+  getGitHubRepositoryName(): string {
+    core.info('Get github_repository_name.')
+    return core.getInput('github_repository_name', {required: true})
+  }
+
+  getGithubRepositoryOwner(): string {
+    core.info('Get github_repository_owner.')
+    return core.getInput('github_repository_owner', {required: true})
+  }
+
+  getPullRequestNumber(): number {
+    core.info('Get pull_request_number.')
+    return Number(core.getInput('pull_request_number', {required: true}))
   }
 }
 

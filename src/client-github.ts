@@ -2,23 +2,15 @@ import * as core from '@actions/core';
 import * as github from '@actions/github';
 import { graphql } from '@octokit/graphql';
 
-interface EdgeItem<T> {
-  node: T;
+interface EdgeItems<T> {
+  edges: [{
+    node: T;
+  }]
 }
 
 interface Commit {
   commit: {
     message: string;
-  };
-}
-
-interface GetCommitsResponse {
-  repository: {
-    pullRequest: {
-      commits: {
-        edges: [EdgeItem<Commit>];
-      };
-    };
   };
 }
 
@@ -32,21 +24,34 @@ interface Comment {
   url: string;
 }
 
-interface GetCommentsResponse {
-  repository: {
-    pullRequest: {
-      comments: {
-        edges: [EdgeItem<Comment>];
-      };
-    };
-  };
+interface Label {
+  name: string;
+}
+
+interface PullRequest {
+  url: string;
+  title: string;
+  author: string;
+  commits: Commit[];
+  comments: Comment[];
+  labels: Label[];
+}
+
+interface GetPullRequest {
+  pullRequest: {
+    url: string;
+    title: string;
+    author: {
+      login: string;
+    }
+    commits: EdgeItems<Commit>;
+    comments: EdgeItems<Comment>
+    labels: EdgeItems<Label>
+  }
 }
 
 interface GitHubClientI {
-  getPullRequestUrl(): string;
-  getPullRequestTitle(): string;
-  getPullRequestCommits(): Promise<Commit[]>;
-  getPullRequestComments(): Promise<Comment[]>;
+  getPullRequest(pullRequestNumber: number, repositoryOwner: string, repositoryName: string): Promise<PullRequest>
 }
 
 class GitHubClient implements GitHubClientI {
@@ -56,51 +61,15 @@ class GitHubClient implements GitHubClientI {
     this.githubApiToken = githubApiToken;
   }
 
-  getPullRequestUrl(): string {
-    core.info('Get pull request URL.');
-
-    if (!github.context.payload) throw new Error('No payload found in the context.');
-    if (!github.context.payload.pull_request) throw new Error('No PR found in the payload.');
-    if (!github.context.payload.pull_request.html_url)
-      throw new Error('No PR url found in the payload.');
-
-    return github.context.payload.pull_request.html_url;
-  }
-
-  getPullRequestTitle(): string {
-    core.info('Get pull request title.');
-
-    if (!github.context.payload) throw new Error('No payload found in the context.');
-    if (!github.context.payload.pull_request) throw new Error('No PR found in the payload.');
-    if (!github.context.payload.pull_request.title) throw new Error('No title found in the PR.');
-
-    return github.context.payload.pull_request.title;
-  }
-
   // https://docs.github.com/en/graphql/reference/objects#pullrequest
-  async getPullRequestCommits(): Promise<Commit[]> {
-    core.info('Get pull request commits.');
-
-    if (!github.context.payload) throw new Error('No payload found in the context.');
-    if (!github.context.payload.pull_request) throw new Error('No PR found in the payload.');
-    if (!github.context.payload.pull_request.number) throw new Error('No number found in the PR.');
-    if (!github.context.payload.repository) throw new Error('No repository found in the payload.');
-    if (!github.context.payload.repository.name)
-      throw new Error('No name found in the repository.');
-    if (
-      !github.context.payload.repository.owner ||
-      (!github.context.payload.repository.owner.login &&
-        !github.context.payload.repository.owner.name)
-    )
-      throw new Error('No owner found in the repository.');
+  async getPullRequest(pullRequestNumber: number, repositoryOwner: string, repositoryName: string): Promise<PullRequest> {
+    core.info('Get pull request.');
 
     const variables = {
       baseUrl: 'https://api.github.com',
-      repositoryOwner:
-        github.context.payload.repository.owner.name ||
-        github.context.payload.repository.owner.login,
-      repositoryName: github.context.payload.repository.name,
-      pullRequestNumber: github.context.payload.pull_request.number,
+      pullRequestNumber,
+      repositoryOwner,
+      repositoryName,
       headers: {
         authorization: `token ${this.githubApiToken}`,
       },
@@ -111,10 +80,17 @@ class GitHubClient implements GitHubClientI {
         $repositoryOwner: String!
         $repositoryName: String!
         $pullRequestNumber: Int!
-        $numberOfCommits: Int = 100
+        $numberOfCommits: Int = 500
+        $numberOfComments: Int = 500
+        $numberOfLabels: Int = 50
       ) {
         repository(owner: $repositoryOwner, name: $repositoryName) {
           pullRequest(number: $pullRequestNumber) {
+            url
+            title
+            author {
+              login
+            }
             commits(last: $numberOfCommits) {
               edges {
                 node {
@@ -124,54 +100,6 @@ class GitHubClient implements GitHubClientI {
                 }
               }
             }
-          }
-        }
-      }
-    `;
-
-    const response = await graphql<GetCommitsResponse>(query, variables);
-    const repository = response.repository;
-    return repository.pullRequest.commits.edges.map((edge: EdgeItem<Commit>) => edge.node);
-  }
-
-  // https://docs.github.com/en/graphql/reference/objects#pullrequest
-  async getPullRequestComments(): Promise<Comment[]> {
-    core.info('Get pull request comments.');
-
-    if (!github.context.payload) throw new Error('No payload found in the context.');
-    if (!github.context.payload.pull_request) throw new Error('No PR found in the payload.');
-    if (!github.context.payload.pull_request.number) throw new Error('No number found in the PR.');
-    if (!github.context.payload.repository) throw new Error('No repository found in the payload.');
-    if (!github.context.payload.repository.name)
-      throw new Error('No name found in the repository.');
-    if (
-      !github.context.payload.repository.owner ||
-      (!github.context.payload.repository.owner.login &&
-        !github.context.payload.repository.owner.name)
-    )
-      throw new Error('No owner found in the repository.');
-
-    const variables = {
-      baseUrl: 'https://api.github.com',
-      repositoryOwner:
-        github.context.payload.repository.owner.name ||
-        github.context.payload.repository.owner.login,
-      repositoryName: github.context.payload.repository.name,
-      pullRequestNumber: github.context.payload.pull_request.number,
-      headers: {
-        authorization: `token ${this.githubApiToken}`,
-      },
-    };
-
-    const query = `
-      query comments(
-        $pullRequestNumber: Int!
-        $repositoryName: String!
-        $repositoryOwner: String!
-        $numberOfComments: Int = 100
-      ) {
-        repository(owner: $repositoryOwner, name: $repositoryName) {
-          pullRequest(number: $pullRequestNumber) {
             comments(last: $numberOfComments) {
               edges {
                 node {
@@ -185,18 +113,31 @@ class GitHubClient implements GitHubClientI {
                 }
               }
             }
+            labels(last: $numberOfLabels) {
+              edges {
+                node {
+                  name
+                }
+              }
+            }
           }
         }
       }
     `;
 
-    const response = await graphql<GetCommentsResponse>(query, variables);
-    const repository = response.repository;
-    return repository.pullRequest.comments.edges.map((edge: EdgeItem<Comment>) => edge.node);
+    const response = await graphql<GetPullRequest>(query, variables);
+    return {
+      url: response.pullRequest.url,
+      title: response.pullRequest.title,
+      author: response.pullRequest.author.login,
+      commits: response.pullRequest.commits.edges.map(e => e.node),
+      comments: response.pullRequest.comments.edges.map(e => e.node),
+      labels: response.pullRequest.labels.edges.map(e => e.node)
+    }
   }
 }
 
-export { GitHubClient, GitHubClientI, Commit, Comment };
+export { GitHubClient, GitHubClientI, Commit, Comment, Label, PullRequest };
 
 // daniel
 /**
