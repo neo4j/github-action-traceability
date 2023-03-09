@@ -2,16 +2,16 @@ import { describe, it } from '@jest/globals';
 import { InputsClientBuilder } from './dummy-client-inputs';
 import { GitHubClientBuilder } from './dummy-client-github';
 import { TrelloClientBuilder } from './dummy-client-trello';
-import { AssertionsService } from '../src/service-assertions';
+import { ValidationsService } from '../src/service-validations';
 import { NoIdShortLink, TrelloShortLink } from '../src/client-trello';
 
-describe('AssertionService', () => {
+describe('ValidationsService', () => {
   describe('.validateExclusivelyTrelloShortLinks', () => {
     it('succeeds if there are no short links', () => {
       const inputs = new InputsClientBuilder().build();
       const github = new GitHubClientBuilder().build();
       const trello = new TrelloClientBuilder().build();
-      const service = new AssertionsService(inputs, github, trello);
+      const service = new ValidationsService(inputs, github, trello);
       expect(() => service.validateExclusivelyTrelloShortLinks([])).not.toThrow();
     });
 
@@ -19,7 +19,7 @@ describe('AssertionService', () => {
       const inputs = new InputsClientBuilder().build();
       const github = new GitHubClientBuilder().build();
       const trello = new TrelloClientBuilder().build();
-      const service = new AssertionsService(inputs, github, trello);
+      const service = new ValidationsService(inputs, github, trello);
       expect(() =>
         service.validateExclusivelyTrelloShortLinks([
           new TrelloShortLink('abc123'),
@@ -32,7 +32,7 @@ describe('AssertionService', () => {
       const inputs = new InputsClientBuilder().build();
       const github = new GitHubClientBuilder().build();
       const trello = new TrelloClientBuilder().build();
-      const service = new AssertionsService(inputs, github, trello);
+      const service = new ValidationsService(inputs, github, trello);
       expect(() =>
         service.validateExclusivelyTrelloShortLinks([
           new TrelloShortLink('abc123'),

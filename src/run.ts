@@ -1,64 +1,44 @@
 import * as core from '@actions/core';
 
-import { GitHubClientI } from './client-github';
+import {GitHubClientI, PullRequest} from './client-github';
 import { GlobalVerificationStrategy, InputsClientI } from './client-inputs';
-import { AssertionsService } from './service-assertions';
+import { ValidationsService } from './service-validations';
 import { TrelloClientI, TrelloShortLink } from './client-trello';
 import { UtilsService } from './service-utils';
 
-const attachPullRequestToTrello = async (
-  inputs: InputsClientI,
-  trello: TrelloClientI,
-  github: GitHubClientI,
-  trelloShortLink: TrelloShortLink,
-): Promise<void> => {
-  core.info('Start attaching pull request to Trello card.');
-  const assertions = new AssertionsService(inputs, github, trello);
-  const url = github.getPullRequestUrl();
-  const card = await trello.getCard(trelloShortLink.id);
-  assertions.validateCardOpen(card);
-
-  const attachments = await trello.getCardAttachments(trelloShortLink.id);
-  if (attachments.find((attachment) => attachment.url === url)) {
-    core.info('Trello card already has an attachment for this pull request. Skipping.');
-  } else {
-    await trello.addUrlAttachmentToCard(trelloShortLink.id, url);
-  }
-  return;
-};
-
 const run = async (inputs: InputsClientI, github: GitHubClientI, trello: TrelloClientI) => {
-  const assertions = new AssertionsService(inputs, github, trello);
+  const validations = new ValidationsService(inputs, github, trello);
   const utils = new UtilsService(inputs);
+  const pullRequest = await github.getPullRequest(
+      inputs.getPullRequestNumber(),
+      inputs.getGithubRepositoryOwner(),
+      inputs.getGitHubRepositoryName());
 
   core.info('Start global verification strategy.');
   switch (inputs.getGlobalVerificationStrategy()) {
     case GlobalVerificationStrategy.CommitsAndPRTitle: {
-      const title = github.getPullRequestTitle();
-      const titleShortLinks = utils.extractShortLink(title);
-      const commits = await github.getPullRequestCommits();
-      const commitShortLinks = commits
+      const titleShortLinks = utils.extractShortLink(pullRequest.title);
+      const commitShortLinks = pullRequest.commits
         .map((c) => c.commit.message)
         .map(utils.extractShortLink.bind(utils));
       const shortLinks = [...new Set([titleShortLinks, ...commitShortLinks])];
-      assertions.validateShortLinksStrategy(shortLinks);
+      validations.validateShortLinksStrategy(shortLinks);
       for (const shortLink of shortLinks) {
         if (shortLink instanceof TrelloShortLink) {
-          await attachPullRequestToTrello(inputs, trello, github, shortLink);
+          await utils.attachPullRequestToTrello(inputs, trello, github, pullRequest, shortLink);
         }
       }
       return;
     }
     case GlobalVerificationStrategy.Commits: {
-      console.log(JSON.stringify({ comments: await github.getPullRequestComments() }, null, 2)); // daniel
-      const commits = await github.getPullRequestCommits();
+      const commitMessages = pullRequest.commits.map(c => c.commit.message)
       const shortLinks = [
-        ...new Set(commits.map((c) => c.commit.message).map(utils.extractShortLink.bind(utils))),
+        ...new Set(commitMessages.map(utils.extractShortLink.bind(utils)))
       ];
-      assertions.validateShortLinksStrategy(shortLinks);
+      validations.validateShortLinksStrategy(shortLinks);
       for (const shortLink of shortLinks) {
         if (shortLink instanceof TrelloShortLink) {
-          await attachPullRequestToTrello(inputs, trello, github, shortLink);
+          await utils.attachPullRequestToTrello(inputs, trello, github, pullRequest, shortLink);
         }
       }
       return;
