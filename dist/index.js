@@ -7583,7 +7583,8 @@ class GitHubClient {
     // https://docs.github.com/en/graphql/reference/objects#pullrequest
     getPullRequest(pullRequestNumber, repositoryOwner, repositoryName) {
         return __awaiter(this, void 0, void 0, function* () {
-            core.info('Get pull request.');
+            core.info(`Get pull request #${pullRequestNumber} for ${repositoryOwner}/${repositoryName}.`);
+            core.info(JSON.stringify({ githubApiToken: this.githubApiToken }, null, 2)); // daniel
             const variables = {
                 baseUrl: 'https://api.github.com',
                 pullRequestNumber,
