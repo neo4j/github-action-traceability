@@ -20,3 +20,6 @@ jobs:
           trello_api_key: "none"
           trello_api_token: "none"
           github_api_token: "none"
+          github_repository_owner: context.repo.owner
+          github_repository_name: context.repo.repo
+          pull_request_number: context.issue.number
