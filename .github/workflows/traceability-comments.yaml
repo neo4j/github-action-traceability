@@ -18,6 +18,7 @@ jobs:
     steps:
       - uses: neo4j/github-action-traceability@v2
         with:
+          global_verification_strategy: comments
           trello_api_key: ${{ secrets.TRELLO_API_KEY }}
           trello_api_token: ${{ secrets.TRELLO_API_TOKEN }}
           github_api_token: ${{ secrets.GITHUB_TOKEN }}

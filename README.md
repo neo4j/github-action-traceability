@@ -72,6 +72,13 @@ jobs:
 | **commits_and_pr_title** | The GHA will check the commits in your PR as well as your PR title.                                               |
 | **disabled**             | Disables the GHA. If you intend to permanently disable the GHA, then you should just remove it from your project. |
 
+Please visit the following files for examples:
+- [traceability-comments.yaml](./.github/workflows/traceability-comments.yaml)
+- [traceability-comments-trigger.yaml](./.github/workflows/traceability-comments-trigger.yaml)
+- [traceability-commits.yaml](./.github/workflows/traceability-commits.yaml)
+- [traceability-commits-and-title.yaml](./.github/workflows/traceability-commits-and-title.yaml)
+- [traceability-disabled.yaml](./.github/workflows/traceability-disabled.yaml)
+
 ### short_link_verification_strategy
 
 **Default**: `trello_or_noid`

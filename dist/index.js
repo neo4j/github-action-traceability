@@ -7584,7 +7584,6 @@ class GitHubClient {
     getPullRequest(pullRequestNumber, repositoryOwner, repositoryName) {
         return __awaiter(this, void 0, void 0, function* () {
             core.info(`Get pull request #${pullRequestNumber} for ${repositoryOwner}/${repositoryName}.`);
-            core.info(JSON.stringify({ githubApiToken: this.githubApiToken }, null, 2)); // daniel
             const variables = {
                 baseUrl: 'https://api.github.com',
                 pullRequestNumber,
@@ -7909,29 +7908,29 @@ exports.TrelloClient = TrelloClient;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ERR_UNEXPECTED = exports.ERR_NO_SHORT_LINK = exports.ERR_NO_VALID_COMMENTS = exports.ERR_NO_MATCHING_ATTACHMENT = exports.ERR_INVALID_INPUT = exports.ERR_INVALID_NOID = exports.ERR_CLOSED_CARD = exports.ERR_CARD_ATTACHMENT_NOT_FOUND = exports.ERR_CARD_ATTACHMENT_POST_API = exports.ERR_CARD_ATTACHMENT_GET_API = exports.ERR_CARD_NOT_FOUND = exports.ERR_CARD_GET_API = void 0;
-const ERR_CARD_GET_API = (status) => `Failed: GET Trello card returned ${status}`;
+const ERR_CARD_GET_API = (status) => `GET Trello card returned ${status}`;
 exports.ERR_CARD_GET_API = ERR_CARD_GET_API;
-const ERR_CARD_NOT_FOUND = (shortLink) => `Failed: unable to get Trello card ${shortLink}.`;
+const ERR_CARD_NOT_FOUND = (shortLink) => `Unable to get Trello card ${shortLink}.`;
 exports.ERR_CARD_NOT_FOUND = ERR_CARD_NOT_FOUND;
-const ERR_CARD_ATTACHMENT_GET_API = (status) => `Failed: GET Trello card attachments returned ${status}.`;
+const ERR_CARD_ATTACHMENT_GET_API = (status) => `GET Trello card attachments returned ${status}.`;
 exports.ERR_CARD_ATTACHMENT_GET_API = ERR_CARD_ATTACHMENT_GET_API;
-const ERR_CARD_ATTACHMENT_POST_API = (status) => `Failed: POST Trello card attachment returned ${status}`;
+const ERR_CARD_ATTACHMENT_POST_API = (status) => `POST Trello card attachment returned ${status}`;
 exports.ERR_CARD_ATTACHMENT_POST_API = ERR_CARD_ATTACHMENT_POST_API;
-const ERR_CARD_ATTACHMENT_NOT_FOUND = (shortLink) => `Failed: unable to get attachment for Trello card ${shortLink}.`;
+const ERR_CARD_ATTACHMENT_NOT_FOUND = (shortLink) => `Unable to get attachment for Trello card ${shortLink}.`;
 exports.ERR_CARD_ATTACHMENT_NOT_FOUND = ERR_CARD_ATTACHMENT_NOT_FOUND;
-const ERR_CLOSED_CARD = (shortLink) => `Failed: Trello card "${shortLink}" needs to be in an open state, but it is currently marked as closed.`;
+const ERR_CLOSED_CARD = (shortLink) => `Trello card "${shortLink}" needs to be in an open state, but it is currently marked as closed.`;
 exports.ERR_CLOSED_CARD = ERR_CLOSED_CARD;
-const ERR_INVALID_NOID = (shortLinkId) => `Failed: unexpected NOID short link "${shortLinkId}". Only Trello short links are allowed in your project, please provide one in the form of "[a2bd4d] My change description".`;
+const ERR_INVALID_NOID = (shortLinkId) => `Unexpected NOID short link "${shortLinkId}". Only Trello short links are allowed in your project, please provide one in the form of "[a2bd4d] My change description".`;
 exports.ERR_INVALID_NOID = ERR_INVALID_NOID;
-const ERR_INVALID_INPUT = (setting, value) => `Failed: unrecognised value ${value} for "${setting}".`;
+const ERR_INVALID_INPUT = (setting, value) => `Unrecognised value ${value} for "${setting}".`;
 exports.ERR_INVALID_INPUT = ERR_INVALID_INPUT;
-const ERR_NO_MATCHING_ATTACHMENT = (commentUrl, shortLink, prUrl) => `Failed: although the comment ${commentUrl} contained the link https://trello.com/c/${shortLink}, when checking the Trello card we could not find an attachment for pull request ${prUrl}. This can be due to a genuine user error on your behalf, if so then please attach ${prUrl} to https://trello.com/c/${shortLink}. In rarer cases, this step may also fail when a comment in a pull request accidentally matches one of our regex patterns, if so then please consider updating the offending comment (or adding the 'No Trello' PR label).`;
+const ERR_NO_MATCHING_ATTACHMENT = (commentUrl, shortLink, prUrl) => `Although the comment ${commentUrl} contained the link https://trello.com/c/${shortLink}, when checking the Trello card we could not find an attachment for pull request ${prUrl}. This can be due to a genuine user error on your behalf, if so then please attach ${prUrl} to https://trello.com/c/${shortLink}. In rarer cases, this step may also fail when a comment in a pull request accidentally matches one of our regex patterns, if so then please consider updating the offending comment (or adding the 'No Trello' PR label).`;
 exports.ERR_NO_MATCHING_ATTACHMENT = ERR_NO_MATCHING_ATTACHMENT;
-const ERR_NO_VALID_COMMENTS = () => `Failed: there were no comments in this PR that contained a valid Trello URL. This is likely either intentional or because you forgot to attach this PR a Trello card. In order for this CI check to pass, you need to either attach this PR to a Trello card, or to label your PR with the 'No Trello' label.`;
+const ERR_NO_VALID_COMMENTS = () => `There were no comments in this PR that contained a valid Trello URL. This is likely either intentional or because you forgot to attach this PR a Trello card. In order for this CI check to pass, you need to either attach this PR to a Trello card, or to label your PR with the 'No Trello' label.`;
 exports.ERR_NO_VALID_COMMENTS = ERR_NO_VALID_COMMENTS;
-const ERR_NO_SHORT_LINK = (description) => `Failed: description "${description}" did not contain a valid short link. Please include one like in the following examples: "[abc123] My work description" or "[NOID] My work description".`;
+const ERR_NO_SHORT_LINK = (description) => `Description "${description}" did not contain a valid short link. Please include one like in the following examples: "[abc123] My work description" or "[NOID] My work description".`;
 exports.ERR_NO_SHORT_LINK = ERR_NO_SHORT_LINK;
-const ERR_UNEXPECTED = (error) => `Failed: unexpected error ${error}`;
+const ERR_UNEXPECTED = (error) => `Unexpected: ${error}`;
 exports.ERR_UNEXPECTED = ERR_UNEXPECTED;
 
 
@@ -8037,10 +8036,9 @@ const errors_1 = __nccwpck_require__(6976);
 const run = (inputs, github, trello) => __awaiter(void 0, void 0, void 0, function* () {
     const validations = new service_validations_1.ValidationsService(inputs, github, trello);
     const utils = new service_utils_1.UtilsService(inputs);
-    const pullRequest = yield github.getPullRequest(inputs.getPullRequestNumber(), inputs.getGithubRepositoryOwner(), inputs.getGitHubRepositoryName());
-    core.info('Start global verification strategy.');
     switch (inputs.getGlobalVerificationStrategy()) {
         case client_inputs_1.GlobalVerificationStrategy.CommitsAndPRTitle: {
+            const pullRequest = yield github.getPullRequest(inputs.getPullRequestNumber(), inputs.getGithubRepositoryOwner(), inputs.getGitHubRepositoryName());
             const titleShortLinks = utils.extractShortLink(pullRequest.title);
             const commitShortLinks = pullRequest.commits
                 .map((c) => c.commit.message)
@@ -8055,6 +8053,7 @@ const run = (inputs, github, trello) => __awaiter(void 0, void 0, void 0, functi
             break;
         }
         case client_inputs_1.GlobalVerificationStrategy.Commits: {
+            const pullRequest = yield github.getPullRequest(inputs.getPullRequestNumber(), inputs.getGithubRepositoryOwner(), inputs.getGitHubRepositoryName());
             const commitMessages = pullRequest.commits.map((c) => c.commit.message);
             const shortLinks = [...new Set(commitMessages.map(utils.extractShortLink.bind(utils)))];
             validations.validateShortLinksStrategy(shortLinks);
@@ -8066,6 +8065,7 @@ const run = (inputs, github, trello) => __awaiter(void 0, void 0, void 0, functi
             break;
         }
         case client_inputs_1.GlobalVerificationStrategy.Comments: {
+            const pullRequest = yield github.getPullRequest(inputs.getPullRequestNumber(), inputs.getGithubRepositoryOwner(), inputs.getGitHubRepositoryName());
             const noIdLabels = pullRequest.labels.filter((l) => l.name === 'No Trello');
             if (noIdLabels.length > 0)
                 return;

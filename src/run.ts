@@ -10,15 +10,14 @@ import { ERR_NO_VALID_COMMENTS } from './errors';
 const run = async (inputs: InputsClientI, github: GitHubClientI, trello: TrelloClientI) => {
   const validations = new ValidationsService(inputs, github, trello);
   const utils = new UtilsService(inputs);
-  const pullRequest = await github.getPullRequest(
-    inputs.getPullRequestNumber(),
-    inputs.getGithubRepositoryOwner(),
-    inputs.getGitHubRepositoryName(),
-  );
 
-  core.info('Start global verification strategy.');
   switch (inputs.getGlobalVerificationStrategy()) {
     case GlobalVerificationStrategy.CommitsAndPRTitle: {
+      const pullRequest = await github.getPullRequest(
+        inputs.getPullRequestNumber(),
+        inputs.getGithubRepositoryOwner(),
+        inputs.getGitHubRepositoryName(),
+      );
       const titleShortLinks = utils.extractShortLink(pullRequest.title);
       const commitShortLinks = pullRequest.commits
         .map((c) => c.commit.message)
@@ -36,6 +35,11 @@ const run = async (inputs: InputsClientI, github: GitHubClientI, trello: TrelloC
       break;
     }
     case GlobalVerificationStrategy.Commits: {
+      const pullRequest = await github.getPullRequest(
+        inputs.getPullRequestNumber(),
+        inputs.getGithubRepositoryOwner(),
+        inputs.getGitHubRepositoryName(),
+      );
       const commitMessages = pullRequest.commits.map((c) => c.commit.message);
       const shortLinks = [...new Set(commitMessages.map(utils.extractShortLink.bind(utils)))];
       validations.validateShortLinksStrategy(shortLinks);
@@ -50,6 +54,11 @@ const run = async (inputs: InputsClientI, github: GitHubClientI, trello: TrelloC
       break;
     }
     case GlobalVerificationStrategy.Comments: {
+      const pullRequest = await github.getPullRequest(
+        inputs.getPullRequestNumber(),
+        inputs.getGithubRepositoryOwner(),
+        inputs.getGitHubRepositoryName(),
+      );
       const noIdLabels = pullRequest.labels.filter((l) => l.name === 'No Trello');
       if (noIdLabels.length > 0) return;
 
