@@ -1,5 +1,5 @@
 import * as core from '@actions/core';
-import {ERR_INVALID_INPUT} from "./errors";
+import { ERR_INVALID_INPUT } from './errors';
 
 enum GlobalVerificationStrategy {
   Commits = 'commits',

@@ -18,17 +18,17 @@ class GitHubClientBuilder {
     return this;
   }
 
-  public withPullRequestAuthor(author: string): GitHubClientBuilder {
-    this.author = author;
-    return this;
-  }
-
   public withPullRequestCommitMessage(message: string): GitHubClientBuilder {
     this.commits.push({ commit: { message: message } });
     return this;
   }
 
-  public withPullRequestComment(author: string, body: string, url: string): GitHubClientBuilder {
+  public withPullRequestLabel(name: string): GitHubClientBuilder {
+    this.labels.push({ name });
+    return this;
+  }
+
+  public withPullRequestComment(author: string, url: string, body: string): GitHubClientBuilder {
     this.comments.push({
       author: {
         login: author,

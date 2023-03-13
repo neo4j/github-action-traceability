@@ -1,4 +1,5 @@
 import { TrelloAttachment, TrelloCard, TrelloClientI } from '../../src/client-trello';
+import { ERR_CARD_NOT_FOUND } from '../../src/errors';
 
 class TrelloClientBuilder {
   cards: Record<string, TrelloCard> = {};
@@ -42,20 +43,20 @@ class DummyTrelloClient implements TrelloClientI {
   addUrlAttachmentToCard(shortLink: string, urlAttachment: string): Promise<TrelloAttachment> {
     const attachments = this.cardAttachments[shortLink];
     const attachment = { shortLink, url: urlAttachment };
-    if (attachments === undefined) throw new Error('Card does not exist.');
+    if (attachments === undefined) throw new Error(ERR_CARD_NOT_FOUND(shortLink));
     attachments.push(attachment);
     return Promise.resolve(attachment);
   }
 
   getCard(shortLink: string): Promise<TrelloCard> {
     const card = this.cards[shortLink];
-    if (card === undefined) throw new Error('Card does not exist.');
+    if (card === undefined) throw new Error(ERR_CARD_NOT_FOUND(shortLink));
     return Promise.resolve(card);
   }
 
   getCardAttachments(shortLink: string): Promise<TrelloAttachment[]> {
     const attachments = this.cardAttachments[shortLink];
-    if (attachments === undefined) throw new Error('Card does not exist.');
+    if (attachments === undefined) throw new Error(ERR_CARD_NOT_FOUND(shortLink));
     return Promise.resolve(attachments);
   }
 }

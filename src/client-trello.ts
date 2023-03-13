@@ -6,8 +6,8 @@ import {
   ERR_CARD_ATTACHMENT_NOT_FOUND,
   ERR_CARD_ATTACHMENT_POST_API,
   ERR_CARD_GET_API,
-  ERR_CARD_NOT_FOUND
-} from "./errors";
+  ERR_CARD_NOT_FOUND,
+} from './errors';
 
 class ShortLink {
   id: string;
@@ -83,7 +83,7 @@ class TrelloClient implements TrelloClientI {
         return (await response.json()) as unknown as TrelloCard;
       })
       .catch(() => {
-        throw new Error(ERR_CARD_NOT_FOUND());
+        throw new Error(ERR_CARD_NOT_FOUND(shortLink));
       });
   }
 
@@ -96,12 +96,12 @@ class TrelloClient implements TrelloClientI {
     return fetch(this.buildApiUrl(path), options as RequestInit)
       .then(async (response) => {
         if (!response.ok) {
-          throw new Error(ERR_CARD_ATTACHMENT_GET_API(response.status))
+          throw new Error(ERR_CARD_ATTACHMENT_GET_API(response.status));
         }
         return (await response.json()) as unknown as TrelloAttachment[];
       })
       .catch(() => {
-        throw new Error(ERR_CARD_ATTACHMENT_NOT_FOUND());
+        throw new Error(ERR_CARD_ATTACHMENT_NOT_FOUND(shortLink));
       });
   }
 
@@ -122,7 +122,7 @@ class TrelloClient implements TrelloClientI {
     return fetch(this.buildApiUrl(path, queryParams), options as RequestInit)
       .then(async (response) => {
         if (!response.ok) {
-          throw new Error(ERR_CARD_ATTACHMENT_POST_API(response.status))
+          throw new Error(ERR_CARD_ATTACHMENT_POST_API(response.status));
         }
 
         return (await response.json()) as unknown as TrelloAttachment[];

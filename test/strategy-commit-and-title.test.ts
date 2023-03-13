@@ -5,7 +5,12 @@ import { GitHubClientBuilder } from './utils/dummy-client-github';
 import { TrelloClientBuilder } from './utils/dummy-client-trello';
 import { expectSuccess, expectThrows } from './utils/test-utils';
 import { run } from '../src/run';
-import {ERR_CLOSED_CARD, ERR_INVALID_NOID, ERR_NO_SHORT_LINK} from "../src/errors";
+import {
+  ERR_CARD_NOT_FOUND,
+  ERR_CLOSED_CARD,
+  ERR_INVALID_NOID,
+  ERR_NO_SHORT_LINK,
+} from '../src/errors';
 
 describe('GlobalVerificationStrategy.CommitsAndPrTitle', () => {
   it('verifies title', async () => {
@@ -127,7 +132,7 @@ describe('GlobalVerificationStrategy.CommitsAndPrTitle', () => {
         .withPullRequestCommitMessage('[abc123] Commit')
         .build();
       const trello = new TrelloClientBuilder().build();
-      await expectThrows(run(inputs, github, trello), 'Card does not exist.');
+      await expectThrows(run(inputs, github, trello), ERR_CARD_NOT_FOUND('abc123'));
     });
 
     it('fails if the Trello card is closed', async () => {

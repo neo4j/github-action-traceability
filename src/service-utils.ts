@@ -3,7 +3,7 @@ import { InputsClientI } from './client-inputs';
 import { NoIdShortLink, ShortLink, TrelloClientI, TrelloShortLink } from './client-trello';
 import { GitHubClientI, PullRequest, Comment } from './client-github';
 import { ValidationsService } from './service-validations';
-import {ERR_NO_SHORT_LINK} from "./errors";
+import { ERR_NO_SHORT_LINK } from './errors';
 
 class UtilsService {
   inputs: InputsClientI;
@@ -45,9 +45,8 @@ class UtilsService {
   extractShortLinkFromComment(comment: Comment): ShortLink {
     core.info(`Extracting potential short link from comment ${comment.url}.`);
 
-    const nakedPattern = new RegExp(`^https://trello.com/c/([a-zA-Z0-9]+)(/.+\\b)?$`);
     const powerUpPattern = new RegExp(
-      `^\!\\[\\]\\(.+\\) \\[.+\\]\\(https://trello.com/c/([a-zA-Z0-9]+)/.+\\)$`,
+      `^\!\\[\\]\\(.*\\) \\[.*\\]\\(https://trello.com/c/([a-zA-Z0-9]+)/.+\\)$`,
     );
     const neoNoraPattern = new RegExp(`.+\\bhttps://trello.com/c/([a-zA-Z0-9]+)\\b.+`);
 
@@ -55,11 +54,8 @@ class UtilsService {
       const match = neoNoraPattern.exec(comment.body);
       return match ? new TrelloShortLink(match[1]) : new NoIdShortLink('');
     } else {
-      const match1 = powerUpPattern.exec(comment.body);
-      const match2 = nakedPattern.exec(comment.body);
-      if (match1) return new TrelloShortLink(match1[1]);
-      if (match2) return new TrelloShortLink(match2[1]);
-      return new NoIdShortLink('');
+      const match = powerUpPattern.exec(comment.body);
+      return match ? new TrelloShortLink(match[1]) : new NoIdShortLink('');
     }
   }
 

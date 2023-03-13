@@ -3,7 +3,7 @@ import { InputsClient } from './client-inputs';
 import { GitHubClient } from './client-github';
 import { TrelloClient } from './client-trello';
 import { run } from './run';
-import {ERR_UNEXPECTED} from "./errors";
+import { ERR_UNEXPECTED } from './errors';
 
 const inputs = new InputsClient();
 const github = new GitHubClient(inputs.getGitHubApiToken());

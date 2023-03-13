@@ -8,7 +8,7 @@ import {
 } from './client-trello';
 import { GitHubClientI } from './client-github';
 import * as core from '@actions/core';
-import {ERR_CLOSED_CARD, ERR_INVALID_NOID, ERR_NO_ATTACHMENT} from "./errors";
+import { ERR_CLOSED_CARD, ERR_INVALID_NOID, ERR_NO_MATCHING_ATTACHMENT } from './errors';
 
 class ValidationsService {
   inputs: InputsClientI;
@@ -27,11 +27,11 @@ class ValidationsService {
     pullRequestUrl: string,
   ): Promise<void> {
     const attachments = await this.trello.getCardAttachments(shortLink.id);
-    const hasAttachment = !!attachments.filter((attachment) =>
+    const pullRequestAttachments = attachments.filter((attachment) =>
       attachment.url.startsWith(pullRequestUrl),
     );
-    if (hasAttachment) {
-      throw new Error(ERR_NO_ATTACHMENT(commentUrl, shortLink.id, pullRequestUrl));
+    if (pullRequestAttachments.length === 0) {
+      throw new Error(ERR_NO_MATCHING_ATTACHMENT(commentUrl, shortLink.id, pullRequestUrl));
     }
   }
 

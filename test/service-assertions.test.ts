@@ -4,7 +4,7 @@ import { GitHubClientBuilder } from './utils/dummy-client-github';
 import { TrelloClientBuilder } from './utils/dummy-client-trello';
 import { ValidationsService } from '../src/service-validations';
 import { NoIdShortLink, TrelloShortLink } from '../src/client-trello';
-import {ERR_INVALID_NOID} from "../src/errors";
+import { ERR_INVALID_NOID } from '../src/errors';
 
 describe('ValidationsService', () => {
   const inputs = new InputsClientBuilder().build();
@@ -32,7 +32,7 @@ describe('ValidationsService', () => {
           new TrelloShortLink('abc123'),
           new NoIdShortLink('NOID'),
         ]),
-      ).toThrow(ERR_INVALID_NOID('NOID'))
+      ).toThrow(ERR_INVALID_NOID('NOID'));
     });
   });
 });
