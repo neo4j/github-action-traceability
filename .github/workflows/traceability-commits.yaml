@@ -20,6 +20,6 @@ jobs:
           trello_api_key: ${{ secrets.TRELLO_API_KEY }}
           trello_api_token: ${{ secrets.TRELLO_API_TOKEN }}
           github_api_token: ${{ secrets.GITHUB_TOKEN }}
-          github_repository_owner: context.repo.owner
-          github_repository_name: context.repo.repo
-          pull_request_number: context.issue.number
+          github_repository_owner: neo4j
+          github_repository_name: github-action-traceability
+          pull_request_number: ${{ github.event.pull_request.number }}
