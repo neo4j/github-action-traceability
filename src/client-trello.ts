@@ -1,6 +1,13 @@
 import * as core from '@actions/core';
 
 import fetch, { RequestInit } from 'node-fetch';
+import {
+  ERR_CARD_ATTACHMENT_GET_API,
+  ERR_CARD_ATTACHMENT_NOT_FOUND,
+  ERR_CARD_ATTACHMENT_POST_API,
+  ERR_CARD_GET_API,
+  ERR_CARD_NOT_FOUND
+} from "./errors";
 
 class ShortLink {
   id: string;
@@ -71,12 +78,12 @@ class TrelloClient implements TrelloClientI {
     return fetch(this.buildApiUrl(path), options as RequestInit)
       .then(async (response) => {
         if (!response.ok) {
-          throw new Error(`Get Trello card endpoint returned: ${response.status} ${response.text}`);
+          throw new Error(ERR_CARD_GET_API(response.status));
         }
         return (await response.json()) as unknown as TrelloCard;
       })
       .catch(() => {
-        throw new Error(`Error: unable to get Trello card.`);
+        throw new Error(ERR_CARD_NOT_FOUND());
       });
   }
 
@@ -89,14 +96,12 @@ class TrelloClient implements TrelloClientI {
     return fetch(this.buildApiUrl(path), options as RequestInit)
       .then(async (response) => {
         if (!response.ok) {
-          throw new Error(
-            `Get Trello card attachments endpoint returned: ${response.status} ${response.text}`,
-          );
+          throw new Error(ERR_CARD_ATTACHMENT_GET_API(response.status))
         }
         return (await response.json()) as unknown as TrelloAttachment[];
       })
       .catch(() => {
-        throw new Error(`Error: unable to get Trello card attachement.`);
+        throw new Error(ERR_CARD_ATTACHMENT_NOT_FOUND());
       });
   }
 
@@ -117,7 +122,7 @@ class TrelloClient implements TrelloClientI {
     return fetch(this.buildApiUrl(path, queryParams), options as RequestInit)
       .then(async (response) => {
         if (!response.ok) {
-          throw new Error(`API endpoint ${path} error: ${response.status} ${response.text}`);
+          throw new Error(ERR_CARD_ATTACHMENT_POST_API(response.status))
         }
 
         return (await response.json()) as unknown as TrelloAttachment[];

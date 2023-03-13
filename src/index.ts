@@ -3,6 +3,7 @@ import { InputsClient } from './client-inputs';
 import { GitHubClient } from './client-github';
 import { TrelloClient } from './client-trello';
 import { run } from './run';
+import {ERR_UNEXPECTED} from "./errors";
 
 const inputs = new InputsClient();
 const github = new GitHubClient(inputs.getGitHubApiToken());
@@ -15,5 +16,5 @@ run(inputs, github, trello)
     if (error instanceof Error) {
       core.setFailed(error);
     }
-    core.setFailed(`Failed with unexpected error ${error}`);
+    core.setFailed(ERR_UNEXPECTED(error));
   });

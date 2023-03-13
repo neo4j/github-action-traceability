@@ -1,4 +1,4 @@
-import { GitHubClientI, Commit, Comment, Label, PullRequest } from '../src/client-github';
+import { GitHubClientI, Commit, Comment, Label, PullRequest } from '../../src/client-github';
 
 class GitHubClientBuilder {
   url: string = 'https://www.github.com/neo4j/apoc';
@@ -34,8 +34,6 @@ class GitHubClientBuilder {
         login: author,
       },
       body,
-      bodyHTML: body,
-      bodyText: body,
       url,
     });
     return this;

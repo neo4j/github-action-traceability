@@ -1,7 +1,14 @@
 import { InputsClientI, ShortLinkVerificationStrategy } from './client-inputs';
-import { NoIdShortLink, ShortLink, TrelloCard, TrelloClientI } from './client-trello';
+import {
+  NoIdShortLink,
+  ShortLink,
+  TrelloCard,
+  TrelloClientI,
+  TrelloShortLink,
+} from './client-trello';
 import { GitHubClientI } from './client-github';
 import * as core from '@actions/core';
+import {ERR_CLOSED_CARD, ERR_INVALID_NOID, ERR_NO_ATTACHMENT} from "./errors";
 
 class ValidationsService {
   inputs: InputsClientI;
@@ -14,14 +21,25 @@ class ValidationsService {
     this.trello = trello;
   }
 
+  async validateCommentContainsTrelloAttachment(
+    shortLink: TrelloShortLink,
+    commentUrl: string,
+    pullRequestUrl: string,
+  ): Promise<void> {
+    const attachments = await this.trello.getCardAttachments(shortLink.id);
+    const hasAttachment = !!attachments.filter((attachment) =>
+      attachment.url.startsWith(pullRequestUrl),
+    );
+    if (hasAttachment) {
+      throw new Error(ERR_NO_ATTACHMENT(commentUrl, shortLink.id, pullRequestUrl));
+    }
+  }
+
   validateExclusivelyTrelloShortLinks(shortLinks: ShortLink[]): void {
     core.info('Verify short links only contain Trello short links.');
     shortLinks.forEach((shortLink) => {
       if (shortLink instanceof NoIdShortLink) {
-        throw new Error(
-          `Unexpected NOID short link "${shortLink.id}". Only Trello short links are allowed in your ` +
-            'project, please provide one in the form of "[a2bd4d] My change description".',
-        );
+        throw new Error(ERR_INVALID_NOID(shortLink.id));
       }
     });
   }
@@ -43,10 +61,7 @@ class ValidationsService {
   validateCardOpen(card: TrelloCard): void {
     core.info('Verify Trello card is open.');
     if (card.closed) {
-      throw new Error(
-        `Trello card "${card.shortLink}" needs to be in an open state, ` +
-          'but it is currently marked as closed.',
-      );
+      throw new Error(ERR_CLOSED_CARD(card.shortLink));
     }
   }
 }

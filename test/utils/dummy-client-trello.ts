@@ -1,4 +1,4 @@
-import { TrelloAttachment, TrelloCard, TrelloClientI } from '../src/client-trello';
+import { TrelloAttachment, TrelloCard, TrelloClientI } from '../../src/client-trello';
 
 class TrelloClientBuilder {
   cards: Record<string, TrelloCard> = {};

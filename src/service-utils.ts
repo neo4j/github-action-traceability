@@ -1,8 +1,9 @@
 import * as core from '@actions/core';
 import { InputsClientI } from './client-inputs';
 import { NoIdShortLink, ShortLink, TrelloClientI, TrelloShortLink } from './client-trello';
-import { GitHubClientI, PullRequest } from './client-github';
+import { GitHubClientI, PullRequest, Comment } from './client-github';
 import { ValidationsService } from './service-validations';
+import {ERR_NO_SHORT_LINK} from "./errors";
 
 class UtilsService {
   inputs: InputsClientI;
@@ -28,7 +29,7 @@ class UtilsService {
   }
 
   extractShortLink(description: string): ShortLink {
-    core.info(`Extracting short links from "${description}".`);
+    core.info(`Extracting potential short links from "${description}".`);
     const noIdShortLink = this.extractNoIdShortLink(description);
     const trelloShortLink = this.extractTrelloShortLink(description);
 
@@ -37,10 +38,28 @@ class UtilsService {
     } else if (trelloShortLink) {
       return trelloShortLink;
     } else {
-      throw new Error(
-        `Description "${description}" did not contain a valid short link. Please include one ` +
-          'like in the following examples: "[abc123] My work description" or "[NOID] My work description".',
-      );
+      throw new Error(ERR_NO_SHORT_LINK(description));
+    }
+  }
+
+  extractShortLinkFromComment(comment: Comment): ShortLink {
+    core.info(`Extracting potential short link from comment ${comment.url}.`);
+
+    const nakedPattern = new RegExp(`^https://trello.com/c/([a-zA-Z0-9]+)(/.+\\b)?$`);
+    const powerUpPattern = new RegExp(
+      `^\!\\[\\]\\(.+\\) \\[.+\\]\\(https://trello.com/c/([a-zA-Z0-9]+)/.+\\)$`,
+    );
+    const neoNoraPattern = new RegExp(`.+\\bhttps://trello.com/c/([a-zA-Z0-9]+)\\b.+`);
+
+    if (comment.author.login === 'neonora') {
+      const match = neoNoraPattern.exec(comment.body);
+      return match ? new TrelloShortLink(match[1]) : new NoIdShortLink('');
+    } else {
+      const match1 = powerUpPattern.exec(comment.body);
+      const match2 = nakedPattern.exec(comment.body);
+      if (match1) return new TrelloShortLink(match1[1]);
+      if (match2) return new TrelloShortLink(match2[1]);
+      return new NoIdShortLink('');
     }
   }
 

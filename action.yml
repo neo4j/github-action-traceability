@@ -8,7 +8,7 @@ inputs:
   global_verification_strategy:
     required: false
     default: "commits"
-    description: "One of commits, commits_and_pr_title, disabled."
+    description: "One of comments, commits, commits_and_pr_title, disabled."
   short_link_verification_strategy:
     required: false
     default: "trello_or_noid"

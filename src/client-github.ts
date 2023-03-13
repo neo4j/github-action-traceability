@@ -1,5 +1,4 @@
 import * as core from '@actions/core';
-import * as github from '@actions/github';
 import { graphql } from '@octokit/graphql';
 
 interface EdgeItems<T> {
@@ -21,8 +20,6 @@ interface Comment {
     login: string;
   };
   body: string;
-  bodyText: string; // daniel
-  bodyHTML: string; // daniel
   url: string;
 }
 
@@ -118,9 +115,7 @@ class GitHubClient implements GitHubClientI {
                   author {
                     login
                   }
-                  body,
-                  bodyText,
-                  bodyHTML,
+                  body
                   url
                 }
               }
@@ -138,7 +133,6 @@ class GitHubClient implements GitHubClientI {
     `;
 
     const response = await graphql<GetPullRequest>(query, variables);
-    core.info(JSON.stringify({ response }, null, 2)); // daniel
     return {
       url: response.repository.pullRequest.url,
       title: response.repository.pullRequest.title,
@@ -151,39 +145,3 @@ class GitHubClient implements GitHubClientI {
 }
 
 export { GitHubClient, GitHubClientI, Commit, Comment, Label, PullRequest };
-
-// daniel
-/**
- *
- * {
- *   "comments": [
- *     {
- *       "author": {
- *         "login": "AzuObs"
- *       },
- *       "body": "https://trello.com/c/xwxZBfVu/1673-review-cip-78-rbac-for-load",
- *       "bodyText": "https://trello.com/c/xwxZBfVu/1673-review-cip-78-rbac-for-load",
- *       "bodyHTML": "<p dir=\"auto\"><a href=\"https://trello.com/c/xwxZBfVu/1673-review-cip-78-rbac-for-load\" rel=\"nofollow\">https://trello.com/c/xwxZBfVu/1673-review-cip-78-rbac-for-load</a></p>",
- *       "url": "https://github.com/neo4j/github-action-traceability/pull/6#issuecomment-1456277806"
- *     },
- *     {
- *       "author": {
- *         "login": "AzuObs"
- *       },
- *       "body": "### :wave: Neo-Nora here. I'll update this comment when a release is made.\r\n\r\n\r\n----------\r\n<details open><summary>PRs linked to this through Cherry Picks have been attatched to the following Trello cards:</summary>\r\n\r\n![](https://github.trello.services/images/mini-trello-icon.png)[https://trello.com/c/BnBwoWsW](https://trello.com/c/BnBwoWsW)\r\n\r\n</details>\r\n\r\n\r\n----------\r\n:speaking_head: Report 🐞 or feature requests [here](https://trello.com/b/P5EyEhac/neonora).\r\nThis comment was last updated (Mon, 06 Mar 2023 13:34:10 GMT).",
- *       "bodyText": "👋 Neo-Nora here. I'll update this comment when a release is made.\n\nPRs linked to this through Cherry Picks have been attatched to the following Trello cards:\nhttps://trello.com/c/BnBwoWsW\n\n\n🗣️ Report 🐞 or feature requests here.\nThis comment was last updated (Mon, 06 Mar 2023 13:34:10 GMT).",
- *       "bodyHTML": "<h3 dir=\"auto\"><g-emoji class=\"g-emoji\" alias=\"wave\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f44b.png\">👋</g-emoji> Neo-Nora here. I'll update this comment when a release is made.</h3>\n<hr>\n<details open=\"\"><summary>PRs linked to this through Cherry Picks have been attatched to the following Trello cards:</summary>\n<p dir=\"auto\"><a target=\"_blank\" rel=\"noopener noreferrer nofollow\" href=\"https://camo.githubusercontent.com/208d50cabd9d101500fe5dd548265dcfa00e017e397395692a173e7116c1094a/68747470733a2f2f6769746875622e7472656c6c6f2e73657276696365732f696d616765732f6d696e692d7472656c6c6f2d69636f6e2e706e67\"><img src=\"https://camo.githubusercontent.com/208d50cabd9d101500fe5dd548265dcfa00e017e397395692a173e7116c1094a/68747470733a2f2f6769746875622e7472656c6c6f2e73657276696365732f696d616765732f6d696e692d7472656c6c6f2d69636f6e2e706e67\" alt=\"\" data-canonical-src=\"https://github.trello.services/images/mini-trello-icon.png\" style=\"max-width: 100%;\"></a><a href=\"https://trello.com/c/BnBwoWsW\" rel=\"nofollow\">https://trello.com/c/BnBwoWsW</a></p>\n</details>\n<hr>\n<p dir=\"auto\"><g-emoji class=\"g-emoji\" alias=\"speaking_head\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f5e3.png\">🗣️</g-emoji> Report <g-emoji class=\"g-emoji\" alias=\"lady_beetle\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f41e.png\">🐞</g-emoji> or feature requests <a href=\"https://trello.com/b/P5EyEhac/neonora\" rel=\"nofollow\">here</a>.<br>\nThis comment was last updated (Mon, 06 Mar 2023 13:34:10 GMT).</p>",
- *       "url": "https://github.com/neo4j/github-action-traceability/pull/6#issuecomment-1456279217"
- *     },
- *     {
- *       "author": {
- *         "login": "AzuObs"
- *       },
- *       "body": "![](https://github.trello.services/images/mini-trello-icon.png) [Implement Traceability Proposal](https://trello.com/c/YbW6f2xn/1705-implement-traceability-proposal)",
- *       "bodyText": "Implement Traceability Proposal",
- *       "bodyHTML": "<p dir=\"auto\"><a target=\"_blank\" rel=\"noopener noreferrer nofollow\" href=\"https://camo.githubusercontent.com/208d50cabd9d101500fe5dd548265dcfa00e017e397395692a173e7116c1094a/68747470733a2f2f6769746875622e7472656c6c6f2e73657276696365732f696d616765732f6d696e692d7472656c6c6f2d69636f6e2e706e67\"><img src=\"https://camo.githubusercontent.com/208d50cabd9d101500fe5dd548265dcfa00e017e397395692a173e7116c1094a/68747470733a2f2f6769746875622e7472656c6c6f2e73657276696365732f696d616765732f6d696e692d7472656c6c6f2d69636f6e2e706e67\" alt=\"\" data-canonical-src=\"https://github.trello.services/images/mini-trello-icon.png\" style=\"max-width: 100%;\"></a> <a href=\"https://trello.com/c/YbW6f2xn/1705-implement-traceability-proposal\" rel=\"nofollow\">Implement Traceability Proposal</a></p>",
- *       "url": "https://github.com/neo4j/github-action-traceability/pull/6#issuecomment-1456299206"
- *     }
- *   ]
- * }
- */

@@ -1,8 +1,10 @@
 import * as core from '@actions/core';
+import {ERR_INVALID_INPUT} from "./errors";
 
 enum GlobalVerificationStrategy {
   Commits = 'commits',
   CommitsAndPRTitle = 'commits_and_pr_title',
+  Comments = 'comments',
   Disabled = 'disabled',
 }
 
@@ -31,10 +33,12 @@ class InputsClient implements InputsClientI {
         return GlobalVerificationStrategy.Commits;
       case 'commits_and_pr_title':
         return GlobalVerificationStrategy.CommitsAndPRTitle;
+      case 'comments':
+        return GlobalVerificationStrategy.Comments;
       case 'disabled':
         return GlobalVerificationStrategy.Disabled;
       default:
-        throw new Error(`Unrecognised value ${input} for "global_verification_strategy"`);
+        throw new Error(ERR_INVALID_INPUT('global_verification_strategy', input));
     }
   }
 
@@ -47,7 +51,7 @@ class InputsClient implements InputsClientI {
       case 'trello_or_noid':
         return ShortLinkVerificationStrategy.TrelloOrNoId;
       default:
-        throw new Error(`Unrecognised value ${input} for "short_link_verification_strategy"`);
+        throw new Error(ERR_INVALID_INPUT('short_link_verification_strategy', input));
     }
   }
 
@@ -66,7 +70,6 @@ class InputsClient implements InputsClientI {
     return core.getInput('github_api_token', { required: true });
   }
 
-  // daniel document three inputs below
   getGitHubRepositoryName(): string {
     core.info('Get github_repository_name.');
     return core.getInput('github_repository_name', { required: true });

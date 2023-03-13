@@ -2,7 +2,7 @@ import {
   GlobalVerificationStrategy,
   ShortLinkVerificationStrategy,
   InputsClientI,
-} from '../src/client-inputs';
+} from '../../src/client-inputs';
 
 class InputsClientBuilder {
   globalVerificationStrategy: GlobalVerificationStrategy = GlobalVerificationStrategy.Commits;

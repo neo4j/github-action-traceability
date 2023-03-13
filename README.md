@@ -67,6 +67,7 @@ jobs:
 
 | Option                   | Descriptions                                                                                                      |
 |--------------------------|-------------------------------------------------------------------------------------------------------------------|
+| **comments**             | The GHA will only check the comments contained within your PR.                                                    | 
 | **commits**              | The GHA will only check the commits contained within your PR.                                                     |
 | **commits_and_pr_title** | The GHA will check the commits in your PR as well as your PR title.                                               |
 | **disabled**             | Disables the GHA. If you intend to permanently disable the GHA, then you should just remove it from your project. |
@@ -102,6 +103,18 @@ and make your own power up. It takes 5 minutes, and you don't need particularly 
 ### github_api_token
 
 Included by default in your GitHub CI.
+
+### github_repository_owner
+
+Repository owner. Either an individual or an organization.
+
+### github_repository_name
+
+Repository name.
+
+### pull_request_number
+
+The pull request number.
 
 # Contributing
 
