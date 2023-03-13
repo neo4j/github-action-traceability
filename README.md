@@ -29,35 +29,14 @@ Trello short links can be found in the card URL. Below, the short link is highli
 
 # Setup Overview
 
-In order to enable this GitHub action, you need to add it to your existing repository and let it run on PR builds. An 
-example setup is provided below, and a live one exists in 
-[neo4j/apoc](https://github.com/neo4j/apoc/tree/dev/.github/workflows).
+In order to enable this GitHub action, you need to add it to your existing repository and let it run on PR builds. This
+GitHub action is setup in this repository, please visit the following files for examples.
 
-```yml
-name: traceability
-
-on:
-  pull_request:
-    branches:
-      - dev
-    types:
-      - opened
-      - edited
-      - reopened
-      - synchronize
-
-jobs:
-  validate-pr:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: neo4j/github-action-traceability@v1
-        with:
-          global_verification_strategy: commits_and_pr_title
-          short_link_verification_strategy: trello_or_noid
-          trello_api_key: ${{ secrets.TRELLO_API_KEY }}
-          trello_api_token: ${{ secrets.TRELLO_API_TOKEN }}
-          github_api_token: ${{ secrets.GITHUB_TOKEN }}
-```
+- [traceability-comments.yaml](./.github/workflows/traceability-comments.yaml)
+- [traceability-comments-trigger.yaml](./.github/workflows/traceability-comments-trigger.yaml)
+- [traceability-commits.yaml](./.github/workflows/traceability-commits.yaml)
+- [traceability-commits-and-title.yaml](./.github/workflows/traceability-commits-and-title.yaml)
+- [traceability-disabled.yaml](./.github/workflows/traceability-disabled.yaml)
 
 # Setup Inputs in Detail
 
@@ -71,13 +50,6 @@ jobs:
 | **commits**              | The GHA will only check the commits contained within your PR.                                                     |
 | **commits_and_pr_title** | The GHA will check the commits in your PR as well as your PR title.                                               |
 | **disabled**             | Disables the GHA. If you intend to permanently disable the GHA, then you should just remove it from your project. |
-
-Please visit the following files for examples:
-- [traceability-comments.yaml](./.github/workflows/traceability-comments.yaml)
-- [traceability-comments-trigger.yaml](./.github/workflows/traceability-comments-trigger.yaml)
-- [traceability-commits.yaml](./.github/workflows/traceability-commits.yaml)
-- [traceability-commits-and-title.yaml](./.github/workflows/traceability-commits-and-title.yaml)
-- [traceability-disabled.yaml](./.github/workflows/traceability-disabled.yaml)
 
 ### short_link_verification_strategy
 
