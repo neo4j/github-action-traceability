@@ -63,12 +63,12 @@ jobs:
                 check_run_id: checkRun.id,
                 conclusion: 'cancelled',
                 output: {
-                  title: 'Cancelled.'
+                  title: 'Cancelled.',
                   summary: 'Check Run cancelled by "traceability-comments-trigger.yaml".', 
                 }
               }
               if (checkRun.status !== 'completed') {
-                core.info(`Cancelling check-run ${request.check_suite_id} from ${request.owner}/${request.repo}`)
+                core.info(`Cancelling check-run ${request.check_run_id} from ${request.owner}/${request.repo}`)
                 await github.rest.checks(request)
                 return
               }
