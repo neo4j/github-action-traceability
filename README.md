@@ -18,7 +18,7 @@ Depending on how you want to configure this GitHub Action for your project, you 
 Include your short link in each of your commit messages: 
 - The short link needs to appear at the beginning of the commit message 
 - The short link needs to be between square brackets
-
+// daniel
 ```bash
 git commit -m "[i19tvtq1] Description of my change"
 ```
