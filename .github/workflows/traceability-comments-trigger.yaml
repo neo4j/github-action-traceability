@@ -52,26 +52,25 @@ jobs:
             } catch (err) {
               core.setFailed(`Request failed with error ${err}`)
             }
-      - name: "Cancel Pending Check Run"
+      - name: "Cancel Unfinished Check Run"
         uses: actions/github-script@v6
         with:
           script: |
-            const checkRun = `${{ fromJSON(steps.get-check-runs.outputs.result).id }}`
+            const checkRunId = `${{ fromJSON(steps.get-check-runs.outputs.result).id }}`
+            const checkRunStatus = `${{ fromJSON(steps.get-check-runs.outputs.result).status }}`
             try {
               const request = {
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                check_run_id: checkRun.id,
+                check_run_id: checkRunId,
                 conclusion: 'cancelled',
                 output: {
                   title: 'Cancelled.',
                   summary: 'Check Run cancelled by "traceability-comments-trigger.yaml".', 
                 }
               }
-              core.info(JSON.stringify({checkRun, request}, null ,2 )) // daniel
-              core.info(checkRun) // daniel
-              if (checkRun.status !== 'completed') {
-                core.info(`Cancelling check-run ${request.check_run_id} from ${request.owner}/${request.repo}`)
+              if (checkRunStatus !== 'completed') {
+                core.info(`Cancelling check-run ${checkRunId} from ${request.owner}/${request.repo}`)
                 await github.rest.checks.update(request)
                 return
               }
