@@ -2,6 +2,7 @@ name: traceability-comments-trigger
 
 permissions:
   checks: write
+  pull-requests: read
 
 on:
   issue_comment:
@@ -15,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.issue.pull_request
     steps:
-      - name: "Get Commit"
+      - name: "Get Pull Request for Comment"
         uses: actions/github-script@v6
         id: get-commit
         with:
@@ -32,9 +33,9 @@ jobs:
             } catch (err) {
               core.setFailed(`Request failed with error ${err}`)
             }
-      - name: "Get Check Suite For Commit"
+      - name: "Get Check Run For Pull Request"
         uses: actions/github-script@v6
-        id: get-suite
+        id: get-check-runs
         with:
           script: |
             const request = {
@@ -46,7 +47,31 @@ jobs:
             core.info(`Getting check-suites for ${request.ref} from ${request.owner}/${request.repo}`)
             try {
               const result = await github.rest.checks.listForRef(request)
-              return result.data.check_runs[0].check_suite
+              return result.data.check_runs[0]
+            } catch (err) {
+              core.setFailed(`Request failed with error ${err}`)
+            }
+      - name: "Cancel Pending Check Run"
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const checkRun = `${{ fromJSON(steps.get-check-runs.outputs.result) }}`
+            try {
+              const request = {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                check_run_id: checkRun.id,
+                conclusion: 'cancelled',
+                output: {
+                  title: 'Cancelled.'
+                  summary: 'Check Run cancelled by "traceability-comments-trigger.yaml".', 
+                }
+              }
+              if (checkRun.status !== 'completed') {
+                core.info(`Cancelling check-run ${request.check_suite_id} from ${request.owner}/${request.repo}`)
+                await github.rest.checks(request)
+                return
+              }
             } catch (err) {
               core.setFailed(`Request failed with error ${err}`)
             }
@@ -57,7 +82,7 @@ jobs:
             const request = {
               owner: context.repo.owner,
               repo: context.repo.repo,
-              check_suite_id: `${{ fromJSON(steps.get-suite.outputs.result).id }}`
+              check_suite_id: `${{ fromJSON(steps.get-check-runs.outputs.result.check_suite).id }}`
             }  
             core.info(`Re-requesting check-suite ${request.check_suite_id} from ${request.owner}/${request.repo}`)
             try {
