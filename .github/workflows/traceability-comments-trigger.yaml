@@ -47,6 +47,7 @@ jobs:
             core.info(`Getting check-suites for ${request.ref} from ${request.owner}/${request.repo}`)
             try {
               const result = await github.rest.checks.listForRef(request)
+              core.info(JSON.stringify({checkRun: result.data.check_runs[0]}, null, 2)) // daniel
               return result.data.check_runs[0]
             } catch (err) {
               core.setFailed(`Request failed with error ${err}`)
@@ -67,7 +68,7 @@ jobs:
                   summary: 'Check Run cancelled by "traceability-comments-trigger.yaml".', 
                 }
               }
-              core.info(JSON.stringify({checkRun, request}, null ,2 ))
+              core.info(JSON.stringify({checkRun, request}, null ,2 )) // daniel
               if (checkRun.status !== 'completed') {
                 core.info(`Cancelling check-run ${request.check_run_id} from ${request.owner}/${request.repo}`)
                 await github.rest.checks.update(request)
