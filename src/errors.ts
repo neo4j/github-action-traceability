@@ -10,8 +10,9 @@ export const ERR_CLOSED_CARD = (shortLink: string) =>
   `Trello card "${shortLink}" needs to be in an open state, but it is currently marked as closed.`;
 export const ERR_INVALID_NOID = (shortLinkId: string) =>
   `Unexpected NOID short link "${shortLinkId}". Only Trello short links are allowed in your project, please provide one in the form of "[a2bd4d] My change description".`;
-export const ERR_INVALID_INPUT = (setting: string, value: string) =>
-  `Unrecognised value ${value} for "${setting}".`;
+export const ERR_INPUT_NOT_FOUND = (input: string) => `Input not found "${input}".`;
+export const ERR_INPUT_INVALID = (input: string, value: string) =>
+  `Unrecognised value ${value} for input "${input}".`;
 export const ERR_NO_MATCHING_ATTACHMENT = (commentUrl: string, shortLink: string, prUrl: string) =>
   `Although the comment ${commentUrl} contained the link https://trello.com/c/${shortLink}, when checking the Trello card we could not find an attachment for pull request ${prUrl}. This can be due to a genuine user error on your behalf, if so then please attach ${prUrl} to https://trello.com/c/${shortLink}. In rarer cases, this step may also fail when a comment in a pull request accidentally matches one of the job's regex patterns, if so then please consider updating the offending comment (or adding the 'No Trello' PR label).`;
 export const ERR_NO_VALID_COMMENTS = () =>

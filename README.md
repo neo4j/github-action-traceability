@@ -35,7 +35,7 @@ GitHub action is setup in this repository, please visit the following files for 
 - [traceability-comments.yaml](./.github/workflows/traceability-comments.yaml)
 - [traceability-comments-trigger.yaml](./.github/workflows/traceability-comments-trigger.yaml)
 - [traceability-commits.yaml](./.github/workflows/traceability-commits.yaml)
-- [traceability-commits-and-title.yaml](./.github/workflows/traceability-commits-and-title.yaml)
+- [traceability-title.yaml](./.github/workflows/traceability-title.yaml)
 - [traceability-disabled.yaml](./.github/workflows/traceability-disabled.yaml)
 
 # Setup Inputs in Detail
@@ -44,21 +44,12 @@ GitHub action is setup in this repository, please visit the following files for 
 
 **Default**: `commits`
 
-| Option                   | Descriptions                                                                                                      |
-|--------------------------|-------------------------------------------------------------------------------------------------------------------|
-| **comments**             | The GHA will only check the comments contained within your PR.                                                    | 
-| **commits**              | The GHA will only check the commits contained within your PR.                                                     |
-| **commits_and_pr_title** | The GHA will check the commits in your PR as well as your PR title.                                               |
-| **disabled**             | Disables the GHA. If you intend to permanently disable the GHA, then you should just remove it from your project. |
-
-### short_link_verification_strategy
-
-**Default**: `trello_or_noid`
-
-| Option               | Descriptions                                                     |
-|----------------------|------------------------------------------------------------------|
-| **trello_or_noid**   | The GHA will allow Trello short links and also NOID short links. |
-| **trello**           | The GHA will only allow Trello short links.                      |
+| Option       | Descriptions                                                                                                      |
+|--------------|-------------------------------------------------------------------------------------------------------------------|
+| **comments** | The GHA will only check the comments contained within your PR.                                                    | 
+| **commits**  | The GHA will only check the commits contained within your PR.                                                     |
+| **title**    | The GHA will only check the title contained within your PR.                           |
+| **disabled** | Disables the GHA. If you intend to permanently disable the GHA, then you should just remove it from your project. |
 
 ### trello_api_key
 
@@ -70,7 +61,7 @@ Alternatively, follow instructions
 and make your own power up. It takes 5 minutes, and you don't need particularly advanced privileges to create it.
 
 ### trello_api_token
-// daniel
+
 Go to existing PowerUp in 
 [ManageTrelloPowerUps>GithubIntegration](https://trello.com/power-ups/639711253572cf0030b9bb20/edit/api-key) 
 and click on "Token".
@@ -82,18 +73,6 @@ and make your own power up. It takes 5 minutes, and you don't need particularly 
 ### github_api_token
 
 Included by default in your GitHub CI.
-
-### github_repository_owner
-
-Repository owner. Either an individual or an organization.
-
-### github_repository_name
-
-Repository name.
-
-### pull_request_number
-
-The pull request number.
 
 # Contributing
 

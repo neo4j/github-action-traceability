@@ -1,21 +1,16 @@
 import * as core from '@actions/core';
-import { ERR_INVALID_INPUT } from './errors';
+import * as github from '@actions/github';
+import { ERR_INPUT_INVALID, ERR_INPUT_NOT_FOUND } from './errors';
 
 enum GlobalVerificationStrategy {
   Commits = 'commits',
-  CommitsAndPRTitle = 'commits_and_pr_title',
+  Title = 'title',
   Comments = 'comments',
   Disabled = 'disabled',
 }
 
-enum ShortLinkVerificationStrategy {
-  Trello = 'trello',
-  TrelloOrNoId = 'trello_or_noid',
-}
-
 interface InputsClientI {
   getGlobalVerificationStrategy(): GlobalVerificationStrategy;
-  getShortLinkVerificationStrategy(): ShortLinkVerificationStrategy;
   getTrelloApiKey(): string;
   getTrelloApiToken(): string;
   getGitHubApiToken(): string;
@@ -31,27 +26,14 @@ class InputsClient implements InputsClientI {
     switch (input) {
       case 'commits':
         return GlobalVerificationStrategy.Commits;
-      case 'commits_and_pr_title':
-        return GlobalVerificationStrategy.CommitsAndPRTitle;
+      case 'title':
+        return GlobalVerificationStrategy.Title;
       case 'comments':
         return GlobalVerificationStrategy.Comments;
       case 'disabled':
         return GlobalVerificationStrategy.Disabled;
       default:
-        throw new Error(ERR_INVALID_INPUT('global_verification_strategy', input));
-    }
-  }
-
-  getShortLinkVerificationStrategy(): ShortLinkVerificationStrategy {
-    core.info('Get short_link_verification_strategy.');
-    const input = core.getInput('short_link_verification_strategy');
-    switch (input) {
-      case 'trello':
-        return ShortLinkVerificationStrategy.Trello;
-      case 'trello_or_noid':
-        return ShortLinkVerificationStrategy.TrelloOrNoId;
-      default:
-        throw new Error(ERR_INVALID_INPUT('short_link_verification_strategy', input));
+        throw new Error(ERR_INPUT_INVALID('global_verification_strategy', input));
     }
   }
 
@@ -71,19 +53,49 @@ class InputsClient implements InputsClientI {
   }
 
   getGitHubRepositoryName(): string {
-    core.info('Get github_repository_name.');
-    return core.getInput('github_repository_name', { required: true });
+    core.info('Get github.context.payload.repository.');
+    if (!github.context.payload.repository)
+      throw new Error(ERR_INPUT_NOT_FOUND('github.context.payload.repository'));
+    if (!github.context.payload.repository.name)
+      throw new Error(ERR_INPUT_NOT_FOUND('github.context.payload.repository.name'));
+    return github.context.payload.repository.name;
   }
 
   getGithubRepositoryOwner(): string {
     core.info('Get github_repository_owner.');
-    return core.getInput('github_repository_owner', { required: true });
+
+    if (!github.context.payload.repository)
+      throw new Error(ERR_INPUT_NOT_FOUND('github.context.payload.repository'));
+    if (!github.context.payload.repository.name)
+      throw new Error(ERR_INPUT_NOT_FOUND('github.context.payload.repository.name'));
+    if (!github.context.payload.repository.owner)
+      throw new Error(ERR_INPUT_NOT_FOUND('github.context.payload.repository.owner'));
+    if (
+      !github.context.payload.repository.owner.login &&
+      !github.context.payload.repository.owner.name
+    )
+      throw new Error(
+        ERR_INPUT_NOT_FOUND(
+          'github.context.payload.repository.owner.login && github.context.payload.repository.owner.name',
+        ),
+      );
+
+    return (
+      github.context.payload.repository.owner.name || github.context.payload.repository.owner.login
+    );
   }
 
   getPullRequestNumber(): number {
-    core.info('Get pull_request_number.');
-    return Number(core.getInput('pull_request_number', { required: true }));
+    core.info('Get github.context.payload.pull_request.number.');
+
+    if (!github.context.payload) throw new Error(ERR_INPUT_NOT_FOUND('github.context.payload'));
+    if (!github.context.payload.pull_request)
+      throw new Error(ERR_INPUT_NOT_FOUND('github.context.payload.pull_request'));
+    if (!github.context.payload.pull_request.number)
+      throw new Error(ERR_INPUT_NOT_FOUND('github.context.payload.pull_request.number'));
+
+    return github.context.payload.pull_request.number;
   }
 }
 
-export { InputsClient, InputsClientI, GlobalVerificationStrategy, ShortLinkVerificationStrategy };
+export { InputsClient, InputsClientI, GlobalVerificationStrategy };

@@ -1,16 +1,12 @@
 import { describe, it } from '@jest/globals';
-import { InputsClientBuilder } from './utils/dummy-client-inputs';
-import { GitHubClientBuilder } from './utils/dummy-client-github';
 import { TrelloClientBuilder } from './utils/dummy-client-trello';
 import { ValidationsService } from '../src/service-validations';
 import { NoIdShortLink, TrelloShortLink } from '../src/client-trello';
 import { ERR_INVALID_NOID } from '../src/errors';
 
 describe('ValidationsService', () => {
-  const inputs = new InputsClientBuilder().build();
-  const github = new GitHubClientBuilder().build();
   const trello = new TrelloClientBuilder().build();
-  const service = new ValidationsService(inputs, github, trello);
+  const service = new ValidationsService(trello);
 
   describe('.validateExclusivelyTrelloShortLinks', () => {
     it('succeeds if there are no short links', () => {

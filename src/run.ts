@@ -8,30 +8,20 @@ import { UtilsService } from './service-utils';
 import { ERR_NO_VALID_COMMENTS } from './errors';
 
 const run = async (inputs: InputsClientI, github: GitHubClientI, trello: TrelloClientI) => {
-  const validations = new ValidationsService(inputs, github, trello);
+  const validations = new ValidationsService(trello);
   const utils = new UtilsService(inputs);
 
   switch (inputs.getGlobalVerificationStrategy()) {
-    case GlobalVerificationStrategy.CommitsAndPRTitle: {
+    case GlobalVerificationStrategy.Title: {
       const pullRequest = await github.getPullRequest(
         inputs.getPullRequestNumber(),
         inputs.getGithubRepositoryOwner(),
         inputs.getGitHubRepositoryName(),
       );
-      const titleShortLinks = utils.extractShortLink(pullRequest.title);
-      const commitShortLinks = pullRequest.commits
-        .map((c) => c.commit.message)
-        .map(utils.extractShortLink.bind(utils));
-      const shortLinks = [...new Set([titleShortLinks, ...commitShortLinks])];
-      validations.validateShortLinksStrategy(shortLinks);
-
-      await Promise.all(
-        shortLinks.map(async (shortLink) => {
-          if (shortLink instanceof TrelloShortLink) {
-            await utils.attachPullRequestToTrello(inputs, trello, github, pullRequest, shortLink);
-          }
-        }),
-      );
+      const shortLink = utils.extractShortLink(pullRequest.title);
+      if (shortLink instanceof TrelloShortLink) {
+        await utils.attachPullRequestToTrello(inputs, trello, github, pullRequest, shortLink);
+      }
       break;
     }
     case GlobalVerificationStrategy.Commits: {
@@ -42,7 +32,6 @@ const run = async (inputs: InputsClientI, github: GitHubClientI, trello: TrelloC
       );
       const commitMessages = pullRequest.commits.map((c) => c.commit.message);
       const shortLinks = [...new Set(commitMessages.map(utils.extractShortLink.bind(utils)))];
-      validations.validateShortLinksStrategy(shortLinks);
 
       await Promise.all(
         shortLinks.map(async (shortLink) => {

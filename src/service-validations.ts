@@ -1,4 +1,3 @@
-import { InputsClientI, ShortLinkVerificationStrategy } from './client-inputs';
 import {
   NoIdShortLink,
   ShortLink,
@@ -6,18 +5,13 @@ import {
   TrelloClientI,
   TrelloShortLink,
 } from './client-trello';
-import { GitHubClientI } from './client-github';
 import * as core from '@actions/core';
 import { ERR_CLOSED_CARD, ERR_INVALID_NOID, ERR_NO_MATCHING_ATTACHMENT } from './errors';
 
 class ValidationsService {
-  inputs: InputsClientI;
-  github: GitHubClientI;
   trello: TrelloClientI;
 
-  constructor(inputs: InputsClientI, github: GitHubClientI, trello: TrelloClientI) {
-    this.github = github;
-    this.inputs = inputs;
+  constructor(trello: TrelloClientI) {
     this.trello = trello;
   }
 
@@ -42,20 +36,6 @@ class ValidationsService {
         throw new Error(ERR_INVALID_NOID(shortLink.id));
       }
     });
-  }
-
-  validateShortLinksStrategy(shortLinks: ShortLink[]): void {
-    core.info('Verify short link strategy.');
-
-    switch (this.inputs.getShortLinkVerificationStrategy()) {
-      case ShortLinkVerificationStrategy.Trello: {
-        this.validateExclusivelyTrelloShortLinks(shortLinks);
-        return;
-      }
-      case ShortLinkVerificationStrategy.TrelloOrNoId: {
-        return;
-      }
-    }
   }
 
   validateCardOpen(card: TrelloCard): void {

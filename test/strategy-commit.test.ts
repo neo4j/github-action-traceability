@@ -1,16 +1,11 @@
 import { describe, it } from '@jest/globals';
 import { InputsClientBuilder } from './utils/dummy-client-inputs';
-import { GlobalVerificationStrategy, ShortLinkVerificationStrategy } from '../src/client-inputs';
+import { GlobalVerificationStrategy } from '../src/client-inputs';
 import { GitHubClientBuilder } from './utils/dummy-client-github';
 import { TrelloClientBuilder } from './utils/dummy-client-trello';
 import { expectSuccess, expectThrows } from './utils/test-utils';
 import { run } from '../src/run';
-import {
-  ERR_CARD_NOT_FOUND,
-  ERR_CLOSED_CARD,
-  ERR_INVALID_NOID,
-  ERR_NO_SHORT_LINK,
-} from '../src/errors';
+import { ERR_CARD_NOT_FOUND, ERR_CLOSED_CARD, ERR_NO_SHORT_LINK } from '../src/errors';
 
 describe('GlobalVerificationStrategy.Commit', () => {
   it('ignores title', async () => {
@@ -34,80 +29,46 @@ describe('GlobalVerificationStrategy.Commit', () => {
     await expectThrows(run(inputs, github, trello), ERR_NO_SHORT_LINK('Invalid commit'));
   });
 
-  describe('ShortLinkVerificationStrategy', () => {
-    describe('.Trello', () => {
-      it('succeeds if commits contain Trello short links', async () => {
-        const inputs = new InputsClientBuilder()
-          .withGlobalVerificationStrategy(GlobalVerificationStrategy.Commits)
-          .withShortLinkVerificationStrategy(ShortLinkVerificationStrategy.Trello)
-          .build();
-        const github = new GitHubClientBuilder()
-          .withPullRequestCommitMessage('[abc123] Valid commit')
-          .build();
-        const trello = new TrelloClientBuilder().withCard('abc123', false).build();
-        await expectSuccess(run(inputs, github, trello));
-      });
+  it('succeeds if commit contain only Trello short links', async () => {
+    const inputs = new InputsClientBuilder()
+      .withGlobalVerificationStrategy(GlobalVerificationStrategy.Commits)
+      .build();
+    const github = new GitHubClientBuilder()
+      .withPullRequestCommitMessage('[abc123] Valid commit')
+      .withPullRequestCommitMessage('[abc123] Valid commit')
+      .build();
+    const trello = new TrelloClientBuilder().withCard('abc123', false).build();
+    await expectSuccess(run(inputs, github, trello));
+  });
 
-      it('fails if commits contain NOID short links', async () => {
-        const inputs = new InputsClientBuilder()
-          .withGlobalVerificationStrategy(GlobalVerificationStrategy.Commits)
-          .withShortLinkVerificationStrategy(ShortLinkVerificationStrategy.Trello)
-          .build();
-        const github = new GitHubClientBuilder()
-          .withPullRequestCommitMessage('[NOID] Commit')
-          .build();
-        const trello = new TrelloClientBuilder().build();
-        await expectThrows(run(inputs, github, trello), ERR_INVALID_NOID('NOID'));
-      });
-    });
+  it('succeeds if commits contain only NOID short links', async () => {
+    const inputs = new InputsClientBuilder()
+      .withGlobalVerificationStrategy(GlobalVerificationStrategy.Commits)
+      .build();
+    const github = new GitHubClientBuilder()
+      .withPullRequestCommitMessage('[NOID] Valid commit')
+      .withPullRequestCommitMessage('[NOID] Valid commit')
+      .build();
+    const trello = new TrelloClientBuilder().build();
+    await expectSuccess(run(inputs, github, trello));
+  });
 
-    describe('.TrelloOrNoId', () => {
-      it('succeeds if commit contain only Trello short links', async () => {
-        const inputs = new InputsClientBuilder()
-          .withGlobalVerificationStrategy(GlobalVerificationStrategy.Commits)
-          .withShortLinkVerificationStrategy(ShortLinkVerificationStrategy.TrelloOrNoId)
-          .build();
-        const github = new GitHubClientBuilder()
-          .withPullRequestCommitMessage('[abc123] Valid commit')
-          .withPullRequestCommitMessage('[abc123] Valid commit')
-          .build();
-        const trello = new TrelloClientBuilder().withCard('abc123', false).build();
-        await expectSuccess(run(inputs, github, trello));
-      });
-
-      it('succeeds if commits contain only NOID short links', async () => {
-        const inputs = new InputsClientBuilder()
-          .withGlobalVerificationStrategy(GlobalVerificationStrategy.Commits)
-          .withShortLinkVerificationStrategy(ShortLinkVerificationStrategy.TrelloOrNoId)
-          .build();
-        const github = new GitHubClientBuilder()
-          .withPullRequestCommitMessage('[NOID] Valid commit')
-          .withPullRequestCommitMessage('[NOID] Valid commit')
-          .build();
-        const trello = new TrelloClientBuilder().build();
-        await expectSuccess(run(inputs, github, trello));
-      });
-
-      it('succeeds if commits contain mix of Trello and NOID short links', async () => {
-        const inputs = new InputsClientBuilder()
-          .withGlobalVerificationStrategy(GlobalVerificationStrategy.Commits)
-          .withShortLinkVerificationStrategy(ShortLinkVerificationStrategy.TrelloOrNoId)
-          .build();
-        const github = new GitHubClientBuilder()
-          .withPullRequestCommitMessage('[abc123] Valid commit')
-          .withPullRequestCommitMessage('[NOID] Valid commit')
-          .build();
-        const trello = new TrelloClientBuilder().withCard('abc123', false).build();
-        await expectSuccess(run(inputs, github, trello));
-      });
-    });
+  it('succeeds if commits contain mix of Trello and NOID short links', async () => {
+    const inputs = new InputsClientBuilder()
+      .withGlobalVerificationStrategy(GlobalVerificationStrategy.Commits)
+      .build();
+    const github = new GitHubClientBuilder()
+      .withPullRequestCommitMessage('[abc123] Valid commit')
+      .withPullRequestCommitMessage('[NOID] Valid commit')
+      .build();
+    const trello = new TrelloClientBuilder().withCard('abc123', false).build();
+    await expectSuccess(run(inputs, github, trello));
   });
 
   describe('Adding attachments to Trello cards', () => {
     it('fails if the Trello card does not exist', async () => {
       const inputs = new InputsClientBuilder()
         .withGlobalVerificationStrategy(GlobalVerificationStrategy.Commits)
-        .withShortLinkVerificationStrategy(ShortLinkVerificationStrategy.Trello)
         .build();
       const github = new GitHubClientBuilder()
         .withPullRequestCommitMessage('[abc123] Invalid commit')
@@ -119,7 +80,6 @@ describe('GlobalVerificationStrategy.Commit', () => {
     it('fails if the Trello card is closed', async () => {
       const inputs = new InputsClientBuilder()
         .withGlobalVerificationStrategy(GlobalVerificationStrategy.Commits)
-        .withShortLinkVerificationStrategy(ShortLinkVerificationStrategy.Trello)
         .build();
       const github = new GitHubClientBuilder()
         .withPullRequestCommitMessage('[abc123] Invalid commit')
@@ -131,7 +91,6 @@ describe('GlobalVerificationStrategy.Commit', () => {
     it('attaches the PR url to the Trello card corresponding to the Trello short link', async () => {
       const inputs = new InputsClientBuilder()
         .withGlobalVerificationStrategy(GlobalVerificationStrategy.Commits)
-        .withShortLinkVerificationStrategy(ShortLinkVerificationStrategy.Trello)
         .build();
       const github = new GitHubClientBuilder()
         .withPullRequestUrl('github.com/namespace/project/pulls/96')
@@ -150,7 +109,6 @@ describe('GlobalVerificationStrategy.Commit', () => {
     it('attaches the PR url to multiple Trello cards if there are multiple Trello short links', async () => {
       const inputs = new InputsClientBuilder()
         .withGlobalVerificationStrategy(GlobalVerificationStrategy.Commits)
-        .withShortLinkVerificationStrategy(ShortLinkVerificationStrategy.Trello)
         .build();
       const github = new GitHubClientBuilder()
         .withPullRequestUrl('github.com/namespace/project/pulls/96')
@@ -179,7 +137,6 @@ describe('GlobalVerificationStrategy.Commit', () => {
     it('does not create duplicate attachments', async () => {
       const inputs = new InputsClientBuilder()
         .withGlobalVerificationStrategy(GlobalVerificationStrategy.Commits)
-        .withShortLinkVerificationStrategy(ShortLinkVerificationStrategy.Trello)
         .build();
       const github = new GitHubClientBuilder()
         .withPullRequestUrl('github.com/namespace/project/pulls/96')
@@ -201,7 +158,6 @@ describe('GlobalVerificationStrategy.Commit', () => {
     it('does nothing if there are only NOID short links', async () => {
       const inputs = new InputsClientBuilder()
         .withGlobalVerificationStrategy(GlobalVerificationStrategy.Commits)
-        .withShortLinkVerificationStrategy(ShortLinkVerificationStrategy.TrelloOrNoId)
         .build();
       const github = new GitHubClientBuilder().withPullRequestCommitMessage('[NOID] Foo').build();
       const trello = new TrelloClientBuilder().withCard('abc123', false).build();

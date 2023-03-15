@@ -67,7 +67,7 @@ class UtilsService {
     trelloShortLink: TrelloShortLink,
   ): Promise<void> {
     core.info('Start attaching pull request to Trello card.');
-    const assertions = new ValidationsService(inputs, github, trello);
+    const assertions = new ValidationsService(trello);
     const card = await trello.getCard(trelloShortLink.id);
     assertions.validateCardOpen(card);
 

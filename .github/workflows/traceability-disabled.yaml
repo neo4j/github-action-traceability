@@ -20,6 +20,3 @@ jobs:
           trello_api_key: "none"
           trello_api_token: "none"
           github_api_token: "none"
-          github_repository_owner: neo4j
-          github_repository_name: github-action-traceability
-          pull_request_number: ${{ github.event.pull_request.number }}

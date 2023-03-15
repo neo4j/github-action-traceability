@@ -1,50 +1,27 @@
-import {
-  GlobalVerificationStrategy,
-  ShortLinkVerificationStrategy,
-  InputsClientI,
-} from '../../src/client-inputs';
+import { GlobalVerificationStrategy, InputsClientI } from '../../src/client-inputs';
 
 class InputsClientBuilder {
   globalVerificationStrategy: GlobalVerificationStrategy = GlobalVerificationStrategy.Commits;
-  shortLinkVerificationStrategy: ShortLinkVerificationStrategy =
-    ShortLinkVerificationStrategy.TrelloOrNoId;
 
   withGlobalVerificationStrategy(strategy: GlobalVerificationStrategy): InputsClientBuilder {
     this.globalVerificationStrategy = strategy;
     return this;
   }
 
-  withShortLinkVerificationStrategy(strategy: ShortLinkVerificationStrategy): InputsClientBuilder {
-    this.shortLinkVerificationStrategy = strategy;
-    return this;
-  }
-
   build(): InputsClientI {
-    return new DummyInputsClient(
-      this.globalVerificationStrategy,
-      this.shortLinkVerificationStrategy,
-    );
+    return new DummyInputsClient(this.globalVerificationStrategy);
   }
 }
 
 class DummyInputsClient implements InputsClientI {
   globalVerificationStrategy: GlobalVerificationStrategy;
-  shortLinkVerificationStrategy: ShortLinkVerificationStrategy;
 
-  constructor(
-    globalVerificationStrategy: GlobalVerificationStrategy,
-    shortLinkVerificationStrategy: ShortLinkVerificationStrategy,
-  ) {
+  constructor(globalVerificationStrategy: GlobalVerificationStrategy) {
     this.globalVerificationStrategy = globalVerificationStrategy;
-    this.shortLinkVerificationStrategy = shortLinkVerificationStrategy;
   }
 
   getGlobalVerificationStrategy(): GlobalVerificationStrategy {
     return this.globalVerificationStrategy;
-  }
-
-  getShortLinkVerificationStrategy(): ShortLinkVerificationStrategy {
-    return this.shortLinkVerificationStrategy;
   }
 
   getGitHubApiToken(): string {

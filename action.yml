@@ -8,11 +8,7 @@ inputs:
   global_verification_strategy:
     required: false
     default: "commits"
-    description: "One of comments, commits, commits_and_pr_title, disabled."
-  short_link_verification_strategy:
-    required: false
-    default: "trello_or_noid"
-    description: "One of trello, trello_or_noid."
+    description: "One of comments, commits, title, disabled."
   trello_api_key:
     required: true
     description: "API key for Trello. Use GitHub secrets. Don't use plaintext."
@@ -22,15 +18,6 @@ inputs:
   github_api_token:
     required: true
     description: "API token for GitHub. Use GitHub secrets. Don't use plaintext."
-  github_repository_owner:
-    required: true
-    description: "Repository owner. Either an individual or an organization."
-  github_repository_name:
-    required: true
-    description: "Repository name."
-  pull_request_number:
-    required: true
-    description: "Pull request number."
 runs:
   using: "node16"
   main: "dist/index.js"
