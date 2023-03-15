@@ -56,7 +56,7 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const checkRun = `${{ fromJSON(steps.get-check-runs.outputs.result) }}`
+            const checkRun = `${{ fromJSON(steps.get-check-runs.outputs.result).id }}`
             try {
               const request = {
                 owner: context.repo.owner,
