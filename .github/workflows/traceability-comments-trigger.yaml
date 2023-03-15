@@ -55,34 +55,11 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-#            const checkRunId = `${{ fromJSON(steps.get-check-runs.outputs.result).id }}`
-#            const checkRunStatus = `${{ fromJSON(steps.get-check-runs.outputs.result).status }}`
-#            try {
-#              const request = {
-#                owner: context.repo.owner,
-#                repo: context.repo.repo,
-#                check_run_id: checkRunId,
-#                conclusion: 'cancelled',
-#                output: {
-#                  title: 'Cancelled.',
-#                  summary: 'Check Run cancelled by "traceability-comments-trigger.yaml".',
-#                }
-#              }
-#              if (checkRunStatus !== 'completed') {
-#                core.info(`Cancelling check-run ${checkRunId} from ${request.owner}/${request.repo}`)
-#                await github.rest.checks.update(request)
-#              } else {
-#                core.info(`No need to cancel check-run ${checkRunId}`)
-#              }
-#            } catch (err) {
-#              core.setFailed(`Request failed with error ${err}`)
-#            }
             try {
               const request = {
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 check_run_id: `${{ fromJSON(steps.get-check-runs.outputs.result).id }}`
-#                check_suite_id: `${{ fromJSON(steps.get-check-runs.outputs.result).check_suite.id }}`
               }
               core.info(`Re-requesting check-suite ${request.check_suite_id} from ${request.owner}/${request.repo}`)
               await github.rest.checks.rerequestRun(request)
