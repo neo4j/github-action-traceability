@@ -47,7 +47,6 @@ jobs:
             core.info(`Getting check-suites for ${request.ref} from ${request.owner}/${request.repo}`)
             try {
               const result = await github.rest.checks.listForRef(request)
-              core.info(JSON.stringify({checkRun: result.data.check_runs[0]}, null, 2)) // daniel
               return result.data.check_runs[0]
             } catch (err) {
               core.setFailed(`Request failed with error ${err}`)
@@ -84,7 +83,7 @@ jobs:
             const request = {
               owner: context.repo.owner,
               repo: context.repo.repo,
-              check_suite_id: `${{ fromJSON(steps.get-check-runs.outputs.result.check_suite).id }}`
+              check_suite_id: `${{ fromJSON(steps.get-check-runs.outputs.result).check_suite.id }}`
             }  
             core.info(`Re-requesting check-suite ${request.check_suite_id} from ${request.owner}/${request.repo}`)
             try {
