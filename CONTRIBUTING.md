@@ -67,4 +67,6 @@ git push origin --tags --force
 # Contributor License Agreement
 
 In order to contribute we would like to request that you first sign Neo4j's [Contributor License Agreement](https://neo4j.com/developer/cla/) as we will not
-be able to accept your contributions without it. // daniel
+be able to accept your contributions without it. 
+
+// daniel
