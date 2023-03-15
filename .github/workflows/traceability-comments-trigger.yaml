@@ -68,6 +68,7 @@ jobs:
                   summary: 'Check Run cancelled by "traceability-comments-trigger.yaml".', 
                 }
               }
+              core.info({checkRunId, checkRunStatus}, null, 2)) // daniel
               if (checkRunStatus !== 'completed') {
                 core.info(`Cancelling check-run ${checkRunId} from ${request.owner}/${request.repo}`)
                 await github.rest.checks.update(request)
