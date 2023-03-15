@@ -46,7 +46,6 @@ jobs:
             core.info(`Getting check-suites for ${request.ref} from ${request.owner}/${request.repo}`)
             try {
               const result = await github.rest.checks.listForRef(request)
-              core.info(JSON.stringify({result}, null, 2))
               return result.data.check_runs[0].check_suite
             } catch (err) {
               core.setFailed(`Request failed with error ${err}`)
