@@ -3,7 +3,7 @@
 ![](assets/trello-github.png)
 
 # Introduction
-
+// daniel
 This GitHub Action exists for the sole purpose of linking Trello cards to git commits. So that when you look at your
 project's work history in git, you can easily trace back each code change to a nicely documented Trello card. 
 
