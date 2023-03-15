@@ -69,6 +69,7 @@ jobs:
                 }
               }
               core.info(JSON.stringify({checkRun, request}, null ,2 )) // daniel
+              core.info(checkRun) // daniel
               if (checkRun.status !== 'completed') {
                 core.info(`Cancelling check-run ${request.check_run_id} from ${request.owner}/${request.repo}`)
                 await github.rest.checks.update(request)
