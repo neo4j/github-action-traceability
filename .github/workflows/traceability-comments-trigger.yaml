@@ -51,7 +51,7 @@ jobs:
             } catch (err) {
               core.setFailed(`Request failed with error ${err}`)
             }
-      - name: "Cancel Unfinished Check Run"
+      - name: "Re-request Check Suite"
         uses: actions/github-script@v6
         with:
           script: |
@@ -68,26 +68,22 @@ jobs:
                   summary: 'Check Run cancelled by "traceability-comments-trigger.yaml".', 
                 }
               }
-              core.info(JSON.stringify({checkRunId, checkRunStatus}, null, 2)) // daniel
               if (checkRunStatus !== 'completed') {
                 core.info(`Cancelling check-run ${checkRunId} from ${request.owner}/${request.repo}`)
                 await github.rest.checks.update(request)
-                return
+              } else {
+                core.info(`No need to cancel check-run ${checkRunId}`)
               }
             } catch (err) {
               core.setFailed(`Request failed with error ${err}`)
             }
-      - name: "Re-request Check Suite"
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const request = {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              check_suite_id: `${{ fromJSON(steps.get-check-runs.outputs.result).check_suite.id }}`
-            }  
-            core.info(`Re-requesting check-suite ${request.check_suite_id} from ${request.owner}/${request.repo}`)
             try {
+              const request = {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                check_suite_id: `${{ fromJSON(steps.get-check-runs.outputs.result).check_suite.id }}`
+              }  
+              core.info(`Re-requesting check-suite ${request.check_suite_id} from ${request.owner}/${request.repo}`)
               await github.rest.checks.rerequestSuite(request)
             } catch (err) {
               core.setFailed(`Request failed with error ${err}`)
