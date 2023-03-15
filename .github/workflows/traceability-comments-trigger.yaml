@@ -69,7 +69,7 @@ jobs:
               }
               if (checkRun.status !== 'completed') {
                 core.info(`Cancelling check-run ${request.check_run_id} from ${request.owner}/${request.repo}`)
-                await github.rest.checks(request)
+                await github.rest.checks.update(request)
                 return
               }
             } catch (err) {
