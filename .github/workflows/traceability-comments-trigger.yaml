@@ -54,7 +54,8 @@ jobs:
       - name: "Cancel Check Run"
         id: cancel-check-run
         uses: actions/github-script@v6
-        with: |
+        with:
+          script: |
             const checkRunId = `${{ fromJSON(steps.get-check-runs.outputs.result).id }}`
             const checkRunStatus = `${{ fromJSON(steps.get-check-runs.outputs.result).status }}` 
             const request = {
