@@ -93,6 +93,11 @@ jobs:
               core.info(`Re-requesting check-suite ${request.check_suite_id} from ${request.owner}/${request.repo}`)
               await github.rest.checks.rerequestSuite(request)
             } catch (err) {
-              core.info(JSON.stringify({err}, null, 2)) // daniel
+              // we cancelled any running check-suite in the step before this one, so if we get an error here saying
+              // a check-suite is already re-running it means something else triggered it to rerun between this step
+              // and the last. That is what we wanted to do anyways, so we can ignore these errors.
+              if (err.response.data.message === 'This check suite is already re-running.') {
+                return
+              }
               core.setFailed(`Request failed with error ${err}`)
             }
