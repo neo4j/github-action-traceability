@@ -62,8 +62,8 @@ jobs:
         with:
           script: |
             core.info(`${{ fromJSON(steps.get-check-runs.outputs.result).id }}`) // daniel
-            const checkRunId = "" // daniel 
-            const checkRunStatus = "" // daniel 
+            const checkRunId = `${{ fromJSON(steps.get-check-runs.outputs.result).id }}`
+            const checkRunStatus = `${{ fromJSON(steps.get-check-runs.outputs.result).status }}`
             const request = {
               owner: context.repo.owner,
               repo: context.repo.repo,
