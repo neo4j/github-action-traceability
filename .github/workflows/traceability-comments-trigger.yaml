@@ -42,7 +42,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: `${{ fromJSON(steps.get-commit.outputs.result).head.sha }}`,
-              check_name: 'traceability-comments'
+              check_name: 'traceability-comments-f00' // daniel
             }
             core.info(`Getting check-suites for ${request.ref} from ${request.owner}/${request.repo}`)
             try {
