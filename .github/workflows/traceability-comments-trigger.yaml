@@ -58,7 +58,7 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            core.info(`${{ fromJSON(steps.get-check-runs.outputs) }}`) // daniel
+            core.info(`${{ fromJSON(steps.get-check-runs.outputs.result) }}`) // daniel
             const checkRunId = "" // daniel 
             const checkRunStatus = "" // daniel 
             const request = {
