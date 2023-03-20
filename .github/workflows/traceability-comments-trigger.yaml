@@ -48,20 +48,23 @@ jobs:
             try {
               const result = await github.rest.checks.listForRef(request)
               if (result.data.check_runs.length > 0) {
-                return result.data.check_runs[0]
+                return {
+                  ...result.data.check_runs[0],
+                  continue: true
+                }
               }
               else {
                 return {
-                  skip: true
+                  continue: false
                 }
               }
             } catch (err) {
               core.setFailed(`Request failed with error ${err}`)
             }
       - name: "Cancel Check Run"
-        id: cancel-check-run
         uses: actions/github-script@v6
-        if: ${{ fromJSON(steps.get-check-runs.outputs.result).skip }}
+        id: cancel-check-run
+        if: ${{ fromJSON(steps.get-check-runs.outputs.result).continue }}
         with:
           script: |
             const checkRunId = `${{ fromJSON(steps.get-check-runs.outputs.result).id }}`
@@ -87,8 +90,9 @@ jobs:
               core.info(`No need to cancel check-run ${checkRunId}`)
             }
       - name: "Re-request Check Suite"
-        id: rerequest-check-suite
         uses: actions/github-script@v6
+        id: rerequest-check-suite
+        if: ${{ fromJSON(steps.get-check-runs.outputs.result).continue }}
         with:
           script: |
             const checkSuiteId = `${{ fromJSON(steps.get-check-runs.outputs.result).check_suite.id }}` 
