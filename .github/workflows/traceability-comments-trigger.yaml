@@ -58,8 +58,6 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            core.info(JSON.stringify({a: `${{ fromJSON(steps.get-check-runs.outputs.result) }}`}, null, 2))
-            core.info(JSON.stringify({a: `${{ fromJSON(steps.get-check-runs.outputs) }}`}, null, 2))
             const checkRunId = `${{ fromJSON(steps.get-check-runs.outputs.result).id }}`
             const checkRunStatus = `${{ fromJSON(steps.get-check-runs.outputs.result).status }}` 
             const request = {
