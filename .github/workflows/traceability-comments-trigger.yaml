@@ -78,7 +78,7 @@ jobs:
               core.info(`Cancelling check-run ${checkRunId} from ${request.owner}/${request.repo}`)        
               try {
                 await github.rest.checks.update(request)
-              } catch {
+              } catch (err) {
                 core.setFailed(`Request failed with error ${err}`)
               }
             } else {
