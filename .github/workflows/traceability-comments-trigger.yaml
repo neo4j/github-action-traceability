@@ -42,18 +42,21 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: `${{ fromJSON(steps.get-commit.outputs.result).head.sha }}`,
-              check_name: 'traceability-comments'
+              check_name: 'traceability-commentsfoo'
             }
             core.info(`Getting check-suites for ${request.ref} from ${request.owner}/${request.repo}`)
             try {
               const result = await github.rest.checks.listForRef(request)
-              return result.data.check_runs[0]
+              if (result.data.check_runs.length > 0) {
+                return result.data.check_runs[0]
+              }
             } catch (err) {
               core.setFailed(`Request failed with error ${err}`)
             }
       - name: "Cancel Check Run"
         id: cancel-check-run
         uses: actions/github-script@v6
+        if: ${{ !!fromJSON(steps.get-check-runs.outputs.result) }}
         with:
           script: |
             const checkRunId = `${{ fromJSON(steps.get-check-runs.outputs.result).id }}`
