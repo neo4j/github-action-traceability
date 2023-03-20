@@ -60,8 +60,8 @@ jobs:
           script: |
             core.info(`${{ steps.get-check-runs }}`) // daniel
             core.info(`${{ steps.get-check-runs.outputs }}`) // daniel
-            const checkRunId = "" // daniel `${{ fromJSON(steps.get-check-runs.outputs.result).id }}`
-            const checkRunStatus = "" // daniel `${{ fromJSON(steps.get-check-runs.outputs.result).status }}` 
+            const checkRunId = "" // daniel 
+            const checkRunStatus = "" // daniel 
             const request = {
               owner: context.repo.owner,
               repo: context.repo.repo,
