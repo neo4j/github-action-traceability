@@ -42,14 +42,12 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: `${{ fromJSON(steps.get-commit.outputs.result).head.sha }}`,
-              check_name: 'traceability-commentsfoo'
+              check_name: 'traceability-comments'
             }
             core.info(`Getting check-suites for ${request.ref} from ${request.owner}/${request.repo}`)
             try {
               const result = await github.rest.checks.listForRef(request)
-              if (result.data.check_runs.length > 0) {
-                return result.data.check_runs[0]
-              }
+              return result.data.check_runs[0]
             } catch (err) {
               core.setFailed(`Request failed with error ${err}`)
             }
