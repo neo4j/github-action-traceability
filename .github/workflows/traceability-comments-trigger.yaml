@@ -58,8 +58,10 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const checkRunId = `${{ fromJSON(steps.get-check-runs.outputs.result).id }}`
-            const checkRunStatus = `${{ fromJSON(steps.get-check-runs.outputs.result).status }}` 
+            core.info(`${{ steps.get-check-runs }}`) // daniel
+            core.info(`${{ steps.get-check-runs.outputs }}`) // daniel
+            const checkRunId = "" // daniel `${{ fromJSON(steps.get-check-runs.outputs.result).id }}`
+            const checkRunStatus = "" // daniel `${{ fromJSON(steps.get-check-runs.outputs.result).status }}` 
             const request = {
               owner: context.repo.owner,
               repo: context.repo.repo,
