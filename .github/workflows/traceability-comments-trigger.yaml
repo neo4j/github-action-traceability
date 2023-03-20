@@ -56,7 +56,6 @@ jobs:
       - name: "Cancel Check Run"
         id: cancel-check-run
         uses: actions/github-script@v6
-        if: ${{ !!fromJSON(steps.get-check-runs.outputs.result) }}
         with:
           script: |
             const checkRunId = `${{ fromJSON(steps.get-check-runs.outputs.result).id }}`
