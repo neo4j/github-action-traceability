@@ -51,7 +51,9 @@ jobs:
                 return result.data.check_runs[0]
               }
               else {
-                return {}
+                return {
+                  skip: true
+                }
               }
             } catch (err) {
               core.setFailed(`Request failed with error ${err}`)
@@ -59,9 +61,9 @@ jobs:
       - name: "Cancel Check Run"
         id: cancel-check-run
         uses: actions/github-script@v6
+        if: ${{ fromJSON(steps.get-check-runs.outputs.result).skip }}
         with:
           script: |
-            core.info(`${{ fromJSON(steps.get-check-runs.outputs.result).id }}`) // daniel
             const checkRunId = `${{ fromJSON(steps.get-check-runs.outputs.result).id }}`
             const checkRunStatus = `${{ fromJSON(steps.get-check-runs.outputs.result).status }}`
             const request = {
