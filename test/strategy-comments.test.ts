@@ -211,7 +211,7 @@ describe('GlobalVerificationStrategy.Comments', () => {
     ]);
   });
 
-  it('attaches the pull request if it is not already attachmented to the Trello card', async () => {
+  it('attaches the pull request if it is not already attached to the Trello card', async () => {
     const inputs = new InputsClientBuilder()
       .withGlobalVerificationStrategy(GlobalVerificationStrategy.Comments)
       .build();
@@ -241,7 +241,7 @@ describe('GlobalVerificationStrategy.Comments', () => {
     ]);
   });
 
-  it('does not attach the pull request if it already is already attached to the Trello card', async () => {
+  it('does not duplicate attachment if the pull request if it is already attached to the Trello card', async () => {
     const inputs = new InputsClientBuilder()
       .withGlobalVerificationStrategy(GlobalVerificationStrategy.Comments)
       .build();
