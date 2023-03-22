@@ -2,13 +2,11 @@ import * as core from '@actions/core';
 
 import { GitHubClientI } from './client-github';
 import { GlobalVerificationStrategy, InputsClientI } from './client-inputs';
-import { ValidationsService } from './service-validations';
 import { TrelloClientI, TrelloShortLink } from './client-trello';
 import { UtilsService } from './service-utils';
 import { ERR_NO_VALID_COMMENTS } from './errors';
 
 const run = async (inputs: InputsClientI, github: GitHubClientI, trello: TrelloClientI) => {
-  const validations = new ValidationsService(trello);
   const utils = new UtilsService(inputs);
 
   switch (inputs.getGlobalVerificationStrategy()) {
@@ -63,10 +61,12 @@ const run = async (inputs: InputsClientI, github: GitHubClientI, trello: TrelloC
       await Promise.all(
         trelloShortLinks.map(
           async (sl) =>
-            await validations.validateCommentContainsTrelloAttachment(
+            await utils.attachPullRequestToTrello(
+              inputs,
+              trello,
+              github,
+              pullRequest,
               sl.shortLink,
-              sl.comment.url,
-              pullRequest.url,
             ),
         ),
       );

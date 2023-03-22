@@ -5,11 +5,7 @@ import { GitHubClientBuilder } from './utils/dummy-client-github';
 import { TrelloClientBuilder } from './utils/dummy-client-trello';
 import { expectSuccess, expectThrows } from './utils/test-utils';
 import { run } from '../src/run';
-import {
-  ERR_CARD_NOT_FOUND,
-  ERR_NO_MATCHING_ATTACHMENT,
-  ERR_NO_VALID_COMMENTS,
-} from '../src/errors';
+import { ERR_CARD_NOT_FOUND, ERR_NO_VALID_COMMENTS } from '../src/errors';
 
 describe('GlobalVerificationStrategy.Comments', () => {
   it('fails if there are no comments', async () => {
@@ -192,7 +188,7 @@ describe('GlobalVerificationStrategy.Comments', () => {
     await expectThrows(run(inputs, github, trello), ERR_CARD_NOT_FOUND('BnBwoWsW'));
   });
 
-  it('fails if the Trello card exists but does not have any attachments', async () => {
+  it('attaches the pull request if there are no attachments to the Trello card', async () => {
     const inputs = new InputsClientBuilder()
       .withGlobalVerificationStrategy(GlobalVerificationStrategy.Comments)
       .build();
@@ -205,17 +201,17 @@ describe('GlobalVerificationStrategy.Comments', () => {
       )
       .build();
     const trello = new TrelloClientBuilder().withCard('BnBwoWsW', false).build();
-    await expectThrows(
-      run(inputs, github, trello),
-      ERR_NO_MATCHING_ATTACHMENT(
-        'github.com/comments/123',
-        'BnBwoWsW',
-        'github.com/neo4j/github-action-traceability/pull/12',
-      ),
-    );
+
+    await expectSuccess(run(inputs, github, trello));
+    await expect(await trello.getCardAttachments('BnBwoWsW')).toEqual([
+      {
+        shortLink: 'BnBwoWsW',
+        url: 'github.com/neo4j/github-action-traceability/pull/12',
+      },
+    ]);
   });
 
-  it('fails if the Trello card exists but no attachments match', async () => {
+  it('attaches the pull request if it is not already attachmented to the Trello card', async () => {
     const inputs = new InputsClientBuilder()
       .withGlobalVerificationStrategy(GlobalVerificationStrategy.Comments)
       .build();
@@ -229,16 +225,46 @@ describe('GlobalVerificationStrategy.Comments', () => {
       .build();
     const trello = new TrelloClientBuilder()
       .withCard('BnBwoWsW', false)
-      .withCardAttachment('BnBwoWsW', 'github.com/neo4j/traceability/pulls/13')
+      .withCardAttachment('BnBwoWsW', 'github.com/neo4j/github-action-traceability/pull/other')
       .build();
-    await expectThrows(
-      run(inputs, github, trello),
-      ERR_NO_MATCHING_ATTACHMENT(
+
+    await expectSuccess(run(inputs, github, trello));
+    await expect(await trello.getCardAttachments('BnBwoWsW')).toEqual([
+      {
+        shortLink: 'BnBwoWsW',
+        url: 'github.com/neo4j/github-action-traceability/pull/other',
+      },
+      {
+        shortLink: 'BnBwoWsW',
+        url: 'github.com/neo4j/github-action-traceability/pull/12',
+      },
+    ]);
+  });
+
+  it('does not attach the pull request if it already is already attached to the Trello card', async () => {
+    const inputs = new InputsClientBuilder()
+      .withGlobalVerificationStrategy(GlobalVerificationStrategy.Comments)
+      .build();
+    const github = new GitHubClientBuilder()
+      .withPullRequestUrl('github.com/neo4j/github-action-traceability/pull/12')
+      .withPullRequestComment(
+        'neonora',
         'github.com/comments/123',
-        'BnBwoWsW',
-        'github.com/neo4j/github-action-traceability/pull/12',
-      ),
-    );
+        `details [https://trello.com/c/BnBwoWsW](https://trello.com/c/BnBwoWsW) details`,
+      )
+      .build();
+    const trello = new TrelloClientBuilder()
+      .withCard('BnBwoWsW', false)
+      .withCardAttachment('BnBwoWsW', 'github.com/neo4j/github-action-traceability/pull/12')
+      .build();
+
+    await expectSuccess(run(inputs, github, trello));
+    await expect(await trello.getCardAttachments('BnBwoWsW')).toEqual([
+      {
+        shortLink: 'BnBwoWsW',
+        url: 'github.com/neo4j/github-action-traceability/pull/12',
+      },
+    ]);
   });
 
   it('succeeds if the Trello card does not have the attachment, as long as the "No Trello" label is set', async () => {

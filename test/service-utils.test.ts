@@ -158,7 +158,7 @@ describe('UtilsService', () => {
         ).toEqual(new TrelloShortLink('BnBwoWsW'));
       });
 
-      it('does not parse comment that contains a plain url if the aura is not neonora', () => {
+      it('does not parse comment that contains a plain url if the author is not neonora', () => {
         expect(
           service.extractShortLinkFromComment({
             author: {

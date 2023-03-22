@@ -1,32 +1,12 @@
-import {
-  NoIdShortLink,
-  ShortLink,
-  TrelloCard,
-  TrelloClientI,
-  TrelloShortLink,
-} from './client-trello';
+import { NoIdShortLink, ShortLink, TrelloCard, TrelloClientI } from './client-trello';
 import * as core from '@actions/core';
-import { ERR_CLOSED_CARD, ERR_INVALID_NOID, ERR_NO_MATCHING_ATTACHMENT } from './errors';
+import { ERR_CLOSED_CARD, ERR_INVALID_NOID } from './errors';
 
 class ValidationsService {
   trello: TrelloClientI;
 
   constructor(trello: TrelloClientI) {
     this.trello = trello;
-  }
-
-  async validateCommentContainsTrelloAttachment(
-    shortLink: TrelloShortLink,
-    commentUrl: string,
-    pullRequestUrl: string,
-  ): Promise<void> {
-    const attachments = await this.trello.getCardAttachments(shortLink.id);
-    const pullRequestAttachments = attachments.filter((attachment) =>
-      attachment.url.startsWith(pullRequestUrl),
-    );
-    if (pullRequestAttachments.length === 0) {
-      throw new Error(ERR_NO_MATCHING_ATTACHMENT(commentUrl, shortLink.id, pullRequestUrl));
-    }
   }
 
   validateExclusivelyTrelloShortLinks(shortLinks: ShortLink[]): void {
