@@ -52,7 +52,7 @@ jobs:
               core.debug(result)
               if (result.data.check_runs.length > 0) {
                 return {
-                  runs: result.data.check_runs,
+                  runs: JSON.stringify(result.data.check_runs),
                   continue: true,
                   foo: '{"bar": 1}'
                 }
@@ -71,9 +71,9 @@ jobs:
         if: ${{ fromJSON(steps.get-check-runs.outputs.result).continue }}
         with:
           script: |
-            const checkRuns = ${{ fromJSON(steps.get-check-runs.outputs.result).foo }}
+            const checkRuns = ${{ fromJSON(steps.get-check-runs.outputs.result).runs }}
             core.info(typeof checkRuns) // daniel
-            core.info(checkRuns.bar) // daniel
+            core.info(JSON.stringify({checkRuns})) // daniel
             for (const checkRun of checkRuns) {
               core.info({checkRun}) // daniel
               const checkRunId = checkRun.id
