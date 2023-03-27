@@ -3,7 +3,8 @@ name: traceability-comments-trigger
 permissions:
   checks: write
   pull-requests: read
-  statuses: read # // daniel
+
+# // daniel core.info => core.debug
 
 on:
   issue_comment:
@@ -30,7 +31,7 @@ jobs:
             core.info(`Getting PR #${request.pull_number} from ${request.owner}/${request.repo}`)
             try {
               const result = await github.rest.pulls.get(request)
-              core.debug(JSON.stringify({result}, null, 2))
+              core.info(JSON.stringify({result}, null, 2))
               return result.data
             } catch (err) {
               core.setFailed(`Request failed with error ${err}`)
@@ -65,7 +66,7 @@ jobs:
             core.info(`Getting check-runs for ${request.ref} from ${request.owner}/${request.repo}`)
             try {
               const result = await github.rest.checks.listForRef(request)
-              core.debug(JSON.stringify({result}, null, 2))  
+              core.info(JSON.stringify({result}, null, 2))  
               if (result.data.check_runs.length > 0) {
                 return {
                   runs: ...result.data.check_runs,
@@ -102,7 +103,7 @@ jobs:
               core.info(`Cancelling check-run ${checkRunId} from ${request.owner}/${request.repo}`)        
               try {
                 const result = await github.rest.checks.update(request)
-                core.debug(JSON.stringify({result}, null, 2))
+                core.info(JSON.stringify({result}, null, 2))
               } catch (err) {
                 core.setFailed(`Request failed with error ${err}`)
               }
@@ -124,7 +125,7 @@ jobs:
             try {
               core.info(`Re-requesting check-suite ${request.check_suite_id} from ${request.owner}/${request.repo}`)
               const result = await github.rest.checks.rerequestSuite(request)
-              core.debug(JSON.stringify({result}, null, 2))
+              core.info(JSON.stringify({result}, null, 2))
             } catch (err) {
               // we cancelled any running check-suite in the step before this one, so if we get an error here saying
               // a check-suite is already re-running it means something else triggered it to rerun between this step
