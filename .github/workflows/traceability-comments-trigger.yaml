@@ -3,6 +3,7 @@ name: traceability-comments-trigger
 permissions:
   checks: write
   pull-requests: read
+  statuses: read # // daniel
 
 on:
   issue_comment:
