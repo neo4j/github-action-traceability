@@ -73,8 +73,8 @@ jobs:
         if: ${{ fromJSON(steps.get-check-runs.outputs.result).continue }}
         with:
           script: |
-            const checkRuns = `${{ fromJSON(steps.get-check-runs.outputs.result).foo }}`
-            const checkRunsTwo = `${{ fromJSON(steps.get-check-runs.outputs.result).foo.bar }}`
+            const checkRuns = ${{ fromJSON(steps.get-check-runs.outputs.result).foo }}
+            const checkRunsTwo = ${{ fromJSON(steps.get-check-runs.outputs.result).foo.bar }}
             core.info(typeof checkRuns) // daniel
             core.info(typeof checkRunsTwo) // daniel
             core.info(checkRuns) // daniel
