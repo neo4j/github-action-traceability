@@ -34,6 +34,21 @@ jobs:
             } catch (err) {
               core.setFailed(`Request failed with error ${err}`)
             }
+      - name: "Debug"
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const request = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `${{ fromJSON(steps.get-commit.outputs.result).head.sha }}`
+            }
+            try {
+              const result = await github.rest.repos.listCommitStatusesForRef(request);
+              core.info(JSON.stringify({result}, null, 2));
+            } catch (err) {
+              core.setFailed(`Request failed with error ${err}`)
+            }
       - name: "Get Check Run For Pull Request"
         uses: actions/github-script@v6
         id: get-check-runs
