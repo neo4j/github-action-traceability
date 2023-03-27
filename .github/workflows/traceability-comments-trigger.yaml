@@ -53,10 +53,9 @@ jobs:
               if (result.data.check_runs.length > 0) {
                 return {
                   runs: JSON.stringify(result.data.check_runs),
-                  continue: true,
-                  foo: '{"bar": 1}'
+                  continue: true
                 }
-              } // daniel
+              }
               else {
                 return {
                   continue: false
@@ -72,10 +71,7 @@ jobs:
         with:
           script: |
             const checkRuns = ${{ fromJSON(steps.get-check-runs.outputs.result).runs }}
-            core.info(typeof checkRuns) // daniel
-            core.info(JSON.stringify({checkRuns})) // daniel
             for (const checkRun of checkRuns) {
-              core.info({checkRun}) // daniel
               const checkRunId = checkRun.id
               const checkRunStatus = checkRun.status
               const request = {
@@ -106,22 +102,27 @@ jobs:
         if: ${{ fromJSON(steps.get-check-runs.outputs.result).continue }}
         with:
           script: |
-            const checkSuiteId = `${{ fromJSON(steps.get-check-runs.outputs.result).runs[0].check_suite.id }}` 
-            const request = {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              check_suite_id: checkSuiteId
-            }
-            try {
-              core.info(`Re-requesting check-suite ${request.check_suite_id} from ${request.owner}/${request.repo}`)
-              const result = await github.rest.checks.rerequestSuite(request)
-              core.debug(result)
-            } catch (err) {
-              // we cancelled any running check-suite in the step before this one, so if we get an error here saying
-              // a check-suite is already re-running it means something else triggered it to rerun between this step
-              // and the last. That is what we wanted to do anyways, so we can ignore these errors.
-              if (err.response.data.message === 'This check suite is already re-running.') {
-                return
+            const checkRuns = ${{ fromJSON(steps.get-check-runs.outputs.result).runs }}
+            for (const checkRun of checkRuns) {
+              const checkSuiteId = checkRun.check_suite.id 
+              const request = {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                check_suite_id: checkSuiteId
               }
-              core.setFailed(`Request failed with error ${err}`)
+              try {
+                core.info(`Re-requesting check-suite ${request.check_suite_id} from ${request.owner}/${request.repo}`)
+                const result = await github.rest.checks.rerequestSuite(request)
+                core.debug(result)
+              } catch (err) {
+                // we cancelled any running check-suite in the step before this one, so if we get an error here saying
+                // a check-suite is already re-running it means something else triggered it to rerun between this step
+                // and the last. That is what we wanted to do anyways, so we can ignore these errors.
+                if (err.response.data.message === 'This check suite is already re-running.') {
+                  return
+                }
+                core.setFailed(`Request failed with error ${err}`)
+              }
             }
+
+            
