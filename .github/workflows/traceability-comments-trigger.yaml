@@ -54,8 +54,11 @@ jobs:
                 return {
                   runs: result.data.check_runs,
                   continue: true
+                  var: {
+                    foo: 1
+                  }
                 }
-              }
+              } // daniel
               else {
                 return {
                   continue: false
@@ -70,7 +73,8 @@ jobs:
         if: ${{ fromJSON(steps.get-check-runs.outputs.result).continue }}
         with:
           script: |
-            const checkRuns = JSON.parse(`${{ fromJSON(steps.get-check-runs.outputs.result).runs[0] }}`)
+            const checkRuns = `${{ fromJSON(steps.get-check-runs.outputs.result).var }}`
+            core.info(typeof checkRuns) // daniel
             core.info(checkRuns) // daniel
             for (const checkRun of checkRuns) {
               core.info({checkRun}) // daniel
