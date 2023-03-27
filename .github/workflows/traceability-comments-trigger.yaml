@@ -78,6 +78,7 @@ jobs:
             core.info(typeof checkRuns) // daniel
             core.info(typeof checkRunsTwo) // daniel
             core.info(checkRuns) // daniel
+            core.info(checkRunsTwo) // daniel
             for (const checkRun of checkRuns) {
               core.info({checkRun}) // daniel
               const checkRunId = checkRun.id
