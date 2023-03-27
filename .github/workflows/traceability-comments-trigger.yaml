@@ -68,7 +68,7 @@ jobs:
               core.debug(JSON.stringify({result}, null, 2))  
               if (result.data.check_runs.length > 0) {
                 return {
-                  ...result.data.check_runs[0],
+                  runs: ...result.data.check_runs,
                   continue: true
                 }
               }
@@ -86,8 +86,8 @@ jobs:
         if: ${{ fromJSON(steps.get-check-runs.outputs.result).continue }}
         with:
           script: |
-            const checkRunId = `${{ fromJSON(steps.get-check-runs.outputs.result).id }}`
-            const checkRunStatus = `${{ fromJSON(steps.get-check-runs.outputs.result).status }}`
+            const checkRunId = `${{ fromJSON(steps.get-check-runs.outputs.result).runs[0].id }}`
+            const checkRunStatus = `${{ fromJSON(steps.get-check-runs.outputs.result).runs[0].status }}`
             const request = {
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -115,7 +115,7 @@ jobs:
         if: ${{ fromJSON(steps.get-check-runs.outputs.result).continue }}
         with:
           script: |
-            const checkSuiteId = `${{ fromJSON(steps.get-check-runs.outputs.result).check_suite.id }}` 
+            const checkSuiteId = `${{ fromJSON(steps.get-check-runs.outputs.result).runs[0].check_suite.id }}` 
             const request = {
               owner: context.repo.owner,
               repo: context.repo.repo,
