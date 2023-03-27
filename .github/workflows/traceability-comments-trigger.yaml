@@ -69,7 +69,7 @@ jobs:
               core.info(JSON.stringify({result}, null, 2))  
               if (result.data.check_runs.length > 0) {
                 return {
-                  runs: ...result.data.check_runs,
+                  runs: result.data.check_runs,
                   continue: true
                 }
               }
