@@ -48,6 +48,7 @@ jobs:
             try {
               const result = await github.rest.checks.listForRef(request)
               if (result.data.check_runs.length > 0) {
+                core.info(JSON.stringify({result}, null, 2)) // daniel
                 return {
                   ...result.data.check_runs[0],
                   continue: true
@@ -103,7 +104,8 @@ jobs:
             }
             try {
               core.info(`Re-requesting check-suite ${request.check_suite_id} from ${request.owner}/${request.repo}`)
-              await github.rest.checks.rerequestSuite(request)
+              const result = await github.rest.checks.rerequestSuite(request)
+              core.info(JSON.stringify({result}, null, 2)) // daniel
             } catch (err) {
               // we cancelled any running check-suite in the step before this one, so if we get an error here saying
               // a check-suite is already re-running it means something else triggered it to rerun between this step
