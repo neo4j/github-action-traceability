@@ -70,7 +70,7 @@ jobs:
         if: ${{ fromJSON(steps.get-check-runs.outputs.result).continue }}
         with:
           script: |
-            const checkRuns = `${{ fromJSON(steps.get-check-runs.outputs.result).runs[0] }}`
+            const checkRuns = JSON.parse(`${{ fromJSON(steps.get-check-runs.outputs.result).runs[0] }}`)
             core.info(checkRuns) // daniel
             for (const checkRun of checkRuns) {
               core.info({checkRun}) // daniel
