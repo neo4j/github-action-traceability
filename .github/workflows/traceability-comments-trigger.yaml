@@ -74,7 +74,9 @@ jobs:
         with:
           script: |
             const checkRuns = `${{ fromJSON(steps.get-check-runs.outputs.result).foo }}`
+            const checkRunsTwo = `${{ fromJSON(steps.get-check-runs.outputs.result).foo.bar }}`
             core.info(typeof checkRuns) // daniel
+            core.info(typeof checkRunsTwo) // daniel
             core.info(checkRuns) // daniel
             for (const checkRun of checkRuns) {
               core.info({checkRun}) // daniel
