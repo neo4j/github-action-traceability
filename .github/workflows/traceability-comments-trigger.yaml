@@ -71,7 +71,9 @@ jobs:
         with:
           script: |
             const checkRuns = `${{ fromJSON(steps.get-check-runs.outputs.result).runs }}`
-            for (const checkRun of checkRuns) { 
+            core.info({checkRuns}) // daniel
+            for (const checkRun of checkRuns) {
+              core.info({checkRun}) // daniel
               const checkRunId = checkRun.id
               const checkRunStatus = checkRun.status
               const request = {
