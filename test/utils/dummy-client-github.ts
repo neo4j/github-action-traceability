@@ -3,6 +3,7 @@ import { GitHubClientI, Commit, Comment, Label, PullRequest } from '../../src/cl
 class GitHubClientBuilder {
   url: string = 'https://www.github.com/neo4j/apoc';
   title: string = 'Install Traceability GitHub Action';
+  body: string = '';
   author: string = 'Alice';
   commits: Commit[] = [];
   comments: Comment[] = [];
@@ -15,6 +16,11 @@ class GitHubClientBuilder {
 
   public withPullRequestTitle(title: string): GitHubClientBuilder {
     this.title = title;
+    return this;
+  }
+
+  public withPullRequestBody(body: string): GitHubClientBuilder {
+    this.body = body;
     return this;
   }
 
@@ -43,6 +49,7 @@ class GitHubClientBuilder {
     return new DummyGitHubClient(
       this.url,
       this.title,
+      this.body,
       this.author,
       this.commits,
       this.comments,
@@ -54,6 +61,7 @@ class GitHubClientBuilder {
 class DummyGitHubClient implements GitHubClientI {
   url: string;
   title: string;
+  body: string;
   author: string;
   commits: Commit[];
   comments: Comment[];
@@ -62,6 +70,7 @@ class DummyGitHubClient implements GitHubClientI {
   constructor(
     url: string,
     title: string,
+    body: string,
     author: string,
     commits: Commit[],
     comments: Comment[],
@@ -69,6 +78,7 @@ class DummyGitHubClient implements GitHubClientI {
   ) {
     this.url = url;
     this.title = title;
+    this.body = body;
     this.author = author;
     this.commits = commits;
     this.comments = comments;
@@ -83,6 +93,7 @@ class DummyGitHubClient implements GitHubClientI {
     return Promise.resolve({
       url: this.url,
       title: this.title,
+      body: this.body,
       author: this.author,
       commits: this.commits,
       comments: this.comments,
