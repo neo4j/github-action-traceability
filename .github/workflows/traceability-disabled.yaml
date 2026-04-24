@@ -14,7 +14,8 @@ jobs:
   traceability-disabled:
     runs-on: ubuntu-latest
     steps:
-      - uses: neo4j/github-action-traceability@v2
+      - uses: actions/checkout@v3
+      - uses: ./
         with:
           global_verification_strategy: disabled
           github_api_token: "none"
