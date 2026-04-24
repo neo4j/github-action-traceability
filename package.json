@@ -1,6 +1,6 @@
 {
   "name": "github-action-traceability",
-  "description": "Ensures git commit messages contain a Trello short link",
+  "description": "Ensures pull requests are linked to a Linear issue",
   "version": "1.0.0",
   "author": "Neo4j",
   "license": "Apache-2.0",
@@ -30,14 +30,12 @@
   "dependencies": {
     "@actions/core": "^1.5.0",
     "@actions/github": "^5.0.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "node-fetch": "^2.6.0"
+    "eslint-plugin-prettier": "^4.2.1"
   },
   "devDependencies": {
     "@jest/globals": "^29.3.1",
     "@types/jest": "^29.2.3",
     "@types/node": "^16.9.1",
-    "@types/node-fetch": "^2.5.10",
     "@typescript-eslint/eslint-plugin": "^5.44.0",
     "@typescript-eslint/parser": "^5.44.0",
     "@vercel/ncc": "^0.34.0",

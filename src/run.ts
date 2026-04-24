@@ -2,11 +2,11 @@ import * as core from '@actions/core';
 
 import { GitHubClientI } from './client-github';
 import { GlobalVerificationStrategy, InputsClientI } from './client-inputs';
-import { TrelloClientI, TrelloShortLink } from './client-trello';
+import { LinearIssueLink } from './client-trello';
 import { UtilsService } from './service-utils';
 import { ERR_NO_VALID_COMMENTS } from './errors';
 
-const run = async (inputs: InputsClientI, github: GitHubClientI, trello: TrelloClientI) => {
+const run = async (inputs: InputsClientI, github: GitHubClientI) => {
   const utils = new UtilsService(inputs);
 
   switch (inputs.getGlobalVerificationStrategy()) {
@@ -16,10 +16,7 @@ const run = async (inputs: InputsClientI, github: GitHubClientI, trello: TrelloC
         inputs.getGithubRepositoryOwner(),
         inputs.getGitHubRepositoryName(),
       );
-      const shortLink = utils.extractShortLink(pullRequest.title);
-      if (shortLink instanceof TrelloShortLink) {
-        await utils.attachPullRequestToTrello(inputs, trello, github, pullRequest, shortLink);
-      }
+      utils.extractShortLink(pullRequest.title);
       break;
     }
     case GlobalVerificationStrategy.Commits: {
@@ -29,15 +26,7 @@ const run = async (inputs: InputsClientI, github: GitHubClientI, trello: TrelloC
         inputs.getGitHubRepositoryName(),
       );
       const commitMessages = pullRequest.commits.map((c) => c.commit.message);
-      const shortLinks = [...new Set(commitMessages.map(utils.extractShortLink.bind(utils)))];
-
-      await Promise.all(
-        shortLinks.map(async (shortLink) => {
-          if (shortLink instanceof TrelloShortLink) {
-            await utils.attachPullRequestToTrello(inputs, trello, github, pullRequest, shortLink);
-          }
-        }),
-      );
+      commitMessages.forEach((msg) => utils.extractShortLink(msg));
       break;
     }
     case GlobalVerificationStrategy.Comments: {
@@ -46,30 +35,14 @@ const run = async (inputs: InputsClientI, github: GitHubClientI, trello: TrelloC
         inputs.getGithubRepositoryOwner(),
         inputs.getGitHubRepositoryName(),
       );
-      const noIdLabels = pullRequest.labels.filter((l) => l.name === 'No Trello');
+      const noIdLabels = pullRequest.labels.filter((l) => l.name === 'No Linear');
       if (noIdLabels.length > 0) return;
 
-      const shortLinks = pullRequest.comments.map((comment) => ({
-        comment,
-        shortLink: utils.extractShortLinkFromComment(comment),
-      }));
-      const trelloShortLinks = shortLinks.filter(
-        (shortLink) => shortLink.shortLink instanceof TrelloShortLink,
-      );
-      if (trelloShortLinks.length === 0) throw new Error(ERR_NO_VALID_COMMENTS());
+      const linearIssueLinks = pullRequest.comments
+        .map((comment) => utils.extractShortLinkFromComment(comment))
+        .filter((shortLink) => shortLink instanceof LinearIssueLink);
 
-      await Promise.all(
-        trelloShortLinks.map(
-          async (sl) =>
-            await utils.attachPullRequestToTrello(
-              inputs,
-              trello,
-              github,
-              pullRequest,
-              sl.shortLink,
-            ),
-        ),
-      );
+      if (linearIssueLinks.length === 0) throw new Error(ERR_NO_VALID_COMMENTS());
       break;
     }
     case GlobalVerificationStrategy.Disabled:
