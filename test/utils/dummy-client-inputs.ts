@@ -28,14 +28,6 @@ class DummyInputsClient implements InputsClientI {
     return '';
   }
 
-  getTrelloApiKey(): string {
-    return '';
-  }
-
-  getTrelloApiToken(): string {
-    return '';
-  }
-
   getGithubRepositoryOwner(): string {
     return '';
   }

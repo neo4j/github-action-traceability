@@ -11,8 +11,6 @@ enum GlobalVerificationStrategy {
 
 interface InputsClientI {
   getGlobalVerificationStrategy(): GlobalVerificationStrategy;
-  getTrelloApiKey(): string;
-  getTrelloApiToken(): string;
   getGitHubApiToken(): string;
   getGitHubRepositoryName(): string;
   getGithubRepositoryOwner(): string;
@@ -35,16 +33,6 @@ class InputsClient implements InputsClientI {
       default:
         throw new Error(ERR_INPUT_INVALID('global_verification_strategy', input));
     }
-  }
-
-  getTrelloApiKey(): string {
-    core.info('Get trello_api_key.');
-    return core.getInput('trello_api_key', { required: true });
-  }
-
-  getTrelloApiToken(): string {
-    core.info('Get trello_api_token.');
-    return core.getInput('trello_api_token', { required: true });
   }
 
   getGitHubApiToken(): string {

@@ -1,6 +1,6 @@
-name: "Trello Traceability GitHub Action"
+name: "Linear Traceability GitHub Action"
 author: "Neo4j"
-description: "Ensures git commit messages contain a Trello short link"
+description: "Ensures pull requests are linked to a Linear issue"
 branding:
   icon: 'award'
   color: 'green'
@@ -9,12 +9,6 @@ inputs:
     required: false
     default: "commits"
     description: "One of comments, commits, title, disabled."
-  trello_api_key:
-    required: true
-    description: "API key for Trello. Use GitHub secrets. Don't use plaintext."
-  trello_api_token:
-    required: true
-    description: "API token for Trello. Use GitHub secrets. Don't use plaintext."
   github_api_token:
     required: true
     description: "API token for GitHub. Use GitHub secrets. Don't use plaintext."
