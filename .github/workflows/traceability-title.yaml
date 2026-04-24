@@ -14,7 +14,8 @@ jobs:
   traceability-title:
     runs-on: ubuntu-latest
     steps:
-      - uses: neo4j/github-action-traceability@v2
+      - uses: actions/checkout@v3
+      - uses: ./
         with:
           global_verification_strategy: title
           github_api_token: ${{ secrets.GITHUB_TOKEN }}
