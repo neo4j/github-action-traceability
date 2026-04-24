@@ -11,9 +11,7 @@ describe('GlobalVerificationStrategy.TitleOrDescription', () => {
     const inputs = new InputsClientBuilder()
       .withGlobalVerificationStrategy(GlobalVerificationStrategy.TitleOrDescription)
       .build();
-    const github = new GitHubClientBuilder()
-      .withPullRequestTitle('[NEO-123] My feature')
-      .build();
+    const github = new GitHubClientBuilder().withPullRequestTitle('[NEO-123] My feature').build();
     await expectSuccess(run(inputs, github));
   });
 
@@ -21,9 +19,7 @@ describe('GlobalVerificationStrategy.TitleOrDescription', () => {
     const inputs = new InputsClientBuilder()
       .withGlobalVerificationStrategy(GlobalVerificationStrategy.TitleOrDescription)
       .build();
-    const github = new GitHubClientBuilder()
-      .withPullRequestTitle('[NOID] My feature')
-      .build();
+    const github = new GitHubClientBuilder().withPullRequestTitle('[NOID] My feature').build();
     await expectSuccess(run(inputs, github));
   });
 
