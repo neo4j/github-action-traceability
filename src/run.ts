@@ -4,7 +4,7 @@ import { GitHubClientI } from './client-github';
 import { GlobalVerificationStrategy, InputsClientI } from './client-inputs';
 import { LinearIssueLink } from './client-trello';
 import { UtilsService } from './service-utils';
-import { ERR_NO_VALID_COMMENTS } from './errors';
+import { ERR_NO_LINEAR_ISSUE_TITLE_OR_DESCRIPTION, ERR_NO_VALID_COMMENTS } from './errors';
 
 const run = async (inputs: InputsClientI, github: GitHubClientI) => {
   const utils = new UtilsService(inputs);
@@ -27,6 +27,23 @@ const run = async (inputs: InputsClientI, github: GitHubClientI) => {
       );
       const commitMessages = pullRequest.commits.map((c) => c.commit.message);
       commitMessages.forEach((msg) => utils.extractShortLink(msg));
+      break;
+    }
+    case GlobalVerificationStrategy.TitleOrDescription: {
+      const pullRequest = await github.getPullRequest(
+        inputs.getPullRequestNumber(),
+        inputs.getGithubRepositoryOwner(),
+        inputs.getGitHubRepositoryName(),
+      );
+      try {
+        utils.extractShortLink(pullRequest.title);
+        break;
+      } catch {
+        // title did not match, fall through to check description
+      }
+      if (!utils.extractLinearIssueLinkFromText(pullRequest.body)) {
+        throw new Error(ERR_NO_LINEAR_ISSUE_TITLE_OR_DESCRIPTION());
+      }
       break;
     }
     case GlobalVerificationStrategy.Comments: {

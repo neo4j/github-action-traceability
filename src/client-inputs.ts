@@ -5,6 +5,7 @@ import { ERR_INPUT_INVALID, ERR_INPUT_NOT_FOUND } from './errors';
 enum GlobalVerificationStrategy {
   Commits = 'commits',
   Title = 'title',
+  TitleOrDescription = 'title-or-description',
   Comments = 'comments',
   Disabled = 'disabled',
 }
@@ -26,6 +27,8 @@ class InputsClient implements InputsClientI {
         return GlobalVerificationStrategy.Commits;
       case 'title':
         return GlobalVerificationStrategy.Title;
+      case 'title-or-description':
+        return GlobalVerificationStrategy.TitleOrDescription;
       case 'comments':
         return GlobalVerificationStrategy.Comments;
       case 'disabled':

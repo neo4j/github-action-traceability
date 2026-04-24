@@ -30,6 +30,7 @@ interface Label {
 interface PullRequest {
   url: string;
   title: string;
+  body: string;
   author: string;
   commits: Commit[];
   comments: Comment[];
@@ -41,6 +42,7 @@ interface GetPullRequest {
     pullRequest: {
       url: string;
       title: string;
+      body: string;
       author: {
         login: string;
       };
@@ -96,6 +98,7 @@ class GitHubClient implements GitHubClientI {
           pullRequest(number: $pullRequestNumber) {
             url
             title
+            body
             author {
               login
             }
@@ -135,6 +138,7 @@ class GitHubClient implements GitHubClientI {
     return {
       url: response.repository.pullRequest.url,
       title: response.repository.pullRequest.title,
+      body: response.repository.pullRequest.body,
       author: response.repository.pullRequest.author.login,
       commits: response.repository.pullRequest.commits.edges.map((e) => e.node),
       comments: response.repository.pullRequest.comments.edges.map((e) => e.node),

@@ -41,6 +41,12 @@ class UtilsService {
     }
   }
 
+  extractLinearIssueLinkFromText(text: string): LinearIssueLink | null {
+    const pattern = new RegExp(`([A-Z]+-[0-9]+)`);
+    const match = pattern.exec(text);
+    return match ? new LinearIssueLink(match[1]) : null;
+  }
+
   extractShortLinkFromComment(comment: Comment): ShortLink {
     core.info(`Extracting potential short link from comment ${comment.url}.`);
 
