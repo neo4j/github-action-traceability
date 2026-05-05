@@ -1,18 +1,23 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
-import { ERR_INPUT_INVALID, ERR_INPUT_NOT_FOUND } from './errors';
+import { ERR_INPUT_INVALID, ERR_INPUT_NOT_FOUND, ERR_STRATEGY_REMOVED } from './errors';
 
 enum GlobalVerificationStrategy {
-  Commits = 'commits',
-  Title = 'title',
-  TitleOrDescription = 'title-or-description',
-  Comments = 'comments',
+  Linked = 'linked',
   Disabled = 'disabled',
 }
+
+const REMOVED_STRATEGIES: ReadonlySet<string> = new Set([
+  'commits',
+  'title',
+  'title-or-description',
+  'comments',
+]);
 
 interface InputsClientI {
   getGlobalVerificationStrategy(): GlobalVerificationStrategy;
   getGitHubApiToken(): string;
+  getLinearApiKey(): string;
   getGitHubRepositoryName(): string;
   getGithubRepositoryOwner(): string;
   getPullRequestNumber(): number;
@@ -22,15 +27,12 @@ class InputsClient implements InputsClientI {
   getGlobalVerificationStrategy(): GlobalVerificationStrategy {
     core.info('Get global_verification_strategy.');
     const input = core.getInput('global_verification_strategy');
+    if (REMOVED_STRATEGIES.has(input)) {
+      throw new Error(ERR_STRATEGY_REMOVED(input));
+    }
     switch (input) {
-      case 'commits':
-        return GlobalVerificationStrategy.Commits;
-      case 'title':
-        return GlobalVerificationStrategy.Title;
-      case 'title-or-description':
-        return GlobalVerificationStrategy.TitleOrDescription;
-      case 'comments':
-        return GlobalVerificationStrategy.Comments;
+      case 'linked':
+        return GlobalVerificationStrategy.Linked;
       case 'disabled':
         return GlobalVerificationStrategy.Disabled;
       default:
@@ -41,6 +43,11 @@ class InputsClient implements InputsClientI {
   getGitHubApiToken(): string {
     core.info('Get github_api_token.');
     return core.getInput('github_api_token', { required: true });
+  }
+
+  getLinearApiKey(): string {
+    core.info('Get linear_api_key.');
+    return core.getInput('linear_api_key', { required: true });
   }
 
   getGitHubRepositoryName(): string {

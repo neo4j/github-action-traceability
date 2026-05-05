@@ -1,17 +1,20 @@
 name: "Linear Traceability GitHub Action"
 author: "Neo4j"
-description: "Ensures pull requests are linked to a Linear issue"
+description: "Verifies that pull requests are linked to a Linear issue via the Linear API"
 branding:
   icon: 'award'
   color: 'green'
 inputs:
   global_verification_strategy:
     required: false
-    default: "commits"
-    description: "One of commits, title, title-or-description, comments, disabled."
+    default: "linked"
+    description: "One of linked, disabled."
   github_api_token:
     required: true
-    description: "API token for GitHub. Use GitHub secrets. Don't use plaintext."
+    description: "API token for GitHub. Use GitHub secrets, do not paste plaintext."
+  linear_api_key:
+    required: false
+    description: "Linear API personal access token (Settings → API). Required when global_verification_strategy is 'linked'. Use GitHub secrets, do not paste plaintext."
 runs:
-  using: "node16"
+  using: "node20"
   main: "dist/index.js"

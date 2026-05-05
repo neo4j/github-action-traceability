@@ -1,12 +1,11 @@
-import { GitHubClientI, Commit, Comment, Label, PullRequest } from '../../src/client-github';
+import { GitHubClientI, Label, PullRequest } from '../../src/client-github';
 
 class GitHubClientBuilder {
-  url: string = 'https://www.github.com/neo4j/apoc';
+  url: string = 'https://github.com/neo4j/apoc/pull/1';
   title: string = 'Install Traceability GitHub Action';
   body: string = '';
   author: string = 'Alice';
-  commits: Commit[] = [];
-  comments: Comment[] = [];
+  headRefName: string = 'feature/install-action';
   labels: Label[] = [];
 
   public withPullRequestUrl(url: string): GitHubClientBuilder {
@@ -24,24 +23,13 @@ class GitHubClientBuilder {
     return this;
   }
 
-  public withPullRequestCommitMessage(message: string): GitHubClientBuilder {
-    this.commits.push({ commit: { message: message } });
+  public withHeadRefName(headRefName: string): GitHubClientBuilder {
+    this.headRefName = headRefName;
     return this;
   }
 
   public withPullRequestLabel(name: string): GitHubClientBuilder {
     this.labels.push({ name });
-    return this;
-  }
-
-  public withPullRequestComment(author: string, url: string, body: string): GitHubClientBuilder {
-    this.comments.push({
-      author: {
-        login: author,
-      },
-      body,
-      url,
-    });
     return this;
   }
 
@@ -51,8 +39,7 @@ class GitHubClientBuilder {
       this.title,
       this.body,
       this.author,
-      this.commits,
-      this.comments,
+      this.headRefName,
       this.labels,
     );
   }
@@ -63,8 +50,7 @@ class DummyGitHubClient implements GitHubClientI {
   title: string;
   body: string;
   author: string;
-  commits: Commit[];
-  comments: Comment[];
+  headRefName: string;
   labels: Label[];
 
   constructor(
@@ -72,31 +58,28 @@ class DummyGitHubClient implements GitHubClientI {
     title: string,
     body: string,
     author: string,
-    commits: Commit[],
-    comments: Comment[],
+    headRefName: string,
     labels: Label[],
   ) {
     this.url = url;
     this.title = title;
     this.body = body;
     this.author = author;
-    this.commits = commits;
-    this.comments = comments;
+    this.headRefName = headRefName;
     this.labels = labels;
   }
 
   getPullRequest(
-    pullRequestNumber: number,
-    repositoryOwner: string,
-    repositoryName: string,
+    _pullRequestNumber: number,
+    _repositoryOwner: string,
+    _repositoryName: string,
   ): Promise<PullRequest> {
     return Promise.resolve({
       url: this.url,
       title: this.title,
       body: this.body,
       author: this.author,
-      commits: this.commits,
-      comments: this.comments,
+      headRefName: this.headRefName,
       labels: this.labels,
     });
   }

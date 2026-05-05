@@ -344,6 +344,11 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
+"@graphql-typed-document-node/core@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@graphql-typed-document-node/core/-/core-3.2.0.tgz#5f3d96ec6b2354ad6d8a28bf216a1d97b5426861"
+  integrity sha512-mB9oAsNCm9aM3/SOv4YtBMqZbYj10R7dkq8byBqxGY/ncFwhf2oQzMV+LCRlWoDSEBJ3COiR1yeDvMtsoOsuFQ==
+
 "@humanwhocodes/config-array@^0.5.0":
   version "0.5.0"
   resolved "https://registry.npmjs.org/@humanwhocodes/config-array/-/config-array-0.5.0.tgz"
@@ -606,6 +611,13 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
+"@linear/sdk@^83.0.0":
+  version "83.0.0"
+  resolved "https://registry.yarnpkg.com/@linear/sdk/-/sdk-83.0.0.tgz#8f33f5edfc5edd233f5dc8439d3f72aabc0d5e8e"
+  integrity sha512-/M1FETZfA8U7WrNvBavO+/fkWrIV49/G0g3w/57q2h/K/1FtVmskXpsvSvQXuGJr2njJmAQbygF3yNi/AJ5Jag==
+  dependencies:
+    "@graphql-typed-document-node/core" "^3.2.0"
+
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.npmjs.org/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz"
@@ -804,10 +816,17 @@
   resolved "https://registry.npmjs.org/@types/json-schema/-/json-schema-7.0.11.tgz"
   integrity sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==
 
-"@types/node@*", "@types/node@^16.9.1":
+"@types/node@*":
   version "16.18.3"
   resolved "https://registry.npmjs.org/@types/node/-/node-16.18.3.tgz"
   integrity sha512-jh6m0QUhIRcZpNv7Z/rpN+ZWXOicUUQbSoWks7Htkbb9IjFQj4kzcX/xFCkjstCj5flMsN8FiSvt+q+Tcs4Llg==
+
+"@types/node@^20":
+  version "20.19.39"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.19.39.tgz#e98a3b575574070cd34b784bd173767269f95e99"
+  integrity sha512-orrrD74MBUyK8jOAD/r0+lfa1I2MO6I+vAkmAWzMYbCcgrN4lCrmK52gRFQq/JRxfYPfonkr4b0jcY7Olqdqbw==
+  dependencies:
+    undici-types "~6.21.0"
 
 "@types/prettier@^2.1.5":
   version "2.7.1"
@@ -1696,6 +1715,11 @@ graceful-fs@^4.2.9:
   version "4.2.10"
   resolved "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.10.tgz"
   integrity sha512-9ByhssR2fPVsNZj478qUUbKfmL0+t5BDVyjShtyZZLiK7ZDAArFFfopyOTj0M05wE2tJPisA4iTnnXl2YoPvOA==
+
+graphql@^16:
+  version "16.13.2"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.13.2.tgz#4d2b73df5796b201f1bc2765f5d7067f689cb55f"
+  integrity sha512-5bJ+nf/UCpAjHM8i06fl7eLyVC9iuNAjm9qzkiu2ZGhM0VscSvS6WDPfAwkdkBuoXGM9FJSbKl6wylMwP9Ktig==
 
 has-flag@^3.0.0:
   version "3.0.0"
@@ -2890,6 +2914,11 @@ typescript@^4.4.4:
   version "4.9.3"
   resolved "https://registry.npmjs.org/typescript/-/typescript-4.9.3.tgz"
   integrity sha512-CIfGzTelbKNEnLpLdGFgdyKhG23CKdKgQPOBc+OUNrkJ2vr+KSzsSV5kq5iWhEQbok+quxgGzrAtGWCyU7tHnA==
+
+undici-types@~6.21.0:
+  version "6.21.0"
+  resolved "https://registry.yarnpkg.com/undici-types/-/undici-types-6.21.0.tgz#691d00af3909be93a7faa13be61b3a5b50ef12cb"
+  integrity sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==
 
 universal-user-agent@^6.0.0:
   version "6.0.0"

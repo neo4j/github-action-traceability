@@ -1,4 +1,4 @@
-name: traceability-title
+name: traceability
 
 on:
   pull_request:
@@ -9,13 +9,16 @@ on:
       - edited
       - reopened
       - synchronize
+      - labeled
+      - unlabeled
 
 jobs:
-  traceability-title:
+  traceability:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: ./
         with:
-          global_verification_strategy: title
+          global_verification_strategy: linked
           github_api_token: ${{ secrets.GITHUB_TOKEN }}
+          linear_api_key: ${{ secrets.LINEAR_API_KEY }}

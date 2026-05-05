@@ -1,12 +1,20 @@
-export const ERR_INVALID_NOID = (shortLinkId: string) =>
-  `Unexpected NOID short link "${shortLinkId}". Only Linear issue links are allowed in your project, please provide one in the form of "[TEAM-123] My change description".`;
 export const ERR_INPUT_NOT_FOUND = (input: string) => `Input not found "${input}".`;
 export const ERR_INPUT_INVALID = (input: string, value: string) =>
   `Unrecognised value ${value} for input "${input}".`;
-export const ERR_NO_LINEAR_ISSUE_TITLE_OR_DESCRIPTION = () =>
-  `No Linear issue ID found in the PR title or description. Please include a Linear issue ID in the PR title using the format "[TEAM-123] My PR title", or include it anywhere in the PR description.`;
-export const ERR_NO_VALID_COMMENTS = () =>
-  `There were no comments in this PR that contained a valid Linear issue URL. This is likely either intentional or because you forgot to link this PR to a Linear issue. In order for this CI check to pass, you need to either link this PR to a Linear issue, or label your PR with the 'No Linear' label.`;
-export const ERR_NO_SHORT_LINK = (description: string) =>
-  `Description "${description}" did not contain a valid short link. Please include one like in the following examples: "[TEAM-123] My work description" or "[NOID] My work description".`;
-export const ERR_UNEXPECTED = (error: any) => `Unexpected: ${error}`;
+export const ERR_STRATEGY_REMOVED = (value: string) =>
+  `The global_verification_strategy "${value}" was removed in a previous release. Use "linked" (verifies the PR is linked to a Linear issue via title, description, or branch name) or "disabled". See README.md for migration details.`;
+export const ERR_NO_ISSUE_REFERENCE = () =>
+  `No Linear issue reference found in the pull request title, description, or branch name. Linear auto-links a PR when any of these contains an issue ID like "NEO-123". To intentionally skip the check, prefix the title with "[NOID]" or apply the "No Linear" label.`;
+export const ERR_ISSUE_NOT_FOUND = (identifiers: string[]) =>
+  `None of the referenced Linear issues exist: ${identifiers.join(
+    ', ',
+  )}. Check for typos in the issue identifier.`;
+export const ERR_ATTACHMENT_NOT_FOUND = (identifiers: string[], prUrl: string) =>
+  `Linear has not registered ${prUrl} as an attachment on any of: ${identifiers.join(
+    ', ',
+  )}. The Linear GitHub integration may not be installed for this repository, or the workspace of the linear_api_key may not match the integration's workspace.`;
+export const ERR_LINEAR_AUTH = () =>
+  `The Linear API rejected the request as unauthorised. Verify the linear_api_key secret is set and has access to the workspace where issues live.`;
+export const ERR_LINEAR_RATE_LIMITED = () =>
+  `The Linear API rate-limited the request. The action will retry on the next pull_request event.`;
+export const ERR_UNEXPECTED = (error: unknown) => `Unexpected: ${error}`;

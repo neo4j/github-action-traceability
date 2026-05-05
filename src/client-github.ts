@@ -9,20 +9,6 @@ interface EdgeItems<T> {
   ];
 }
 
-interface Commit {
-  commit: {
-    message: string;
-  };
-}
-
-interface Comment {
-  author: {
-    login: string;
-  };
-  body: string;
-  url: string;
-}
-
 interface Label {
   name: string;
 }
@@ -32,8 +18,7 @@ interface PullRequest {
   title: string;
   body: string;
   author: string;
-  commits: Commit[];
-  comments: Comment[];
+  headRefName: string;
   labels: Label[];
 }
 
@@ -43,11 +28,10 @@ interface GetPullRequest {
       url: string;
       title: string;
       body: string;
+      headRefName: string;
       author: {
         login: string;
       };
-      commits: EdgeItems<Commit>;
-      comments: EdgeItems<Comment>;
       labels: EdgeItems<Label>;
     };
   };
@@ -86,12 +70,10 @@ class GitHubClient implements GitHubClientI {
     };
 
     const query = `
-      query commitMessages(
+      query pullRequestForTraceability(
         $repositoryOwner: String!
         $repositoryName: String!
         $pullRequestNumber: Int!
-        $numberOfCommits: Int = 250
-        $numberOfComments: Int = 100
         $numberOfLabels: Int = 50
       ) {
         repository(owner: $repositoryOwner, name: $repositoryName) {
@@ -99,28 +81,9 @@ class GitHubClient implements GitHubClientI {
             url
             title
             body
+            headRefName
             author {
               login
-            }
-            commits(last: $numberOfCommits) {
-              edges {
-                node {
-                  commit {
-                    message
-                  }
-                }
-              }
-            }
-            comments(last: $numberOfComments) {
-              edges {
-                node {
-                  author {
-                    login
-                  }
-                  body
-                  url
-                }
-              }
             }
             labels(last: $numberOfLabels) {
               edges {
@@ -139,12 +102,11 @@ class GitHubClient implements GitHubClientI {
       url: response.repository.pullRequest.url,
       title: response.repository.pullRequest.title,
       body: response.repository.pullRequest.body,
+      headRefName: response.repository.pullRequest.headRefName,
       author: response.repository.pullRequest.author.login,
-      commits: response.repository.pullRequest.commits.edges.map((e) => e.node),
-      comments: response.repository.pullRequest.comments.edges.map((e) => e.node),
       labels: response.repository.pullRequest.labels.edges.map((e) => e.node),
     };
   }
 }
 
-export { GitHubClient, GitHubClientI, Commit, Comment, Label, PullRequest };
+export { GitHubClient, GitHubClientI, Label, PullRequest };
