@@ -1,79 +1,93 @@
-# Traceability GitHub Action
+# Linear Traceability GitHub Action
 
-![](assets/trello-github.png)
+A GitHub Action that enforces Linear issue traceability on pull requests. It verifies — by calling the Linear API — that every PR is either linked to a real Linear issue or explicitly opted out.
 
-# Introduction
+## What "linked" means
 
-This GitHub Action exists for the sole purpose of linking Trello cards to git commits. So that when you look at your
-project's work history in git, you can easily trace back each code change to a nicely documented Trello card. 
+Linear's GitHub integration auto-links a PR to an issue when the issue identifier (e.g. `NEO-123`) appears in any of:
 
-Depending on how you want to configure this GitHub Action for your project, you will be able to:
-- enforce that git commit messages contain a Trello card short link
-- enforce that PR title contain a Trello card short link
-- enforce that the Trello card exists and is open
-- automatically add an attachment to a Trello card containing the GitHub PR
+- The pull request title (bare or bracketed)
+- The pull request description (with or without a closing keyword like `Closes`, `Fixes`, `Resolves`)
+- The head branch name (case-insensitive substring)
 
-# Commit Message Structure
+Linear does **not** scan commit messages or PR comments. This action mirrors that behavior: it scans the same three locations for `[A-Z]+-\d+` substrings, then asks Linear (a) whether each referenced issue exists and (b) whether the PR is registered as an attachment on it.
 
-Include your short link in each of your commit messages: 
-- The short link needs to appear at the beginning of the commit message 
-- The short link needs to be between square brackets
+When Linear has registered the link, the check passes. When the issue is missing or no attachment is registered (and won't be after a brief retry), the check fails with an actionable error.
 
-```bash
-git commit -m "[i19tvtq1] Description of my change"
+## Strategies
+
+| Option | Description |
+|--------|-------------|
+| `linked` (default) | Verifies via the Linear API that the PR is linked to at least one existing Linear issue. |
+| `disabled` | No-op. Use to install the action without enforcement, e.g. while migrating. |
+
+## Opt-out
+
+Two mechanisms skip the check:
+
+- **`No Linear` PR label** (case-insensitive) — apply via the GitHub UI when a PR is intentionally unrelated to any Linear issue.
+- **`[NOID]` prefix in the PR title** (case-insensitive) — for example, `[NOID] Bump dependency versions`.
+
+Either is sufficient. The action exits successfully without calling the Linear API.
+
+## Setup
+
+```yaml
+# .github/workflows/traceability.yaml
+name: traceability
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize, labeled, unlabeled]
+jobs:
+  traceability:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: neo4j/github-action-traceability@v3
+        with:
+          global_verification_strategy: linked
+          github_api_token: ${{ secrets.GITHUB_TOKEN }}
+          linear_api_key: ${{ secrets.LINEAR_API_KEY }}
 ```
 
-Trello short links can be found in the card URL. Below, the short link is highlighted in blue.
+### Inputs
 
-![](assets/trello-short-link.png)
+| Input | Required | Description |
+|-------|----------|-------------|
+| `global_verification_strategy` | no | `linked` (default) or `disabled`. |
+| `github_api_token` | yes | GitHub token. The default `${{ secrets.GITHUB_TOKEN }}` works. |
+| `linear_api_key` | when strategy is `linked` | Linear personal API key. Create one at **Linear Settings → API → Personal API keys**. Store as a GitHub secret. |
 
-# Setup Overview
+### Why a Linear API key (and not just OAuth)
 
-In order to enable this GitHub action, you need to add it to your existing repository and let it run on PR builds. This
-GitHub action is setup in this repository, please visit the following files for examples.
+A personal API key is the simplest credential for unattended CI use. It has read access to the Linear workspace it was created in. Issue ID lookups and attachment listing are read-only operations.
 
-- [traceability-comments.yaml](./.github/workflows/traceability-comments.yaml)
-- [traceability-comments-trigger.yaml](./.github/workflows/traceability-comments-trigger.yaml)
-- [traceability-commits.yaml](./.github/workflows/traceability-commits.yaml)
-- [traceability-title.yaml](./.github/workflows/traceability-title.yaml)
-- [traceability-disabled.yaml](./.github/workflows/traceability-disabled.yaml)
+## Behavior
 
-# Setup Inputs in Detail
+### Retry on Linear processing latency
 
-### global_verification_strategy
+When a PR opens, Linear's integration takes a few seconds to register the GitHub PR as an attachment on the referenced issue. The action retries the attachment check four times over roughly 30 seconds before failing, so a brand-new PR is unlikely to flake.
 
-**Default**: `commits`
+### Multiple issues per PR
 
-| Option       | Descriptions                                                                                                      |
-|--------------|-------------------------------------------------------------------------------------------------------------------|
-| **comments** | The GHA will only check the comments contained within your PR.                                                    | 
-| **commits**  | The GHA will only check the commits contained within your PR.                                                     |
-| **title**    | The GHA will only check the title contained within your PR.                           |
-| **disabled** | Disables the GHA. If you intend to permanently disable the GHA, then you should just remove it from your project. |
+Linear supports multiple issue IDs in a single PR (e.g. `Fixes NEO-123, NEO-456`). The action passes when **at least one** of the referenced issues exists *and* has the PR registered as an attachment.
 
-### trello_api_key
+### Pull requests from forks
 
-Use the public key of the existing PowerUp 
-[ManageTrelloPowerUps>GithubIntegration](https://trello.com/power-ups/639711253572cf0030b9bb20/edit/api-key).
+`secrets.LINEAR_API_KEY` is unavailable to workflows triggered by `pull_request` events from forks. Such PRs will fail with an authentication error. If your project accepts contributions from forks, use `pull_request_target` instead (with the standard security caveats — review the secrets exposure carefully).
 
-Alternatively, follow instructions 
-[here](https://developer.atlassian.com/cloud/trello/guides/rest-api/api-introduction/#managing-your-api-key) 
-and make your own power up. It takes 5 minutes, and you don't need particularly advanced privileges to create it.
+## Migration from earlier versions
 
-### trello_api_token
+Earlier versions (`v1`, `v2`) used Trello and offered five string-matching strategies (`commits`, `title`, `title-or-description`, `comments`, `disabled`). All of those except `disabled` have been removed. If you used:
 
-Go to existing PowerUp in 
-[ManageTrelloPowerUps>GithubIntegration](https://trello.com/power-ups/639711253572cf0030b9bb20/edit/api-key) 
-and click on "Token".
+- `commits` — Linear does not scan commit messages, so per-commit enforcement no longer matches Linear's link-detection. Switch to `linked`.
+- `title`, `title-or-description`, or `comments` — switch to `linked`. The check now covers title, description, *and* branch name in one strategy.
+- `[abc123]` Trello short links in commit/title prefixes — these are no longer recognized. Use Linear-style `NEO-123` (anywhere in title, description, or branch).
+- The `No Trello` label — rename to `No Linear`.
+- The `trello_api_key` and `trello_api_token` inputs — remove them. Add `linear_api_key`.
 
-Alternatively, follow instructions 
-[here](https://developer.atlassian.com/cloud/trello/guides/rest-api/api-introduction/#managing-your-api-key)
-and make your own power up. It takes 5 minutes, and you don't need particularly advanced privileges to create it.
+Workflows that still set `global_verification_strategy: commits` (or any other removed value) will fail loudly with a migration error.
 
-### github_api_token
+## Contributing
 
-Included by default in your GitHub CI.
-
-# Contributing
-
-Please check out [CONTRIBUTING.md](CONTRIBUTING.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md).
