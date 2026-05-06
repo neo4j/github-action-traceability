@@ -16,6 +16,8 @@ jobs:
   traceability:
     runs-on: ubuntu-latest
     steps:
+      # Dogfoods the in-tree action against PRs to this repo (`uses: ./`).
+      # Downstream consumers should pin a published version instead — see README.md.
       - uses: actions/checkout@v3
       - uses: ./
         with:
