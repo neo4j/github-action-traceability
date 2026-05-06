@@ -1,4 +1,5 @@
 import { LinearClientI } from '../../src/client-linear';
+import { ERR_LINEAR_AUTH } from '../../src/errors';
 
 interface IssueFixture {
   identifier: string;
@@ -57,9 +58,7 @@ class DummyLinearClient implements LinearClientI {
 
   async getIssueAttachmentUrls(identifier: string): Promise<string[] | null> {
     if (this.authFails) {
-      throw new Error(
-        'The Linear API rejected the request as unauthorised. Verify the linear_api_key secret is set and has access to the workspace where issues live.',
-      );
+      throw new Error(ERR_LINEAR_AUTH());
     }
     const baseUrls = this.issues.get(identifier);
     if (baseUrls === undefined) return null;
