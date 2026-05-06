@@ -12,6 +12,9 @@ on:
       - labeled
       - unlabeled
 
+permissions:
+  contents: read
+
 jobs:
   traceability:
     runs-on: ubuntu-latest
