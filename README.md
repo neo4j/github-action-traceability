@@ -1,5 +1,7 @@
 # Linear Traceability GitHub Action
 
+![](assets/GitHub_Linear_Gemini_Generated.png)
+
 A GitHub Action that enforces Linear issue traceability on pull requests. It verifies — by calling the Linear API — that every PR is either linked to a real Linear issue or explicitly opted out.
 
 ## What "linked" means
