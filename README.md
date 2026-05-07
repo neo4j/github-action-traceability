@@ -38,13 +38,12 @@ Either is sufficient. The action exits successfully without calling the Linear A
 # .github/workflows/traceability.yaml
 name: traceability
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, edited, reopened, synchronize, labeled, unlabeled]
 jobs:
   traceability:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
       - uses: neo4j/github-action-traceability@v3
         with:
           global_verification_strategy: linked
@@ -76,7 +75,7 @@ Linear supports multiple issue IDs in a single PR (e.g. `Fixes NEO-123, NEO-456`
 
 ### Pull requests from forks
 
-`secrets.LINEAR_API_KEY` is unavailable to workflows triggered by `pull_request` events from forks. Such PRs will fail with an authentication error. If your project accepts contributions from forks, use `pull_request_target` instead (with the standard security caveats — review the secrets exposure carefully).
+`secrets.LINEAR_API_KEY` is unavailable to workflows triggered by `pull_request` events from forks. Such PRs will fail with an authentication error. Because our project accepts contributions from forks, we use `pull_request_target` instead (with the standard security caveats — review the secrets exposure carefully).
 
 ## Migration from earlier versions
 
