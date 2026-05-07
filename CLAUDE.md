@@ -62,7 +62,7 @@ HTTP-level error mapping for the real `LinearClient` (401/403/429, GraphQL `NotF
 
 **Self-testing**: `.github/workflows/traceability.yaml` uses `uses: ./` and runs the in-tree action against PRs to this repo. Every PR dogfoods the build in `dist/index.js`. The example workflow file therefore differs slightly from how a downstream consumer would reference the action (`uses: neo4j/github-action-traceability@v3`).
 
-Node version: 20.x (see `.nvmrc`). The action runtime is `node20` (see `action.yml`). The fetch-based Linear client relies on Node 18+'s built-in `fetch`.
+Node version: 24.x (see `.nvmrc`). The action runtime is `node24` (see `action.yml`). The fetch-based Linear client relies on Node 18+'s built-in `fetch`.
 
 ## Release
 

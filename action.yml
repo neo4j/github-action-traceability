@@ -16,5 +16,5 @@ inputs:
     required: false
     description: "Linear API personal access token (Settings → API). Required when global_verification_strategy is 'linked'. Use GitHub secrets, do not paste plaintext."
 runs:
-  using: "node20"
+  using: "node24"
   main: "dist/index.js"
