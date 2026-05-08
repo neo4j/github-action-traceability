@@ -19,6 +19,7 @@ interface PullRequest {
   body: string;
   author: string;
   headRefName: string;
+  baseRefName: string;
   labels: Label[];
 }
 
@@ -29,6 +30,7 @@ interface GetPullRequest {
       title: string;
       body: string;
       headRefName: string;
+      baseRefName: string;
       author: {
         login: string;
       };
@@ -82,6 +84,7 @@ class GitHubClient implements GitHubClientI {
             title
             body
             headRefName
+            baseRefName
             author {
               login
             }
@@ -103,6 +106,7 @@ class GitHubClient implements GitHubClientI {
       title: response.repository.pullRequest.title,
       body: response.repository.pullRequest.body,
       headRefName: response.repository.pullRequest.headRefName,
+      baseRefName: response.repository.pullRequest.baseRefName,
       author: response.repository.pullRequest.author.login,
       labels: response.repository.pullRequest.labels.edges.map((e) => e.node),
     };

@@ -29977,6 +29977,7 @@ class GitHubClient {
             title
             body
             headRefName
+            baseRefName
             author {
               login
             }
@@ -29997,6 +29998,7 @@ class GitHubClient {
                 title: response.repository.pullRequest.title,
                 body: response.repository.pullRequest.body,
                 headRefName: response.repository.pullRequest.headRefName,
+                baseRefName: response.repository.pullRequest.baseRefName,
                 author: response.repository.pullRequest.author.login,
                 labels: response.repository.pullRequest.labels.edges.map((e) => e.node),
             };
@@ -30106,6 +30108,13 @@ class InputsClient {
             !github.context.payload.repository.owner.name)
             throw new Error((0, errors_1.ERR_INPUT_NOT_FOUND)('github.context.payload.repository.owner.login && github.context.payload.repository.owner.name'));
         return (github.context.payload.repository.owner.name || github.context.payload.repository.owner.login);
+    }
+    getTargetBranches() {
+        core.info('Get target_branches.');
+        return core
+            .getMultilineInput('target_branches')
+            .map((b) => b.trim())
+            .filter((b) => b.length > 0);
     }
     getPullRequestNumber() {
         core.info('Get github.context.payload.pull_request.number.');
@@ -30397,6 +30406,11 @@ const run = (inputs_1, github_1, linearFactory_1, ...args_1) => __awaiter(void 0
         return;
     }
     const pullRequest = yield github.getPullRequest(inputs.getPullRequestNumber(), inputs.getGithubRepositoryOwner(), inputs.getGitHubRepositoryName());
+    const targetBranches = inputs.getTargetBranches();
+    if (targetBranches.length > 0 && !targetBranches.includes(pullRequest.baseRefName)) {
+        core.info(`Pull request base branch "${pullRequest.baseRefName}" is not in target_branches (${targetBranches.join(', ')}); skipping checks.`);
+        return;
+    }
     if (isOptedOut(pullRequest)) {
         core.info('Pull request is opted out of Linear traceability checks.');
         return;

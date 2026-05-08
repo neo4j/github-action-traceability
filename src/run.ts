@@ -28,6 +28,16 @@ const run = async (
     inputs.getGitHubRepositoryName(),
   );
 
+  const targetBranches = inputs.getTargetBranches();
+  if (targetBranches.length > 0 && !targetBranches.includes(pullRequest.baseRefName)) {
+    core.info(
+      `Pull request base branch "${
+        pullRequest.baseRefName
+      }" is not in target_branches (${targetBranches.join(', ')}); skipping checks.`,
+    );
+    return;
+  }
+
   if (isOptedOut(pullRequest)) {
     core.info('Pull request is opted out of Linear traceability checks.');
     return;

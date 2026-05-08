@@ -21,6 +21,7 @@ interface InputsClientI {
   getGitHubRepositoryName(): string;
   getGithubRepositoryOwner(): string;
   getPullRequestNumber(): number;
+  getTargetBranches(): string[];
 }
 
 class InputsClient implements InputsClientI {
@@ -81,6 +82,14 @@ class InputsClient implements InputsClientI {
     return (
       github.context.payload.repository.owner.name || github.context.payload.repository.owner.login
     );
+  }
+
+  getTargetBranches(): string[] {
+    core.info('Get target_branches.');
+    return core
+      .getMultilineInput('target_branches')
+      .map((b) => b.trim())
+      .filter((b) => b.length > 0);
   }
 
   getPullRequestNumber(): number {
