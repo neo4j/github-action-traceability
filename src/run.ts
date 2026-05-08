@@ -38,8 +38,9 @@ const run = async (
     return;
   }
 
-  if (isOptedOut(pullRequest)) {
-    core.info('Pull request is opted out of Linear traceability checks.');
+  const optOutReason = getOptOutReason(pullRequest);
+  if (optOutReason) {
+    core.info(`Pull request is opted out of Linear traceability checks via ${optOutReason}.`);
     return;
   }
 
@@ -71,11 +72,11 @@ const run = async (
       throw new Error(ERR_ISSUE_NOT_FOUND(candidateIds));
     }
 
-    const attached = results.some(
+    const attachedIssue = results.find(
       (r) => r.urls !== null && r.urls.some((u) => normalizeUrl(u) === prUrl),
     );
-    if (attached) {
-      core.info('Pull request is attached to a Linear issue.');
+    if (attachedIssue) {
+      core.info(`Pull request is attached to Linear issue ${attachedIssue.id}.`);
       return;
     }
   }
@@ -83,10 +84,14 @@ const run = async (
   throw new Error(ERR_ATTACHMENT_NOT_FOUND(existingIds, pullRequest.url));
 };
 
-const isOptedOut = (pullRequest: PullRequest): boolean => {
-  if (pullRequest.labels.some((l) => l.name.trim().toLowerCase() === NO_LINEAR_LABEL)) return true;
-  if (NOID_TITLE_PATTERN.test(pullRequest.title)) return true;
-  return false;
+const getOptOutReason = (pullRequest: PullRequest): string | null => {
+  if (pullRequest.labels.some((l) => l.name.trim().toLowerCase() === NO_LINEAR_LABEL)) {
+    return `the "No Linear" label`;
+  }
+  if (NOID_TITLE_PATTERN.test(pullRequest.title)) {
+    return `the [NOID] title prefix`;
+  }
+  return null;
 };
 
 const extractIssueIds = (pullRequest: PullRequest): string[] => {
