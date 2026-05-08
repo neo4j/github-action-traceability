@@ -6,6 +6,7 @@ class GitHubClientBuilder {
   body: string = '';
   author: string = 'Alice';
   headRefName: string = 'feature/install-action';
+  baseRefName: string = 'dev';
   labels: Label[] = [];
 
   public withPullRequestUrl(url: string): GitHubClientBuilder {
@@ -28,6 +29,11 @@ class GitHubClientBuilder {
     return this;
   }
 
+  public withBaseRefName(baseRefName: string): GitHubClientBuilder {
+    this.baseRefName = baseRefName;
+    return this;
+  }
+
   public withPullRequestLabel(name: string): GitHubClientBuilder {
     this.labels.push({ name });
     return this;
@@ -40,6 +46,7 @@ class GitHubClientBuilder {
       this.body,
       this.author,
       this.headRefName,
+      this.baseRefName,
       this.labels,
     );
   }
@@ -51,6 +58,7 @@ class DummyGitHubClient implements GitHubClientI {
   body: string;
   author: string;
   headRefName: string;
+  baseRefName: string;
   labels: Label[];
 
   constructor(
@@ -59,6 +67,7 @@ class DummyGitHubClient implements GitHubClientI {
     body: string,
     author: string,
     headRefName: string,
+    baseRefName: string,
     labels: Label[],
   ) {
     this.url = url;
@@ -66,6 +75,7 @@ class DummyGitHubClient implements GitHubClientI {
     this.body = body;
     this.author = author;
     this.headRefName = headRefName;
+    this.baseRefName = baseRefName;
     this.labels = labels;
   }
 
@@ -80,6 +90,7 @@ class DummyGitHubClient implements GitHubClientI {
       body: this.body,
       author: this.author,
       headRefName: this.headRefName,
+      baseRefName: this.baseRefName,
       labels: this.labels,
     });
   }

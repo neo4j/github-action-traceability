@@ -197,6 +197,51 @@ describe('GlobalVerificationStrategy.Linked', () => {
     });
   });
 
+  describe('target_branches', () => {
+    it('runs verification when target_branches is empty (no filter)', async () => {
+      const inputs = new InputsClientBuilder().build();
+      const github = new GitHubClientBuilder()
+        .withPullRequestUrl(PR_URL)
+        .withPullRequestTitle('[NEO-123] My feature')
+        .withBaseRefName('release/1.2')
+        .build();
+      const linear = new LinearClientBuilder().withAttachedPullRequest('NEO-123', PR_URL).build();
+      await expectSuccess(run(inputs, github, factoryOf(linear), NO_RETRY));
+    });
+
+    it('runs verification when the PR base branch is in target_branches', async () => {
+      const inputs = new InputsClientBuilder().withTargetBranches(['dev']).build();
+      const github = new GitHubClientBuilder()
+        .withPullRequestUrl(PR_URL)
+        .withPullRequestTitle('[NEO-123] My feature')
+        .withBaseRefName('dev')
+        .build();
+      const linear = new LinearClientBuilder().withAttachedPullRequest('NEO-123', PR_URL).build();
+      await expectSuccess(run(inputs, github, factoryOf(linear), NO_RETRY));
+    });
+
+    it('skips verification when the PR base branch is not in target_branches', async () => {
+      const inputs = new InputsClientBuilder().withTargetBranches(['dev']).build();
+      const github = new GitHubClientBuilder()
+        .withPullRequestTitle('No issue reference')
+        .withBaseRefName('2026.05')
+        .build();
+      const linear = new LinearClientBuilder().withAuthFailure().build();
+      await expectSuccess(run(inputs, github, factoryOf(linear), NO_RETRY));
+    });
+
+    it('matches against any entry when target_branches has multiple values', async () => {
+      const inputs = new InputsClientBuilder().withTargetBranches(['dev', 'main']).build();
+      const github = new GitHubClientBuilder()
+        .withPullRequestUrl(PR_URL)
+        .withPullRequestTitle('[NEO-123] My feature')
+        .withBaseRefName('main')
+        .build();
+      const linear = new LinearClientBuilder().withAttachedPullRequest('NEO-123', PR_URL).build();
+      await expectSuccess(run(inputs, github, factoryOf(linear), NO_RETRY));
+    });
+  });
+
   describe('disabled strategy', () => {
     it('is a no-op', async () => {
       const inputs = new InputsClientBuilder()

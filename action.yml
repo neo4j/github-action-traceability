@@ -15,6 +15,10 @@ inputs:
   linear_api_key:
     required: false
     description: "Linear API personal access token (Settings → API). Required when global_verification_strategy is 'linked'. Use GitHub secrets, do not paste plaintext."
+  target_branches:
+    required: false
+    default: ""
+    description: "Newline-separated list of base branches the action should run against. PRs whose base branch is not in the list are reported as success without contacting Linear. Empty (default) means run against all base branches. Useful when the consumer workflow cannot use the workflow-level `branches:` filter — e.g. so that changing the base branch of a PR re-paints the check status to green."
 runs:
   using: "node20"
   main: "dist/index.js"

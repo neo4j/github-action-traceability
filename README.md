@@ -38,18 +38,21 @@ Either is sufficient. The action exits successfully without calling the Linear A
 # .github/workflows/traceability.yaml
 name: traceability
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, edited, reopened, synchronize, labeled, unlabeled]
+    # no `branches:` filter — let `target_branches` (below) decide
 jobs:
   traceability:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
       - uses: neo4j/github-action-traceability@v3
         with:
           global_verification_strategy: linked
           github_api_token: ${{ secrets.GITHUB_TOKEN }}
           linear_api_key: ${{ secrets.LINEAR_API_KEY }}
+          target_branches: |
+            dev
+            main
 ```
 
 ### Inputs
@@ -59,6 +62,9 @@ jobs:
 | `global_verification_strategy` | no | `linked` (default) or `disabled`. |
 | `github_api_token` | yes | GitHub token. The default `${{ secrets.GITHUB_TOKEN }}` works. |
 | `linear_api_key` | when strategy is `linked` | Linear personal API key. Create one at **Linear Settings → API → Personal API keys**. Store as a GitHub secret. |
+| `target_branches` | no | Newline-separated list of base branches the action should run against. PRs targeting any other base branch are reported as success without contacting Linear. Empty (default) means run for every base branch. |
+
+Prefer `target_branches` over a workflow-level `branches:` filter when PRs in your repo can be re-targeted between branches: the workflow filter only decides whether the workflow *runs*, so once a PR has failed against `dev` and is re-pointed elsewhere, the stale red check sticks. Letting the action gate on the base branch instead means the `edited` event re-fires on a base change and the most recent run paints the check green.
 
 ### Why a Linear API key (and not just OAuth)
 
