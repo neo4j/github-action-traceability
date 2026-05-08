@@ -30411,8 +30411,9 @@ const run = (inputs_1, github_1, linearFactory_1, ...args_1) => __awaiter(void 0
         core.info(`Pull request base branch "${pullRequest.baseRefName}" is not in target_branches (${targetBranches.join(', ')}); skipping checks.`);
         return;
     }
-    if (isOptedOut(pullRequest)) {
-        core.info('Pull request is opted out of Linear traceability checks.');
+    const optOutReason = getOptOutReason(pullRequest);
+    if (optOutReason) {
+        core.info(`Pull request is opted out of Linear traceability checks via ${optOutReason}.`);
         return;
     }
     const candidateIds = extractIssueIds(pullRequest);
@@ -30436,21 +30437,23 @@ const run = (inputs_1, github_1, linearFactory_1, ...args_1) => __awaiter(void 0
         if (existingIds.length === 0) {
             throw new Error((0, errors_1.ERR_ISSUE_NOT_FOUND)(candidateIds));
         }
-        const attached = results.some((r) => r.urls !== null && r.urls.some((u) => normalizeUrl(u) === prUrl));
-        if (attached) {
-            core.info('Pull request is attached to a Linear issue.');
+        const attachedIssue = results.find((r) => r.urls !== null && r.urls.some((u) => normalizeUrl(u) === prUrl));
+        if (attachedIssue) {
+            core.info(`Pull request is attached to Linear issue ${attachedIssue.id}.`);
             return;
         }
     }
     throw new Error((0, errors_1.ERR_ATTACHMENT_NOT_FOUND)(existingIds, pullRequest.url));
 });
 exports.run = run;
-const isOptedOut = (pullRequest) => {
-    if (pullRequest.labels.some((l) => l.name.trim().toLowerCase() === NO_LINEAR_LABEL))
-        return true;
-    if (NOID_TITLE_PATTERN.test(pullRequest.title))
-        return true;
-    return false;
+const getOptOutReason = (pullRequest) => {
+    if (pullRequest.labels.some((l) => l.name.trim().toLowerCase() === NO_LINEAR_LABEL)) {
+        return `the "No Linear" label`;
+    }
+    if (NOID_TITLE_PATTERN.test(pullRequest.title)) {
+        return `the [NOID] title prefix`;
+    }
+    return null;
 };
 const extractIssueIds = (pullRequest) => {
     var _a, _b;
