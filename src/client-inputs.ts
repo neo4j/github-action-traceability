@@ -18,6 +18,8 @@ interface InputsClientI {
   getGlobalVerificationStrategy(): GlobalVerificationStrategy;
   getGitHubApiToken(): string;
   getLinearApiKey(): string;
+  getLinearClientId(): string;
+  getLinearClientSecret(): string;
   getGitHubRepositoryName(): string;
   getGithubRepositoryOwner(): string;
   getPullRequestNumber(): number;
@@ -48,7 +50,17 @@ class InputsClient implements InputsClientI {
 
   getLinearApiKey(): string {
     core.info('Get linear_api_key.');
-    return core.getInput('linear_api_key', { required: true });
+    return core.getInput('linear_api_key');
+  }
+
+  getLinearClientId(): string {
+    core.info('Get linear_client_id.');
+    return core.getInput('linear_client_id');
+  }
+
+  getLinearClientSecret(): string {
+    core.info('Get linear_client_secret.');
+    return core.getInput('linear_client_secret');
   }
 
   getGitHubRepositoryName(): string {

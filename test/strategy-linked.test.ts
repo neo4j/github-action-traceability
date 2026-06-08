@@ -30,6 +30,17 @@ describe('GlobalVerificationStrategy.Linked', () => {
       await expectSuccess(run(inputs, github, factoryOf(linear), NO_RETRY));
     });
 
+    it('awaits an async linear factory (e.g. one that fetches an app token first)', async () => {
+      const inputs = new InputsClientBuilder().build();
+      const github = new GitHubClientBuilder()
+        .withPullRequestUrl(PR_URL)
+        .withPullRequestTitle('[NEO-123] My feature')
+        .build();
+      const linear = new LinearClientBuilder().withAttachedPullRequest('NEO-123', PR_URL).build();
+      const asyncFactory = () => Promise.resolve(linear);
+      await expectSuccess(run(inputs, github, asyncFactory, NO_RETRY));
+    });
+
     it('passes when the title contains a bare Linear issue ID (no brackets)', async () => {
       const inputs = new InputsClientBuilder().build();
       const github = new GitHubClientBuilder()

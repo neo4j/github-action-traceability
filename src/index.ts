@@ -2,12 +2,13 @@ import * as core from '@actions/core';
 import { InputsClient } from './client-inputs';
 import { GitHubClient } from './client-github';
 import { LinearClient } from './client-linear';
+import { resolveLinearAuthorization } from './linear-auth';
 import { run } from './run';
 import { ERR_UNEXPECTED } from './errors';
 
 const inputs = new InputsClient();
 const github = new GitHubClient(inputs.getGitHubApiToken());
-const linearFactory = () => new LinearClient(inputs.getLinearApiKey());
+const linearFactory = async () => new LinearClient(await resolveLinearAuthorization(inputs));
 
 run(inputs, github, linearFactory)
   .then(() => {

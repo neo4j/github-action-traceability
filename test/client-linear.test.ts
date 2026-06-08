@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
-import { LinearClient } from '../src/client-linear';
+import { LinearClient, fetchLinearAppActorToken } from '../src/client-linear';
 import { ERR_LINEAR_AUTH, ERR_LINEAR_RATE_LIMITED } from '../src/errors';
 
 type FetchArgs = Parameters<typeof fetch>;
@@ -119,5 +119,70 @@ describe('LinearClient.getIssueAttachmentUrls', () => {
     fetchMock.mockResolvedValue(jsonResponse(200, { errors: [{ message: 'Something exploded' }] }));
     const client = new LinearClient('k');
     await expect(client.getIssueAttachmentUrls('NEO-1')).rejects.toThrow('Something exploded');
+  });
+});
+
+describe('fetchLinearAppActorToken', () => {
+  let fetchMock: jest.Mock<(...args: FetchArgs) => FetchReturn>;
+  const originalFetch = global.fetch;
+
+  beforeEach(() => {
+    fetchMock = jest.fn<(...args: FetchArgs) => FetchReturn>();
+    global.fetch = fetchMock as unknown as typeof fetch;
+  });
+
+  afterEach(() => {
+    global.fetch = originalFetch;
+  });
+
+  it('returns the access_token from a successful client-credentials response', async () => {
+    fetchMock.mockResolvedValue(
+      jsonResponse(200, {
+        access_token: 'lin_oauth_app_token',
+        token_type: 'Bearer',
+        expires_in: 2591999,
+      }),
+    );
+    const token = await fetchLinearAppActorToken('client-id', 'client-secret');
+    expect(token).toBe('lin_oauth_app_token');
+  });
+
+  it('POSTs a form-urlencoded client_credentials request to the token endpoint (not JSON)', async () => {
+    fetchMock.mockResolvedValue(jsonResponse(200, { access_token: 't' }));
+    await fetchLinearAppActorToken('my-id', 'my-secret');
+    const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+    expect(url).toBe('https://api.linear.app/oauth/token');
+    expect(init.method).toBe('POST');
+    const headers = init.headers as Record<string, string>;
+    expect(headers['Content-Type']).toBe('application/x-www-form-urlencoded');
+    const body = String(init.body);
+    expect(body).toContain('grant_type=client_credentials');
+    expect(body).toContain('client_id=my-id');
+    expect(body).toContain('client_secret=my-secret');
+    expect(body).toContain('scope=read');
+  });
+
+  it('throws ERR_LINEAR_AUTH on HTTP 401', async () => {
+    fetchMock.mockResolvedValue(jsonResponse(401, {}));
+    await expect(fetchLinearAppActorToken('id', 'bad')).rejects.toThrow(ERR_LINEAR_AUTH());
+  });
+
+  it('throws ERR_LINEAR_AUTH on HTTP 403', async () => {
+    fetchMock.mockResolvedValue(jsonResponse(403, {}));
+    await expect(fetchLinearAppActorToken('id', 'bad')).rejects.toThrow(ERR_LINEAR_AUTH());
+  });
+
+  it('throws a token-request error on other non-2xx responses', async () => {
+    fetchMock.mockResolvedValue(jsonResponse(400, { error: 'invalid_request' }));
+    await expect(fetchLinearAppActorToken('id', 'secret')).rejects.toThrow(
+      'Failed to obtain a Linear app token',
+    );
+  });
+
+  it('throws a token-request error when the response omits access_token', async () => {
+    fetchMock.mockResolvedValue(jsonResponse(200, { token_type: 'Bearer' }));
+    await expect(fetchLinearAppActorToken('id', 'secret')).rejects.toThrow(
+      'Failed to obtain a Linear app token',
+    );
   });
 });
