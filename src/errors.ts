@@ -12,9 +12,13 @@ export const ERR_ISSUE_NOT_FOUND = (identifiers: string[]) =>
 export const ERR_ATTACHMENT_NOT_FOUND = (identifiers: string[], prUrl: string) =>
   `Linear has not registered ${prUrl} as an attachment on any of: ${identifiers.join(
     ', ',
-  )}. The Linear GitHub integration may not be installed for this repository, or the workspace of the linear_api_key may not match the integration's workspace.`;
+  )}. The Linear GitHub integration may not be installed for this repository, or the configured Linear credential (linear_api_key, or linear_client_id/linear_client_secret) may not have access to the integration's workspace or the team that owns the issue. App tokens obtained via client credentials only see private teams the OAuth application has been explicitly granted access to.`;
 export const ERR_LINEAR_AUTH = () =>
-  `The Linear API rejected the request as unauthorised. Verify the linear_api_key secret is set and has access to the workspace where issues live.`;
+  `The Linear API rejected the request as unauthorised. Verify the configured Linear credential (linear_api_key, or linear_client_id/linear_client_secret) is set and has access to the workspace where issues live.`;
 export const ERR_LINEAR_RATE_LIMITED = () =>
   `The Linear API rate-limited the request. The action will retry on the next pull_request event.`;
+export const ERR_LINEAR_TOKEN_REQUEST = (detail: string) =>
+  `Failed to obtain a Linear app token via client credentials: ${detail}. Verify the linear_client_id and linear_client_secret inputs match an OAuth application in your Linear workspace.`;
+export const ERR_NO_LINEAR_AUTH = () =>
+  `No Linear credential configured. Set either linear_api_key (a personal API key) or both linear_client_id and linear_client_secret (OAuth client credentials).`;
 export const ERR_UNEXPECTED = (error: unknown) => `Unexpected: ${error}`;

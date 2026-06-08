@@ -3,6 +3,8 @@ import { GlobalVerificationStrategy, InputsClientI } from '../../src/client-inpu
 class InputsClientBuilder {
   globalVerificationStrategy: GlobalVerificationStrategy = GlobalVerificationStrategy.Linked;
   linearApiKey: string = 'fake-linear-api-key';
+  linearClientId: string = '';
+  linearClientSecret: string = '';
   targetBranches: string[] = [];
 
   withGlobalVerificationStrategy(strategy: GlobalVerificationStrategy): InputsClientBuilder {
@@ -15,6 +17,12 @@ class InputsClientBuilder {
     return this;
   }
 
+  withLinearClientCredentials(clientId: string, clientSecret: string): InputsClientBuilder {
+    this.linearClientId = clientId;
+    this.linearClientSecret = clientSecret;
+    return this;
+  }
+
   withTargetBranches(branches: string[]): InputsClientBuilder {
     this.targetBranches = branches;
     return this;
@@ -24,6 +32,8 @@ class InputsClientBuilder {
     return new DummyInputsClient(
       this.globalVerificationStrategy,
       this.linearApiKey,
+      this.linearClientId,
+      this.linearClientSecret,
       this.targetBranches,
     );
   }
@@ -32,15 +42,21 @@ class InputsClientBuilder {
 class DummyInputsClient implements InputsClientI {
   globalVerificationStrategy: GlobalVerificationStrategy;
   linearApiKey: string;
+  linearClientId: string;
+  linearClientSecret: string;
   targetBranches: string[];
 
   constructor(
     globalVerificationStrategy: GlobalVerificationStrategy,
     linearApiKey: string,
+    linearClientId: string,
+    linearClientSecret: string,
     targetBranches: string[],
   ) {
     this.globalVerificationStrategy = globalVerificationStrategy;
     this.linearApiKey = linearApiKey;
+    this.linearClientId = linearClientId;
+    this.linearClientSecret = linearClientSecret;
     this.targetBranches = targetBranches;
   }
 
@@ -54,6 +70,14 @@ class DummyInputsClient implements InputsClientI {
 
   getLinearApiKey(): string {
     return this.linearApiKey;
+  }
+
+  getLinearClientId(): string {
+    return this.linearClientId;
+  }
+
+  getLinearClientSecret(): string {
+    return this.linearClientSecret;
   }
 
   getGithubRepositoryOwner(): string {

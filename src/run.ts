@@ -13,7 +13,7 @@ const ATTACHMENT_RETRY_DELAYS_MS = [0, 5000, 10000, 15000];
 const run = async (
   inputs: InputsClientI,
   github: GitHubClientI,
-  linearFactory: () => LinearClientI,
+  linearFactory: () => LinearClientI | Promise<LinearClientI>,
   retryDelaysMs: number[] = ATTACHMENT_RETRY_DELAYS_MS,
 ): Promise<void> => {
   const strategy = inputs.getGlobalVerificationStrategy();
@@ -50,7 +50,7 @@ const run = async (
   }
   core.info(`Candidate Linear issue IDs: ${candidateIds.join(', ')}.`);
 
-  const linear = linearFactory();
+  const linear = await linearFactory();
   const prUrl = normalizeUrl(pullRequest.url);
 
   let existingIds: string[] = [];

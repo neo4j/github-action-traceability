@@ -30086,7 +30086,15 @@ class InputsClient {
     }
     getLinearApiKey() {
         core.info('Get linear_api_key.');
-        return core.getInput('linear_api_key', { required: true });
+        return core.getInput('linear_api_key');
+    }
+    getLinearClientId() {
+        core.info('Get linear_client_id.');
+        return core.getInput('linear_client_id');
+    }
+    getLinearClientSecret() {
+        core.info('Get linear_client_secret.');
+        return core.getInput('linear_client_secret');
     }
     getGitHubRepositoryName() {
         core.info('Get github.context.payload.repository.');
@@ -30181,9 +30189,48 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LinearClient = void 0;
+exports.fetchLinearAppActorToken = fetchLinearAppActorToken;
 const core = __importStar(__nccwpck_require__(7484));
 const errors_1 = __nccwpck_require__(3916);
 const LINEAR_GRAPHQL_ENDPOINT = 'https://api.linear.app/graphql';
+const LINEAR_OAUTH_TOKEN_ENDPOINT = 'https://api.linear.app/oauth/token';
+// `read` is sufficient to query issues and their attachments. Note that an app
+// actor token only sees public teams plus any private teams the OAuth app has
+// been explicitly granted access to on its details page.
+const LINEAR_APP_TOKEN_SCOPE = 'read';
+/**
+ * Exchanges an OAuth application's client_id/client_secret for a Linear "app
+ * actor" access token via the client_credentials grant. The returned token is
+ * valid for 30 days and must be sent as `Authorization: Bearer <token>`.
+ * Fetched fresh on every run, so the 30-day lifetime never matters in practice.
+ */
+function fetchLinearAppActorToken(clientId, clientSecret) {
+    return __awaiter(this, void 0, void 0, function* () {
+        core.info('Requesting Linear app token via client credentials.');
+        const body = new URLSearchParams({
+            grant_type: 'client_credentials',
+            client_id: clientId,
+            client_secret: clientSecret,
+            scope: LINEAR_APP_TOKEN_SCOPE,
+        });
+        const response = yield fetch(LINEAR_OAUTH_TOKEN_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: body.toString(),
+        });
+        if (response.status === 401 || response.status === 403) {
+            throw new Error((0, errors_1.ERR_LINEAR_AUTH)());
+        }
+        if (!response.ok) {
+            throw new Error((0, errors_1.ERR_LINEAR_TOKEN_REQUEST)(`HTTP ${response.status}`));
+        }
+        const json = (yield response.json());
+        if (!json.access_token) {
+            throw new Error((0, errors_1.ERR_LINEAR_TOKEN_REQUEST)('the response did not include an access_token'));
+        }
+        return json.access_token;
+    });
+}
 const ISSUE_ATTACHMENTS_QUERY = `
   query IssueAttachments($id: String!) {
     issue(id: $id) {
@@ -30256,7 +30303,7 @@ exports.LinearClient = LinearClient;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.ERR_UNEXPECTED = exports.ERR_LINEAR_RATE_LIMITED = exports.ERR_LINEAR_AUTH = exports.ERR_ATTACHMENT_NOT_FOUND = exports.ERR_ISSUE_NOT_FOUND = exports.ERR_NO_ISSUE_REFERENCE = exports.ERR_STRATEGY_REMOVED = exports.ERR_INPUT_INVALID = exports.ERR_INPUT_NOT_FOUND = void 0;
+exports.ERR_UNEXPECTED = exports.ERR_NO_LINEAR_AUTH = exports.ERR_LINEAR_TOKEN_REQUEST = exports.ERR_LINEAR_RATE_LIMITED = exports.ERR_LINEAR_AUTH = exports.ERR_ATTACHMENT_NOT_FOUND = exports.ERR_ISSUE_NOT_FOUND = exports.ERR_NO_ISSUE_REFERENCE = exports.ERR_STRATEGY_REMOVED = exports.ERR_INPUT_INVALID = exports.ERR_INPUT_NOT_FOUND = void 0;
 const ERR_INPUT_NOT_FOUND = (input) => `Input not found "${input}".`;
 exports.ERR_INPUT_NOT_FOUND = ERR_INPUT_NOT_FOUND;
 const ERR_INPUT_INVALID = (input, value) => `Unrecognised value ${value} for input "${input}".`;
@@ -30267,12 +30314,16 @@ const ERR_NO_ISSUE_REFERENCE = () => `No Linear issue reference found in the pul
 exports.ERR_NO_ISSUE_REFERENCE = ERR_NO_ISSUE_REFERENCE;
 const ERR_ISSUE_NOT_FOUND = (identifiers) => `None of the referenced Linear issues exist: ${identifiers.join(', ')}. Check for typos in the issue identifier.`;
 exports.ERR_ISSUE_NOT_FOUND = ERR_ISSUE_NOT_FOUND;
-const ERR_ATTACHMENT_NOT_FOUND = (identifiers, prUrl) => `Linear has not registered ${prUrl} as an attachment on any of: ${identifiers.join(', ')}. The Linear GitHub integration may not be installed for this repository, or the workspace of the linear_api_key may not match the integration's workspace.`;
+const ERR_ATTACHMENT_NOT_FOUND = (identifiers, prUrl) => `Linear has not registered ${prUrl} as an attachment on any of: ${identifiers.join(', ')}. The Linear GitHub integration may not be installed for this repository, or the configured Linear credential (linear_api_key, or linear_client_id/linear_client_secret) may not have access to the integration's workspace or the team that owns the issue. App tokens obtained via client credentials only see private teams the OAuth application has been explicitly granted access to.`;
 exports.ERR_ATTACHMENT_NOT_FOUND = ERR_ATTACHMENT_NOT_FOUND;
-const ERR_LINEAR_AUTH = () => `The Linear API rejected the request as unauthorised. Verify the linear_api_key secret is set and has access to the workspace where issues live.`;
+const ERR_LINEAR_AUTH = () => `The Linear API rejected the request as unauthorised. Verify the configured Linear credential (linear_api_key, or linear_client_id/linear_client_secret) is set and has access to the workspace where issues live.`;
 exports.ERR_LINEAR_AUTH = ERR_LINEAR_AUTH;
 const ERR_LINEAR_RATE_LIMITED = () => `The Linear API rate-limited the request. The action will retry on the next pull_request event.`;
 exports.ERR_LINEAR_RATE_LIMITED = ERR_LINEAR_RATE_LIMITED;
+const ERR_LINEAR_TOKEN_REQUEST = (detail) => `Failed to obtain a Linear app token via client credentials: ${detail}. Verify the linear_client_id and linear_client_secret inputs match an OAuth application in your Linear workspace.`;
+exports.ERR_LINEAR_TOKEN_REQUEST = ERR_LINEAR_TOKEN_REQUEST;
+const ERR_NO_LINEAR_AUTH = () => `No Linear credential configured. Set either linear_api_key (a personal API key) or both linear_client_id and linear_client_secret (OAuth client credentials).`;
+exports.ERR_NO_LINEAR_AUTH = ERR_NO_LINEAR_AUTH;
 const ERR_UNEXPECTED = (error) => `Unexpected: ${error}`;
 exports.ERR_UNEXPECTED = ERR_UNEXPECTED;
 
@@ -30317,16 +30368,26 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(7484));
 const client_inputs_1 = __nccwpck_require__(3224);
 const client_github_1 = __nccwpck_require__(4018);
 const client_linear_1 = __nccwpck_require__(6108);
+const linear_auth_1 = __nccwpck_require__(5633);
 const run_1 = __nccwpck_require__(9786);
 const errors_1 = __nccwpck_require__(3916);
 const inputs = new client_inputs_1.InputsClient();
 const github = new client_github_1.GitHubClient(inputs.getGitHubApiToken());
-const linearFactory = () => new client_linear_1.LinearClient(inputs.getLinearApiKey());
+const linearFactory = () => __awaiter(void 0, void 0, void 0, function* () { return new client_linear_1.LinearClient(yield (0, linear_auth_1.resolveLinearAuthorization)(inputs)); });
 (0, run_1.run)(inputs, github, linearFactory)
     .then(() => {
     core.setOutput('Traceability check completed successfully', 0);
@@ -30339,6 +30400,86 @@ const linearFactory = () => new client_linear_1.LinearClient(inputs.getLinearApi
         core.setFailed((0, errors_1.ERR_UNEXPECTED)(error));
     }
 });
+
+
+/***/ }),
+
+/***/ 5633:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.resolveLinearAuthorization = resolveLinearAuthorization;
+const core = __importStar(__nccwpck_require__(7484));
+const client_linear_1 = __nccwpck_require__(6108);
+const errors_1 = __nccwpck_require__(3916);
+/**
+ * Resolves the value for the Linear `Authorization` header from the configured
+ * credentials. Prefers OAuth client credentials — these are minted fresh on
+ * every run, so the 30-day app-actor token lifetime never bites — and falls
+ * back to a static personal API key. Personal API keys are sent verbatim; app
+ * actor tokens require a `Bearer` prefix.
+ */
+function resolveLinearAuthorization(inputs) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const clientId = inputs.getLinearClientId();
+        const clientSecret = inputs.getLinearClientSecret();
+        if (clientId && clientSecret) {
+            core.info('Authenticating to Linear with OAuth client credentials.');
+            const token = yield (0, client_linear_1.fetchLinearAppActorToken)(clientId, clientSecret);
+            return `Bearer ${token}`;
+        }
+        const apiKey = inputs.getLinearApiKey();
+        if (apiKey) {
+            core.info('Authenticating to Linear with a personal API key.');
+            return apiKey;
+        }
+        throw new Error((0, errors_1.ERR_NO_LINEAR_AUTH)());
+    });
+}
 
 
 /***/ }),
@@ -30421,7 +30562,7 @@ const run = (inputs_1, github_1, linearFactory_1, ...args_1) => __awaiter(void 0
         throw new Error((0, errors_1.ERR_NO_ISSUE_REFERENCE)());
     }
     core.info(`Candidate Linear issue IDs: ${candidateIds.join(', ')}.`);
-    const linear = linearFactory();
+    const linear = yield linearFactory();
     const prUrl = normalizeUrl(pullRequest.url);
     let existingIds = [];
     for (let attempt = 0; attempt < retryDelaysMs.length; attempt++) {
