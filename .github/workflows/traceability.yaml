@@ -27,3 +27,5 @@ jobs:
           global_verification_strategy: linked
           github_api_token: ${{ secrets.GITHUB_TOKEN }}
           linear_api_key: ${{ secrets.LINEAR_API_KEY }}
+          linear_client_id: ${{ secrets.LINEAR_CLIENT_ID }}
+          linear_client_secret: ${{ secrets.LINEAR_CLIENT_SECRET }}
