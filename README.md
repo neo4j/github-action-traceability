@@ -80,9 +80,13 @@ The action only ever reads from Linear (issue lookups and attachment listing), s
 
 **OAuth client credentials (`linear_client_id` + `linear_client_secret`).** Taken from an OAuth application at **Settings → API → OAuth applications**. The action exchanges them for an "app actor" access token via the `client_credentials` grant on **every run**. Each app token is valid for 30 days, but because a fresh one is minted per run, the 30-day lifetime never bites — and the stored client secret itself does not expire (it is only invalidated when you rotate it). This is the better fit for an org-wide, person-independent integration.
 
+> ⚠️ **You must toggle "client credentials tokens" on for the OAuth application** when creating or editing it in Linear. Without it, Linear rejects the `client_credentials` grant and the action fails with `Failed to obtain a Linear app token via client credentials`.
+
 > ⚠️ An app actor token only sees **public** teams plus any **private** teams the OAuth application has been explicitly granted access to on its details page (a paid Linear plan is required for private-team access). If you check PRs against issues in private teams, grant the app access there, or use a personal API key instead.
 
-If both are configured, the client credentials take precedence.
+> ⚠️ Linear revokes existing app actor tokens when a token is requested with a **different set of scopes**, and caps concurrent app tokens at 1000. This action always requests exactly `read`, so its own tokens are consistent — but if you reuse the *same* OAuth application for another integration that requests different scopes, the two will invalidate each other. Use a dedicated OAuth application for this action.
+
+If both are configured, the client credentials take precedence. Configuring only one half of the pair is an error — the action fails immediately naming the missing input rather than silently falling back to `linear_api_key`, since an unset GitHub secret expands to an empty string.
 
 ## Behavior
 

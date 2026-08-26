@@ -20,6 +20,29 @@ interface TokenResponse {
   access_token?: string;
 }
 
+interface OAuthErrorResponse {
+  error?: string;
+  error_description?: string;
+}
+
+/**
+ * Extracts the OAuth `error` / `error_description` from a failed token
+ * response. The token endpoint's status code alone is not actionable in a CI
+ * log — `invalid_client` and `invalid_scope` both surface as HTTP 400, and the
+ * latter is what Linear returns when "client credentials tokens" has not been
+ * toggled on for the application. Returns an empty string when the body is
+ * missing or unparseable, so a broken gateway still reports its status.
+ */
+async function oauthErrorDetail(response: Response): Promise<string> {
+  try {
+    const body = (await response.json()) as OAuthErrorResponse;
+    const detail = [body.error, body.error_description].filter(Boolean).join(': ');
+    return detail ? ` (${detail})` : '';
+  } catch {
+    return '';
+  }
+}
+
 /**
  * Exchanges an OAuth application's client_id/client_secret for a Linear "app
  * actor" access token via the client_credentials grant. The returned token is
@@ -46,7 +69,9 @@ async function fetchLinearAppActorToken(clientId: string, clientSecret: string):
     throw new Error(ERR_LINEAR_AUTH());
   }
   if (!response.ok) {
-    throw new Error(ERR_LINEAR_TOKEN_REQUEST(`HTTP ${response.status}`));
+    throw new Error(
+      ERR_LINEAR_TOKEN_REQUEST(`HTTP ${response.status}${await oauthErrorDetail(response)}`),
+    );
   }
 
   const json = (await response.json()) as TokenResponse;
@@ -83,7 +108,7 @@ interface IssueAttachmentsResponse {
 }
 
 class LinearClient implements LinearClientI {
-  constructor(private readonly apiKey: string) {}
+  constructor(private readonly authorization: string) {}
 
   async getIssueAttachmentUrls(identifier: string): Promise<string[] | null> {
     core.info(`Fetching Linear issue ${identifier}.`);
@@ -92,7 +117,7 @@ class LinearClient implements LinearClientI {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: this.apiKey,
+        Authorization: this.authorization,
       },
       body: JSON.stringify({
         query: ISSUE_ATTACHMENTS_QUERY,

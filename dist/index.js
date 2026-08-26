@@ -30199,6 +30199,26 @@ const LINEAR_OAUTH_TOKEN_ENDPOINT = 'https://api.linear.app/oauth/token';
 // been explicitly granted access to on its details page.
 const LINEAR_APP_TOKEN_SCOPE = 'read';
 /**
+ * Extracts the OAuth `error` / `error_description` from a failed token
+ * response. The token endpoint's status code alone is not actionable in a CI
+ * log — `invalid_client` and `invalid_scope` both surface as HTTP 400, and the
+ * latter is what Linear returns when "client credentials tokens" has not been
+ * toggled on for the application. Returns an empty string when the body is
+ * missing or unparseable, so a broken gateway still reports its status.
+ */
+function oauthErrorDetail(response) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const body = (yield response.json());
+            const detail = [body.error, body.error_description].filter(Boolean).join(': ');
+            return detail ? ` (${detail})` : '';
+        }
+        catch (_a) {
+            return '';
+        }
+    });
+}
+/**
  * Exchanges an OAuth application's client_id/client_secret for a Linear "app
  * actor" access token via the client_credentials grant. The returned token is
  * valid for 30 days and must be sent as `Authorization: Bearer <token>`.
@@ -30222,7 +30242,7 @@ function fetchLinearAppActorToken(clientId, clientSecret) {
             throw new Error((0, errors_1.ERR_LINEAR_AUTH)());
         }
         if (!response.ok) {
-            throw new Error((0, errors_1.ERR_LINEAR_TOKEN_REQUEST)(`HTTP ${response.status}`));
+            throw new Error((0, errors_1.ERR_LINEAR_TOKEN_REQUEST)(`HTTP ${response.status}${yield oauthErrorDetail(response)}`));
         }
         const json = (yield response.json());
         if (!json.access_token) {
@@ -30242,8 +30262,8 @@ const ISSUE_ATTACHMENTS_QUERY = `
   }
 `;
 class LinearClient {
-    constructor(apiKey) {
-        this.apiKey = apiKey;
+    constructor(authorization) {
+        this.authorization = authorization;
     }
     getIssueAttachmentUrls(identifier) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -30253,7 +30273,7 @@ class LinearClient {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: this.apiKey,
+                    Authorization: this.authorization,
                 },
                 body: JSON.stringify({
                     query: ISSUE_ATTACHMENTS_QUERY,
@@ -30303,7 +30323,7 @@ exports.LinearClient = LinearClient;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.ERR_UNEXPECTED = exports.ERR_NO_LINEAR_AUTH = exports.ERR_LINEAR_TOKEN_REQUEST = exports.ERR_LINEAR_RATE_LIMITED = exports.ERR_LINEAR_AUTH = exports.ERR_ATTACHMENT_NOT_FOUND = exports.ERR_ISSUE_NOT_FOUND = exports.ERR_NO_ISSUE_REFERENCE = exports.ERR_STRATEGY_REMOVED = exports.ERR_INPUT_INVALID = exports.ERR_INPUT_NOT_FOUND = void 0;
+exports.ERR_UNEXPECTED = exports.ERR_PARTIAL_LINEAR_CLIENT_CREDENTIALS = exports.ERR_NO_LINEAR_AUTH = exports.ERR_LINEAR_TOKEN_REQUEST = exports.ERR_LINEAR_RATE_LIMITED = exports.ERR_LINEAR_AUTH = exports.ERR_ATTACHMENT_NOT_FOUND = exports.ERR_ISSUE_NOT_FOUND = exports.ERR_NO_ISSUE_REFERENCE = exports.ERR_STRATEGY_REMOVED = exports.ERR_INPUT_INVALID = exports.ERR_INPUT_NOT_FOUND = void 0;
 const ERR_INPUT_NOT_FOUND = (input) => `Input not found "${input}".`;
 exports.ERR_INPUT_NOT_FOUND = ERR_INPUT_NOT_FOUND;
 const ERR_INPUT_INVALID = (input, value) => `Unrecognised value ${value} for input "${input}".`;
@@ -30320,10 +30340,12 @@ const ERR_LINEAR_AUTH = () => `The Linear API rejected the request as unauthoris
 exports.ERR_LINEAR_AUTH = ERR_LINEAR_AUTH;
 const ERR_LINEAR_RATE_LIMITED = () => `The Linear API rate-limited the request. The action will retry on the next pull_request event.`;
 exports.ERR_LINEAR_RATE_LIMITED = ERR_LINEAR_RATE_LIMITED;
-const ERR_LINEAR_TOKEN_REQUEST = (detail) => `Failed to obtain a Linear app token via client credentials: ${detail}. Verify the linear_client_id and linear_client_secret inputs match an OAuth application in your Linear workspace.`;
+const ERR_LINEAR_TOKEN_REQUEST = (detail) => `Failed to obtain a Linear app token via client credentials: ${detail}. Verify the linear_client_id and linear_client_secret inputs match an OAuth application in your Linear workspace, and that "client credentials tokens" is toggled on for that application in Linear's application settings.`;
 exports.ERR_LINEAR_TOKEN_REQUEST = ERR_LINEAR_TOKEN_REQUEST;
 const ERR_NO_LINEAR_AUTH = () => `No Linear credential configured. Set either linear_api_key (a personal API key) or both linear_client_id and linear_client_secret (OAuth client credentials).`;
 exports.ERR_NO_LINEAR_AUTH = ERR_NO_LINEAR_AUTH;
+const ERR_PARTIAL_LINEAR_CLIENT_CREDENTIALS = (missing) => `Incomplete Linear OAuth client credentials: ${missing} is empty. OAuth client credentials require both linear_client_id and linear_client_secret. Note that an unset GitHub secret expands to an empty string, so check the secret name is spelled correctly and that the secret is available to this workflow.`;
+exports.ERR_PARTIAL_LINEAR_CLIENT_CREDENTIALS = ERR_PARTIAL_LINEAR_CLIENT_CREDENTIALS;
 const ERR_UNEXPECTED = (error) => `Unexpected: ${error}`;
 exports.ERR_UNEXPECTED = ERR_UNEXPECTED;
 
@@ -30467,9 +30489,24 @@ function resolveLinearAuthorization(inputs) {
     return __awaiter(this, void 0, void 0, function* () {
         const clientId = inputs.getLinearClientId();
         const clientSecret = inputs.getLinearClientSecret();
+        // Half-configured client credentials are always a mistake: an unset GitHub
+        // secret expands to an empty string, so a typo in the secret name would
+        // otherwise fall through to the personal API key (or to a misleading "no
+        // credential configured" error) instead of naming the real problem.
+        if (clientId && !clientSecret) {
+            throw new Error((0, errors_1.ERR_PARTIAL_LINEAR_CLIENT_CREDENTIALS)('linear_client_secret'));
+        }
+        if (clientSecret && !clientId) {
+            throw new Error((0, errors_1.ERR_PARTIAL_LINEAR_CLIENT_CREDENTIALS)('linear_client_id'));
+        }
         if (clientId && clientSecret) {
             core.info('Authenticating to Linear with OAuth client credentials.');
             const token = yield (0, client_linear_1.fetchLinearAppActorToken)(clientId, clientSecret);
+            // The runner only masks values it received as `secrets.*`. This token is
+            // minted at runtime, so it is unknown to the log masker until we register
+            // it — without this, any future log line or stack trace carrying the token
+            // would print a live 30-day workspace credential in plaintext.
+            core.setSecret(token);
             return `Bearer ${token}`;
         }
         const apiKey = inputs.getLinearApiKey();
