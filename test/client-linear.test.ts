@@ -185,4 +185,32 @@ describe('fetchLinearAppActorToken', () => {
       'Failed to obtain a Linear app token',
     );
   });
+
+  it('surfaces the OAuth error code from the token endpoint so CI logs are diagnosable', async () => {
+    fetchMock.mockResolvedValue(jsonResponse(400, { error: 'invalid_client' }));
+    await expect(fetchLinearAppActorToken('id', 'secret')).rejects.toThrow(/invalid_client/);
+  });
+
+  it('surfaces the OAuth error_description when the token endpoint provides one', async () => {
+    fetchMock.mockResolvedValue(
+      jsonResponse(400, {
+        error: 'invalid_scope',
+        error_description: 'client credentials are not enabled for this application',
+      }),
+    );
+    await expect(fetchLinearAppActorToken('id', 'secret')).rejects.toThrow(
+      /client credentials are not enabled for this application/,
+    );
+  });
+
+  it('still reports the HTTP status when the error body is not readable JSON', async () => {
+    fetchMock.mockResolvedValue({
+      ok: false,
+      status: 502,
+      json: async () => {
+        throw new Error('not json');
+      },
+    } as unknown as Response);
+    await expect(fetchLinearAppActorToken('id', 'secret')).rejects.toThrow(/502/);
+  });
 });

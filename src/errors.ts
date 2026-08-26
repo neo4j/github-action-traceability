@@ -18,7 +18,9 @@ export const ERR_LINEAR_AUTH = () =>
 export const ERR_LINEAR_RATE_LIMITED = () =>
   `The Linear API rate-limited the request. The action will retry on the next pull_request event.`;
 export const ERR_LINEAR_TOKEN_REQUEST = (detail: string) =>
-  `Failed to obtain a Linear app token via client credentials: ${detail}. Verify the linear_client_id and linear_client_secret inputs match an OAuth application in your Linear workspace.`;
+  `Failed to obtain a Linear app token via client credentials: ${detail}. Verify the linear_client_id and linear_client_secret inputs match an OAuth application in your Linear workspace, and that "client credentials tokens" is toggled on for that application in Linear's application settings.`;
 export const ERR_NO_LINEAR_AUTH = () =>
   `No Linear credential configured. Set either linear_api_key (a personal API key) or both linear_client_id and linear_client_secret (OAuth client credentials).`;
+export const ERR_PARTIAL_LINEAR_CLIENT_CREDENTIALS = (missing: string) =>
+  `Incomplete Linear OAuth client credentials: ${missing} is empty. OAuth client credentials require both linear_client_id and linear_client_secret. Note that an unset GitHub secret expands to an empty string, so check the secret name is spelled correctly and that the secret is available to this workflow.`;
 export const ERR_UNEXPECTED = (error: unknown) => `Unexpected: ${error}`;

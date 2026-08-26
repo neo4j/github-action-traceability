@@ -1,7 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
+import * as core from '@actions/core';
 import { resolveLinearAuthorization } from '../src/linear-auth';
 import { InputsClientBuilder } from './utils/dummy-client-inputs';
-import { ERR_NO_LINEAR_AUTH } from '../src/errors';
+import { ERR_NO_LINEAR_AUTH, ERR_PARTIAL_LINEAR_CLIENT_CREDENTIALS } from '../src/errors';
 
 type FetchArgs = Parameters<typeof fetch>;
 type FetchReturn = ReturnType<typeof fetch>;
@@ -53,5 +54,54 @@ describe('resolveLinearAuthorization', () => {
   it('throws ERR_NO_LINEAR_AUTH when no credential is configured', async () => {
     const inputs = new InputsClientBuilder().withLinearApiKey('').build();
     await expect(resolveLinearAuthorization(inputs)).rejects.toThrow(ERR_NO_LINEAR_AUTH());
+  });
+
+  it('masks the minted app token so it cannot leak into the workflow log', async () => {
+    const setSecret = jest.spyOn(core, 'setSecret').mockImplementation(() => undefined);
+    fetchMock.mockResolvedValue(tokenResponse('super-secret-app-token'));
+    const inputs = new InputsClientBuilder()
+      .withLinearApiKey('')
+      .withLinearClientCredentials('client-id', 'client-secret')
+      .build();
+
+    await resolveLinearAuthorization(inputs);
+
+    expect(setSecret).toHaveBeenCalledWith('super-secret-app-token');
+    setSecret.mockRestore();
+  });
+
+  it('fails loudly when linear_client_id is set without linear_client_secret', async () => {
+    const inputs = new InputsClientBuilder()
+      .withLinearApiKey('')
+      .withLinearClientCredentials('client-id', '')
+      .build();
+
+    await expect(resolveLinearAuthorization(inputs)).rejects.toThrow(
+      ERR_PARTIAL_LINEAR_CLIENT_CREDENTIALS('linear_client_secret'),
+    );
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('fails loudly when linear_client_secret is set without linear_client_id', async () => {
+    const inputs = new InputsClientBuilder()
+      .withLinearApiKey('')
+      .withLinearClientCredentials('', 'client-secret')
+      .build();
+
+    await expect(resolveLinearAuthorization(inputs)).rejects.toThrow(
+      ERR_PARTIAL_LINEAR_CLIENT_CREDENTIALS('linear_client_id'),
+    );
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('does not silently fall back to a personal API key when client credentials are half-configured', async () => {
+    const inputs = new InputsClientBuilder()
+      .withLinearApiKey('lin_api_xyz')
+      .withLinearClientCredentials('client-id', '')
+      .build();
+
+    await expect(resolveLinearAuthorization(inputs)).rejects.toThrow(
+      ERR_PARTIAL_LINEAR_CLIENT_CREDENTIALS('linear_client_secret'),
+    );
   });
 });

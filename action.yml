@@ -17,7 +17,7 @@ inputs:
     description: "Linear personal API key (Settings → Security & Access). One of linear_api_key OR (linear_client_id + linear_client_secret) is required when global_verification_strategy is 'linked'. Personal API keys do not expire unless you set an expiration on them. Use GitHub secrets, do not paste plaintext."
   linear_client_id:
     required: false
-    description: "Client ID of a Linear OAuth application (Settings → API → OAuth applications). Provide together with linear_client_secret to authenticate via the client-credentials grant: the action mints a fresh 30-day app token on every run, so the credential never expires in practice. Takes precedence over linear_api_key when both are set. The OAuth app only sees private teams it has been explicitly granted access to on its details page."
+    description: "Client ID of a Linear OAuth application (Settings → API → OAuth applications). Provide together with linear_client_secret to authenticate via the client-credentials grant: the action mints a fresh 30-day app token on every run, so the credential never expires in practice. The application must have 'client credentials tokens' toggled on in Linear, or the grant is rejected. Takes precedence over linear_api_key when both are set. Setting only one of the pair is an error. The OAuth app only sees private teams it has been explicitly granted access to on its details page."
   linear_client_secret:
     required: false
     description: "Client secret for the linear_client_id OAuth application. Use GitHub secrets, do not paste plaintext."
