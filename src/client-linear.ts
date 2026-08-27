@@ -16,6 +16,20 @@ const LINEAR_OAUTH_TOKEN_ENDPOINT = 'https://api.linear.app/oauth/token';
 // been explicitly granted access to on its details page.
 const LINEAR_APP_TOKEN_SCOPE = 'read';
 
+/**
+ * Complete happy path example from the Linear documentation:
+ *
+ * ```json
+ * {
+ *   "access_token": "fxra4u0msw3bagb9rdn2i621bs52m9zo8ksoxljouygcu31nh8s2jf8fygbepy16",
+ *   "token_type": "Bearer",
+ *   "expires_in": 2591999,
+ *   "scope": "read write",
+ * }
+ *
+ * But so far, we only need to read the access_token.
+ * ```
+ */
 interface TokenResponse {
   access_token?: string;
 }
@@ -48,6 +62,8 @@ async function oauthErrorDetail(response: Response): Promise<string> {
  * actor" access token via the client_credentials grant. The returned token is
  * valid for 30 days and must be sent as `Authorization: Bearer <token>`.
  * Fetched fresh on every run, so the 30-day lifetime never matters in practice.
+ *
+ * This is based on https://linear.app/developers/oauth-2-0-authentication#client-credentials-tokens
  */
 async function fetchLinearAppActorToken(clientId: string, clientSecret: string): Promise<string> {
   core.info('Requesting Linear app token via client credentials.');
@@ -108,6 +124,9 @@ interface IssueAttachmentsResponse {
 }
 
 class LinearClient implements LinearClientI {
+  /**
+   * @param authorization what to set as header `Authorization`: either the API key or a Bearer token
+   */
   constructor(private readonly authorization: string) {}
 
   async getIssueAttachmentUrls(identifier: string): Promise<string[] | null> {

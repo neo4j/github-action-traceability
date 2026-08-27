@@ -36,6 +36,7 @@ async function resolveLinearAuthorization(inputs: InputsClientI): Promise<string
     return `Bearer ${token}`;
   }
 
+  // Fall back to a fixed API key if OAuth info is not configured.
   const apiKey = inputs.getLinearApiKey();
   if (apiKey) {
     core.info('Authenticating to Linear with a personal API key.');

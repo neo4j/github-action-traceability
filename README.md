@@ -57,14 +57,14 @@ jobs:
 
 ### Inputs
 
-| Input | Required | Description |
-|-------|----------|-------------|
-| `global_verification_strategy` | no | `linked` (default) or `disabled`. |
-| `github_api_token` | yes | GitHub token. The default `${{ secrets.GITHUB_TOKEN }}` works. |
-| `linear_api_key` | one credential required when strategy is `linked` | Linear personal API key. Create one at **Linear Settings → Security & Access**. Store as a GitHub secret. |
-| `linear_client_id` | one credential required when strategy is `linked` | Client ID of a Linear OAuth application (**Settings → API → OAuth applications**). Use together with `linear_client_secret` instead of `linear_api_key`. Takes precedence when both are configured. |
-| `linear_client_secret` | with `linear_client_id` | Client secret for the OAuth application. Store as a GitHub secret. |
-| `target_branches` | no | Newline-separated list of base branches the action should run against. PRs targeting any other base branch are reported as success without contacting Linear. Empty (default) means run for every base branch. |
+| Input                          | Required                                                                              | Description                                                                                                                                                                                                    |
+|--------------------------------|---------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `global_verification_strategy` | no                                                                                    | `linked` (default) or `disabled`.                                                                                                                                                                              |
+| `github_api_token`             | yes                                                                                   | GitHub token. The default `${{ secrets.GITHUB_TOKEN }}` works.                                                                                                                                                 |
+| `linear_api_key`               | one credential (either this or `linear_client_id`) required when strategy is `linked` | Linear personal API key. Create one at **Linear Settings → Security & Access**. Store as a GitHub secret.                                                                                                      |
+| `linear_client_id`             | one credential (either this or `linear_api_key`) required when strategy is `linked`   | Client ID of a Linear OAuth application (**Settings → API → OAuth applications**). Use together with `linear_client_secret` instead of `linear_api_key`. Takes precedence when both are configured.            |
+| `linear_client_secret`         | with `linear_client_id`                                                               | Client secret for the OAuth application. Store as a GitHub secret.                                                                                                                                             |
+| `target_branches`              | no                                                                                    | Newline-separated list of base branches the action should run against. PRs targeting any other base branch are reported as success without contacting Linear. Empty (default) means run for every base branch. |
 
 Provide **either** `linear_api_key` **or** the pair `linear_client_id` + `linear_client_secret`. See [Choosing a Linear credential](#choosing-a-linear-credential) for the trade-offs.
 
