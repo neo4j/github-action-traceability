@@ -49,10 +49,19 @@ jobs:
         with:
           global_verification_strategy: linked
           github_api_token: ${{ secrets.GITHUB_TOKEN }}
-          linear_api_key: ${{ secrets.LINEAR_API_KEY }}
+          # OAuth application with "client credentials tokens" enabled —
+          # see "Choosing a Linear credential" below.
+          linear_client_id: ${{ secrets.LINEAR_CLIENT_ID }}
+          linear_client_secret: ${{ secrets.LINEAR_CLIENT_SECRET }}
           target_branches: |
             dev
             main
+```
+
+Alternatively, authenticate with a personal API key instead of the OAuth pair:
+
+```yaml
+          linear_api_key: ${{ secrets.LINEAR_API_KEY }}
 ```
 
 ### Inputs
@@ -100,7 +109,7 @@ Linear supports multiple issue IDs in a single PR (e.g. `Fixes NEO-123, NEO-456`
 
 ### Pull requests from forks
 
-`secrets.LINEAR_API_KEY` is unavailable to workflows triggered by `pull_request` events from forks. Such PRs will fail with an authentication error. If your project accepts contributions from forks, use `pull_request_target` instead (with the standard security caveats — review the secrets exposure carefully).
+Linear credentials (`secrets.LINEAR_CLIENT_ID` / `secrets.LINEAR_CLIENT_SECRET`, or `secrets.LINEAR_API_KEY`) are unavailable to workflows triggered by `pull_request` events from forks. Such PRs will fail with an authentication error. If your project accepts contributions from forks, use `pull_request_target` instead (with the standard security caveats — review the secrets exposure carefully).
 
 ## Migration from earlier versions
 
