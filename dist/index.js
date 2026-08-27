@@ -30223,6 +30223,8 @@ function oauthErrorDetail(response) {
  * actor" access token via the client_credentials grant. The returned token is
  * valid for 30 days and must be sent as `Authorization: Bearer <token>`.
  * Fetched fresh on every run, so the 30-day lifetime never matters in practice.
+ *
+ * This is based on https://linear.app/developers/oauth-2-0-authentication#client-credentials-tokens
  */
 function fetchLinearAppActorToken(clientId, clientSecret) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -30262,6 +30264,9 @@ const ISSUE_ATTACHMENTS_QUERY = `
   }
 `;
 class LinearClient {
+    /**
+     * @param authorization what to set as header `Authorization`: either the API key or a Bearer token
+     */
     constructor(authorization) {
         this.authorization = authorization;
     }
@@ -30509,6 +30514,7 @@ function resolveLinearAuthorization(inputs) {
             core.setSecret(token);
             return `Bearer ${token}`;
         }
+        // Fall back to a fixed API key if OAuth info is not configured.
         const apiKey = inputs.getLinearApiKey();
         if (apiKey) {
             core.info('Authenticating to Linear with a personal API key.');
